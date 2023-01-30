@@ -6,4 +6,262 @@
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
+
+    <LinearLayout
+        android:id="@+id/Detail_title"
+        android:layout_width="410dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/Detail_tv_writeTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="2023-01-15 23:59"
+            android:textSize="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Detail_tv_title"
+            android:layout_width="357dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="4시간 서빙 대타하실분 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_writeTime" />
+
+        <TextView
+            android:id="@+id/Detail_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="허유진"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_title" />
+
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Detail_three"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:orientation="vertical"
+        android:background="@color/purple_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Detail_title">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Detail_condition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/purple_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Detail_three">
+
+        <TextView
+            android:id="@+id/Detail_tv_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:text="지원조건"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/Detail_condition_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition1"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분야"
+                android:layout_marginStart="35dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_condition2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="근무일자"
+                android:layout_marginStart="35dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_condition3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition2"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="근무시간"
+                android:layout_marginStart="35dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_condition4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition3"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="급여"
+                android:layout_marginStart="35dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_condition5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition4"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_storeinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="매장정보"
+                android:layout_marginStart="35dp"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Detail_good"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/teal_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Detail_condition">
+
+        <TextView
+            android:id="@+id/Detail_tv_good"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:text="우대조건"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/Detail_good_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="나이"
+                android:layout_marginStart="35dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_good_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good_1"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_career"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="경력"
+                android:layout_marginStart="35dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Detail_good_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good_2"
+            >
+
+            <TextView
+                android:id="@+id/Detail_tv_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="성별"
+                android:layout_marginStart="35dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
