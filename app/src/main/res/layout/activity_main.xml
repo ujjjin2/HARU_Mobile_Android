@@ -1,7 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"/>
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        app:elevation="0dp" > <!-- 그림자 없애기 -->
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="#ffffff" >
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_launcher_background"
+                android:layout_height="380dp"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:background="#ffffff"/>
+                -->
+
+            <EditText
+                android:id="@+id/Main_edittext_search"
+                android:layout_width="355dp"
+                android:layout_height="35dp"
+                android:background="@drawable/border_layout_edittext"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:hint="검색"
+                android:textSize="13dp"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="9dp"> <!-- 힌트 메시지 위치 조정 -->
+            </EditText>
+
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                app:layout_collapseMode="pin" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인천 미추홀구 용현동"
+                    android:textSize="16dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" >"
+                    android:textSize="16dp"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#ffffff"
+            app:layout_collapseMode="pin">
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/Home_TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="#364fa3"
+                app:tabTextColor="#3a3a3a"
+                app:tabIndicatorColor="#364fa3"
+                app:tabIndicatorHeight="3dp"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="4" />
+            -->
+        <!--
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/Home_ViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        -->
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Home_TabLayout">
+        </FrameLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
