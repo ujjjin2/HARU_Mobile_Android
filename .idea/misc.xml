@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/CodeCollection/Androidstdio/HARU_Mobiile/app/src/main/res/layout/activity_detail.xml" value="0.2" />
         <entry key="..\:/CodeCollection/Androidstdio/HARU_Mobiile/app/src/main/res/layout/activity_main.xml" value="0.34739583333333335" />
+        <entry key="..\:/CodeCollection/Androidstdio/HARU_Mobiile/app/src/main/res/layout/activity_register.xml" value="0.21979166666666666" />
       </map>
     </option>
   </component>
