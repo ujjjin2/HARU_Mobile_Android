@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HARU_Mobiile" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.HARU_Mobiile" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
@@ -8,5 +8,17 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+        <!--NO title Bar-->
+        <item name="windowActionBar">false</item>
+
     </style>
+
+    <style name="Theme.HARU_Mobiile.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.HARU_Mobiile.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.HARU_Mobiile.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
