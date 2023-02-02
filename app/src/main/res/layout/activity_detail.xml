@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".DetailActivity">
 
 
@@ -208,7 +209,7 @@
                     android:id="@+id/view3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="5dp"
                     android:background="#DD474747"  />
 
             </LinearLayout>
@@ -228,8 +229,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
-                    android:text="모집조건"
+                    android:layout_marginTop="20dp"
+                    android:text="지원조건"
                     android:textColor="#299460"
                     android:textStyle="bold" />
 
@@ -482,9 +483,11 @@
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:backgroundTint="#299460"
+        android:textColor="@color/white"
         android:text="지원하기"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
