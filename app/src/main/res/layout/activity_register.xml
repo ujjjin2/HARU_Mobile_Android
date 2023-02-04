@@ -20,7 +20,7 @@
         android:id="@+id/Register_pt_title"
         android:layout_width="344dp"
         android:layout_height="40dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="제목을 입력해 주세요"
         android:inputType="textPersonName"
@@ -28,15 +28,59 @@
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Register_toolbar" />
 
     <EditText
+        android:id="@+id/register_pt_category"
+        android:layout_width="344dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="분야를 선택해주세요"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Register_pt_title" />
+
+    <EditText
+        android:id="@+id/register_pt_time1"
+        android:layout_width="147dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="시작 날짜/시간"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_category" />
+
+    <EditText
+        android:id="@+id/register_pt_time2"
+        android:layout_width="147dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="끝 날짜/시간"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_category" />
+
+    <EditText
         android:id="@+id/register_pt_pay"
-        android:layout_width="258dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="160dp"
+        android:layout_width="238dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="시급을 입력해주세요"
         android:inputType="textPersonName"
@@ -44,31 +88,48 @@
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.215"
+        app:layout_constraintHorizontal_bias="0.112"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Register_pt_title" />
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_time1" />
 
     <EditText
         android:id="@+id/register_pt_storeinfo"
-        android:layout_width="263dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="344dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="매장정보"
+        android:enabled="false"
+        android:hint="매장 도로명 주소"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_pt_pay" />
 
     <EditText
+        android:id="@+id/register_pt_storeinfo2"
+        android:layout_width="344dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="상세주소를 입력해주세요"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_storeinfo" />
+
+    <EditText
         android:id="@+id/register_pt_age"
         android:layout_width="261dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="원하시는 연령대를 적어주세요"
         android:inputType="textPersonName"
@@ -76,14 +137,14 @@
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Register_tv_condition" />
 
     <EditText
         android:id="@+id/register_pt_career"
         android:layout_width="261dp"
-        android:layout_height="42dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="원하시는 경력 우대사항을 적어주세요"
@@ -92,7 +153,7 @@
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_pt_age" />
 
@@ -100,63 +161,65 @@
         android:id="@+id/Register_tv_condition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="지원조건"
         android:textColor="#299460"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_pt_storeinfo" />
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_storeinfo2" />
 
     <Button
         android:id="@+id/Register_btn_age"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/register_btn"
         android:text="연령무관"
         android:textColor="@drawable/register_btn_txt"
         android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintHorizontal_bias="0.446"
         app:layout_constraintStart_toEndOf="@+id/register_pt_age"
         app:layout_constraintTop_toBottomOf="@+id/Register_tv_condition" />
 
+
     <Button
         android:id="@+id/register_btn_pay"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="156dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/register_btn"
         android:text="최저시급"
         android:textColor="@drawable/register_btn_txt"
         android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.595"
         app:layout_constraintStart_toEndOf="@+id/register_pt_pay"
-        app:layout_constraintTop_toBottomOf="@+id/Register_pt_title" />
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_time2" />
 
     <Button
         android:id="@+id/Register_btn_career"
-        android:layout_width="86dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/register_btn"
         android:text="경력무관"
         android:textColor="@drawable/register_btn_txt"
         android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toEndOf="@+id/register_pt_career"
         app:layout_constraintTop_toBottomOf="@+id/Register_btn_age" />
 
     <Button
         android:id="@+id/Register_btn_man"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/register_btn"
         android:text="남성 우대"
         android:textColor="@drawable/register_btn_txt"
@@ -165,10 +228,10 @@
 
     <Button
         android:id="@+id/register_btn_woman"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/register_btn"
         android:text="여성 우대"
         android:textColor="@drawable/register_btn_txt"
@@ -185,6 +248,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/register_tv_wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:text="~"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/register_pt_time2"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toEndOf="@+id/register_pt_time1"
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_category" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
