@@ -1,10 +1,11 @@
 package com.object.haru.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.Adapter.CustomAdapter;
-import com.object.haru.MainData;
+import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
+import com.object.haru.retrofit.RetroService;
+import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment1 extends Fragment {
 
     private View view;
 
-    private ArrayList<MainData> arrayList;
+    private List<RecruitDTO> arrayList = new ArrayList<>();
     private CustomAdapter customAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
@@ -35,25 +43,42 @@ public class Fragment1 extends Fragment {
 
         view = inflater.inflate(R.layout.activity_whole_list, container, false);
         recyclerView = view.findViewById(R.id.Fragment1_recyclerview);
-        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+
+        layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-        arrayList = new ArrayList<>();
-
-        customAdapter = new CustomAdapter(arrayList);
-        recyclerView.setAdapter(customAdapter);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        MainData mainData = new MainData(R.mipmap.ic_launcher,"오늘부터 4시간 서빙 대타하실분",
-                "#서빙", "#3시간", "#최저시급", "#매장위치");
-        for (int i = 0; i < 14; i++) {
-            arrayList.add(mainData);
-        }
+        customAdapter = new CustomAdapter(getContext(), arrayList);
+        recyclerView.setAdapter(customAdapter);
 
-        customAdapter.notifyDataSetChanged();
+
+        fetch();
+
 
         return view;
     }
+
+    private void fetch() {
+        RetroService service = RetrofitClientInstance.getRetrofitInstance().create(RetroService.class);
+        service.getAll(1).enqueue(new Callback<List<RecruitDTO>>() {
+            @Override
+            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
+                if (response.isSuccessful() && response.body() !=null){
+                    arrayList.addAll(response.body());
+                    customAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
+                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
+                Log.d("[실패] : " , "onFailure");
+            }
+        });
+    }
+
+
 }

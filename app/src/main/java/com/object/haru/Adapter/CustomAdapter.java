@@ -1,5 +1,6 @@
 package com.object.haru.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.MainData;
 import com.object.haru.R;
 
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
 
-    private ArrayList<MainData> arrayList;
+    private List<RecruitDTO> arrayList;
+    private Context context;
 
-    public CustomAdapter(ArrayList<MainData> arrayList) { this.arrayList = arrayList; }
+    public CustomAdapter(Context context, List<RecruitDTO> arrayList) {
+        this.arrayList = arrayList; this.context=context;
+    }
 
     @NonNull
     @Override
@@ -35,12 +38,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
-        holder.profile.setImageResource(arrayList.get(position).getProfile());
+//        Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
         holder.title.setText(arrayList.get(position).getTitle());
-        holder.category.setText(arrayList.get(position).getCategory());
-        holder.time.setText(arrayList.get(position).getTime());
-        holder.money.setText(arrayList.get(position).getMoney());
-        holder.location.setText(arrayList.get(position).getLocation());
+        holder.category.setText(arrayList.get(position).getSubject());
+        holder.time.setText(arrayList.get(position).getStTime()+"~"+arrayList.get(position).getEndTime());
+        holder.money.setText(arrayList.get(position).getPay());
+        holder.location.setText(arrayList.get(position).getAddr());
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
