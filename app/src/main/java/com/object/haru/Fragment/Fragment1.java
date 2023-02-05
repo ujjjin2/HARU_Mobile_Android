@@ -43,6 +43,7 @@ public class Fragment1 extends Fragment {
 
         view = inflater.inflate(R.layout.activity_whole_list, container, false);
         recyclerView = view.findViewById(R.id.Fragment1_recyclerview);
+
         recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
 
         layoutManager = new LinearLayoutManager(getActivity());
@@ -54,31 +55,32 @@ public class Fragment1 extends Fragment {
         customAdapter = new CustomAdapter(getContext(), arrayList);
         recyclerView.setAdapter(customAdapter);
 
-
-        fetch();
-
+        Log.d("[ㅇㅇㅇㅇ] : " , "111111111");
+//        fetch();
 
         return view;
     }
 
-    private void fetch() {
-        RetroService service = RetrofitClientInstance.getRetrofitInstance().create(RetroService.class);
-        service.getAll(1).enqueue(new Callback<List<RecruitDTO>>() {
-            @Override
-            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
-                if (response.isSuccessful() && response.body() !=null){
-                    arrayList.addAll(response.body());
-                    customAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
-                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-                Log.d("[실패] : " , "onFailure");
-            }
-        });
-    }
+//    private void fetch() {
+//        RetroService service = RetrofitClientInstance.getRetrofitInstance().create(RetroService.class);
+//        service.getAll(1).enqueue(new Callback<List<RecruitDTO>>() {
+//            @Override
+//            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
+//                if (response.isSuccessful() && response.body() !=null){
+//                    Log.d("[ㅇㅇㅇㅇ] : " ,  "222222222222222222");
+//                    arrayList = response.body();
+//                    Log.d("[성공] : " , "성공했습니다.");
+//                    customAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
+//                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
+//                Log.d("[실패] : " , "onFailure");
+//            }
+//        });
+//    }
 
 
 }

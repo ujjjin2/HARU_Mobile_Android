@@ -36,39 +36,21 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.activity_main, container, false);
 
         tabLayout = view.findViewById(R.id.Home_TabLayout);
-        fragment1 = new Fragment1();
+        viewPager2 = view.findViewById(R.id.Home_ViewPager);
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame,fragment1).commit();
-        tabLayout.addTab(tabLayout.newTab().setText("전체"));
-        tabLayout.addTab(tabLayout.newTab().setText("주방"));
-        tabLayout.addTab(tabLayout.newTab().setText("서빙"));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        ContentsPagerAdapter contentsPagerAdapter = new ContentsPagerAdapter(getActivity());
+        viewPager2.setAdapter(contentsPagerAdapter);
+
+        final List<String> tabElement = Arrays.asList("전체", "서빙"); // 뷰페이저 메뉴 이름
+
+        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                Log.d("ListActivity", "선택된 탭 : " + position);
-                Fragment selected = null;
-                if (position == 0) {
-                    selected = fragment1;
-                } else if (position == 1) {
-                    selected = fragment1;
-                } else if (position == 2) {
-                    selected = fragment1;
-                }
-
-          getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame, selected).commit();
-
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                TextView textView = new TextView(getActivity());
+                textView.setText(tabElement.get(position));
+                tab.setCustomView(textView);
             }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        }).attach();
 
 
         return view;

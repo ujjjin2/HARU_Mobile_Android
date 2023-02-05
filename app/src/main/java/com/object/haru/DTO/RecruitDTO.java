@@ -3,72 +3,63 @@ package com.object.haru.DTO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class RecruitDTO {
+
+    @SerializedName("rid")
     @Expose
-    @SerializedName("id")
-    private int rid;
-    @Expose
+    private Integer rid;
     @SerializedName("title")
+    @Expose
     private String title;
-    @Expose
     @SerializedName("subject")
+    @Expose
     private String subject;
-    @Expose
     @SerializedName("stTime")
+    @Expose
     private String stTime;
-    @Expose
     @SerializedName("endTime")
+    @Expose
     private String endTime;
-    @Expose
     @SerializedName("pay")
-    private int pay;
     @Expose
+    private Integer pay;
     @SerializedName("addr")
+    @Expose
     private String addr;
-    @Expose
     @SerializedName("lat")
-    private int lat;
     @Expose
+    private Object lat;
     @SerializedName("lon")
-    private int lon;
     @Expose
+    private Object lon;
     @SerializedName("rage")
+    @Expose
     private String rage;
-    @Expose
     @SerializedName("rsex")
-    private String rsex;
     @Expose
+    private Object rsex;
     @SerializedName("rcareer")
+    @Expose
     private String rcareer;
+    @SerializedName("person")
     @Expose
+    private Object person;
+    @SerializedName("step")
+    @Expose
+    private String step;
     @SerializedName("count")
-    private int count;
     @Expose
+    private Integer count;
     @SerializedName("name")
+    @Expose
     private String name;
 
-    public RecruitDTO(int rid, String title, String subject, String stTime, String endTime, int pay, String addr, int lat, int lon, String rage, String rsex, String rcareer, int count, String name) {
-        this.rid = rid;
-        this.title = title;
-        this.subject = subject;
-        this.stTime = stTime;
-        this.endTime = endTime;
-        this.pay = pay;
-        this.addr = addr;
-        this.lat = lat;
-        this.lon = lon;
-        this.rage = rage;
-        this.rsex = rsex;
-        this.rcareer = rcareer;
-        this.count = count;
-        this.name = name;
-    }
-
-    public int getRid() {
+    public Integer getRid() {
         return rid;
     }
 
-    public void setRid(int rid) {
+    public void setRid(Integer rid) {
         this.rid = rid;
     }
 
@@ -104,11 +95,11 @@ public class RecruitDTO {
         this.endTime = endTime;
     }
 
-    public int getPay() {
+    public Integer getPay() {
         return pay;
     }
 
-    public void setPay(int pay) {
+    public void setPay(Integer pay) {
         this.pay = pay;
     }
 
@@ -120,19 +111,19 @@ public class RecruitDTO {
         this.addr = addr;
     }
 
-    public int getLat() {
+    public Object getLat() {
         return lat;
     }
 
-    public void setLat(int lat) {
+    public void setLat(Object lat) {
         this.lat = lat;
     }
 
-    public int getLon() {
+    public Object getLon() {
         return lon;
     }
 
-    public void setLon(int lon) {
+    public void setLon(Object lon) {
         this.lon = lon;
     }
 
@@ -144,11 +135,11 @@ public class RecruitDTO {
         this.rage = rage;
     }
 
-    public String getRsex() {
+    public Object getRsex() {
         return rsex;
     }
 
-    public void setRsex(String rsex) {
+    public void setRsex(Object rsex) {
         this.rsex = rsex;
     }
 
@@ -160,11 +151,27 @@ public class RecruitDTO {
         this.rcareer = rcareer;
     }
 
-    public int getCount() {
+    public Object getPerson() {
+        return person;
+    }
+
+    public void setPerson(Object person) {
+        this.person = person;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -175,4 +182,5 @@ public class RecruitDTO {
     public void setName(String name) {
         this.name = name;
     }
+
 }

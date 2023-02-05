@@ -34,23 +34,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
         return holder;
+
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
-//        Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
-        holder.title.setText(arrayList.get(position).getTitle());
-        holder.category.setText(arrayList.get(position).getSubject());
-        holder.time.setText(arrayList.get(position).getStTime()+"~"+arrayList.get(position).getEndTime());
-        holder.money.setText(arrayList.get(position).getPay());
-        holder.location.setText(arrayList.get(position).getAddr());
-        holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//      Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
 
-            }
-        });
+        holder.title.setText(arrayList.get(position).getTitle());
+        holder.category.setText(arrayList.get(position).getTitle());
+        holder.time.setText(arrayList.get(position).getTitle());
+        holder.money.setText(arrayList.get(position).getTitle());
+        holder.location.setText(arrayList.get(position).getTitle());
+
     }
 
     @Override
@@ -60,12 +57,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
     public class CustomViewHolder extends RecyclerView.ViewHolder{
 
-        protected ImageView profile;
         protected TextView title, category, time, money, location;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.profile = itemView.findViewById(R.id.image);
+//          this.profile = itemView.findViewById(R.id.image);
             this.title = itemView.findViewById(R.id.text_title);
             this.category = itemView.findViewById(R.id.text_category);
             this.time = itemView.findViewById(R.id.text_time);

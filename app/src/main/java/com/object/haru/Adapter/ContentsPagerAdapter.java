@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ContentsPagerAdapter extends FragmentStateAdapter {
 
-    private int mPageCount = 0;
+    private int mPageCount = 2;  // 뷰 페이저 갯수
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
 
@@ -29,6 +29,9 @@ public class ContentsPagerAdapter extends FragmentStateAdapter {
             case 0:
                 Fragment1 fragment1 = new Fragment1();
                 return fragment1;
+            case 1:
+                Fragment1 fragment12 = new Fragment1();
+                return fragment12;
             default:
                 return null;
         }

@@ -13,8 +13,10 @@
         android:background="@color/white"
         app:itemTextColor="@color/black"
         app:itemBackground="@color/white"
+        app:itemIconTint="@drawable/bottom_navi_icon"
         app:menu="@menu/bottom_menu"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintLeft_toLeftOf="parent">
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
