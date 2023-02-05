@@ -35,6 +35,7 @@ public class Fragment1 extends Fragment {
     private CustomAdapter customAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
+    private Call<RecruitDTO> call;
 
 
     @Nullable
@@ -56,12 +57,12 @@ public class Fragment1 extends Fragment {
         recyclerView.setAdapter(customAdapter);
 
         Log.d("[ㅇㅇㅇㅇ] : " , "111111111");
-//        fetch();
+        fetch();
 
         return view;
     }
 
-//    private void fetch() {
+    private void fetch() {
 //        RetroService service = RetrofitClientInstance.getRetrofitInstance().create(RetroService.class);
 //        service.getAll(1).enqueue(new Callback<List<RecruitDTO>>() {
 //            @Override
@@ -80,7 +81,25 @@ public class Fragment1 extends Fragment {
 //                Log.d("[실패] : " , "onFailure");
 //            }
 //        });
-//    }
+
+        call = RetrofitClientInstance.getApiService().getAll("1");
+        call.enqueue(new Callback<RecruitDTO>() {
+            @Override
+            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                RecruitDTO user = response.body();
+                arrayList.add(user);
+                customAdapter.notifyDataSetChanged();
+                Log.d("입력이 됐나...?", "=============");
+
+
+            }
+
+            @Override
+            public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                Log.d("입력실패 ㅋ...?", "=============");
+            }
+        });
+    }
 
 
 }

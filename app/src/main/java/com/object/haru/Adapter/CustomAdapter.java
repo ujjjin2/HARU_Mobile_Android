@@ -43,10 +43,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 //      Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
 
         holder.title.setText(arrayList.get(position).getTitle());
-        holder.category.setText(arrayList.get(position).getTitle());
-        holder.time.setText(arrayList.get(position).getTitle());
-        holder.money.setText(arrayList.get(position).getTitle());
-        holder.location.setText(arrayList.get(position).getTitle());
+        holder.category.setText(arrayList.get(position).getSubject());
+        holder.time.setText(arrayList.get(position).getStTime() + "~" + arrayList.get(position).getEndTime());
+        holder.money.setText(arrayList.get(position).getPay().toString());
+        holder.location.setText(arrayList.get(position).getAddr());
 
     }
 
