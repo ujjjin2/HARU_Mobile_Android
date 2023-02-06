@@ -26,24 +26,24 @@ public class TestActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textView1);
 
-        call = RetrofitClientInstance.getApiService().getAll("1");
-        call.enqueue(new Callback<RecruitDTO>() {
-            @Override
-            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                textView.setText("");
-                RecruitDTO user = response.body();
-                Log.d("입력이 됐나...?", "=============");
-                String str;
-                str = user.getTitle() + "\n";
-
-                textView.setText(str);
-            }
-
-            @Override
-            public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                Log.d("입력실패 ㅋ...?", "=============");
-            }
-        });
+//        call = RetrofitClientInstance.getApiService().getAll("1");
+//        call.enqueue(new Callback<RecruitDTO>() {
+//            @Override
+//            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+//                textView.setText("");
+//                RecruitDTO user = response.body();
+//                Log.d("입력이 됐나...?", "=============");
+//                String str;
+//                str = user.getTitle() + "\n";
+//
+//                textView.setText(str);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RecruitDTO> call, Throwable t) {
+//                Log.d("입력실패 ㅋ...?", "=============");
+//            }
+//        });
 
         }
     }

@@ -35,7 +35,7 @@ public class Fragment1 extends Fragment {
     private CustomAdapter customAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
-    private Call<RecruitDTO> call;
+    private Call<List<RecruitDTO>> call;
 
 
     @Nullable
@@ -47,13 +47,12 @@ public class Fragment1 extends Fragment {
 
         recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        customAdapter = new CustomAdapter(getContext(), arrayList);
         recyclerView.setAdapter(customAdapter);
 
         Log.d("[ㅇㅇㅇㅇ] : " , "111111111");
@@ -82,21 +81,27 @@ public class Fragment1 extends Fragment {
 //            }
 //        });
 
-        call = RetrofitClientInstance.getApiService().getAll("1");
-        call.enqueue(new Callback<RecruitDTO>() {
+        call = RetrofitClientInstance.getApiService().getAll(30,37.450354677762,126.65915614333);
+        call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
-            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                RecruitDTO user = response.body();
-                arrayList.add(user);
-                customAdapter.notifyDataSetChanged();
-                Log.d("입력이 됐나...?", "=============");
-
+            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
+//                customAdapter.notifyDataSetChanged();
+//                Log.d("입력이 됐나...?", "=============");
+                
+                if (response.isSuccessful()) {
+                    List<RecruitDTO> user = response.body();
+                    arrayList.addAll(user);
+                    customAdapter = new CustomAdapter(arrayList);
+                    recyclerView.setAdapter(customAdapter);
+                    customAdapter.notifyDataSetChanged();
+                    Log.d("[입력 성공]", "=============");
+                }
 
             }
 
             @Override
-            public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                Log.d("입력실패 ㅋ...?", "=============");
+            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
+                Log.d("[입력 실패]", "=============");
             }
         });
     }

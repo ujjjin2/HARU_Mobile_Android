@@ -21,10 +21,9 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
 
     private List<RecruitDTO> arrayList;
-    private Context context;
 
-    public CustomAdapter(Context context, List<RecruitDTO> arrayList) {
-        this.arrayList = arrayList; this.context=context;
+    public CustomAdapter(List<RecruitDTO> arrayList) {
+        this.arrayList = arrayList;
     }
 
     @NonNull
