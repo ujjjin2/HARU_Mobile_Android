@@ -19,11 +19,163 @@
         android:id="@+id/applywrite_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
         android:text="나이"
+        android:textColor="#299460"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toStartOf="@+id/applywrite_age2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ApplyWrite_toolbar" />
+
+    <TextView
+        android:id="@+id/applywrite_career"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:text="경력"
+        android:textColor="#299460"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toStartOf="@+id/applywrite_career2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_age_et" />
+
+    <TextView
+        android:id="@+id/applywrite_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="35dp"
+        android:text="성별"
+        android:textColor="#299460"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toStartOf="@+id/applywrite_sex2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_career_et" />
+
+    <TextView
+        android:id="@+id/applywrite_etc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:textColor="#299460"
+        android:textStyle="bold"
+        android:text="기타 또는 자기소개"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_sex_et" />
+
+    <TextView
+        android:id="@+id/applywrite_age2"
+        android:layout_width="298dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:text=": 20살 이상"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ApplyWrite_toolbar" />
+
+    <TextView
+        android:id="@+id/applywrite_career2"
+        android:layout_width="298dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:text=": 맘스터치 조리 우대"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_age_et" />
+
+    <TextView
+        android:id="@+id/applywrite_sex2"
+        android:layout_width="298dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:text=": 성별 무관"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_career_et" />
+
+    <EditText
+        android:id="@+id/applywrite_age_et"
+        android:layout_width="363dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="지원자의 나이를 적어주세요"
+        android:inputType="textPersonName"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_age2" />
+
+    <EditText
+        android:id="@+id/applywrite_career_et"
+        android:layout_width="363dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="경력을 입력해주세요"
+        android:inputType="textPersonName"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_career2" />
+
+    <EditText
+        android:id="@+id/applywrite_sex_et"
+        android:layout_width="363dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="성별을 입력해주세요"
+        android:inputType="textPersonName"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_sex2" />
+
+    <EditText
+        android:id="@+id/applywrite_sex_et2"
+        android:layout_width="363dp"
+        android:layout_height="161dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="자기자신을 소개해주세요"
+        android:inputType="textPersonName"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_etc" />
+
+    <Button
+        android:id="@+id/applywrite_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="지원하기"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:backgroundTint="#299460"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
