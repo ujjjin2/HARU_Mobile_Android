@@ -12,7 +12,10 @@ import retrofit2.http.Query;
 
 public interface RetroService {
 
+    //일정한 위치 근처의 구인글 다 띄움
     @GET("/api/recruit/select/loaction")
     Call<List<RecruitDTO>> getAll(@Query("distance")double distance, @Query("latitude")double latitude, @Query("longtitude")double longtitude);
 
+
+    
 }

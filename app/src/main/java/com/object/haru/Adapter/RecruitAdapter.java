@@ -1,34 +1,30 @@
 package com.object.haru.Adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.DTO.RecruitDTO;
-import com.object.haru.MainData;
 import com.object.haru.R;
 
 
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
+public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomViewHolder>{
 
     private List<RecruitDTO> arrayList;
 
-    public CustomAdapter(List<RecruitDTO> arrayList) {
+    public RecruitAdapter(List<RecruitDTO> arrayList) {
         this.arrayList = arrayList;
     }
 
     @NonNull
     @Override
-    public CustomAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecruitAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
@@ -38,7 +34,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecruitAdapter.CustomViewHolder holder, int position) {
 //      Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
 
         holder.title.setText(arrayList.get(position).getTitle());

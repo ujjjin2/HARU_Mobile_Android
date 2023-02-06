@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.object.haru.Fragment.Fragment1;
+import com.object.haru.Fragment.MainFragment_rc;
 
 import java.util.ArrayList;
 import java.util.List;
+/*
+* HomeFragment_Slide 에서 넘어갈수 있게 해주는 기능
+* */
 
-public class ContentsPagerAdapter extends FragmentStateAdapter {
+public class MainSlideAdapter extends FragmentStateAdapter {
 
     private int mPageCount = 2;  // 뷰 페이저 갯수
 
@@ -18,7 +21,7 @@ public class ContentsPagerAdapter extends FragmentStateAdapter {
 
 
 
-    public ContentsPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public MainSlideAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
@@ -27,10 +30,10 @@ public class ContentsPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                Fragment1 fragment1 = new Fragment1();
+                MainFragment_rc fragment1 = new MainFragment_rc();
                 return fragment1;
             case 1:
-                Fragment1 fragment12 = new Fragment1();
+                MainFragment_rc fragment12 = new MainFragment_rc();
                 return fragment12;
             default:
                 return null;

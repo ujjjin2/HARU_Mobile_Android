@@ -1,6 +1,5 @@
-package com.object.haru;
+package com.object.haru.Activity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,11 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.object.haru.Fragment.HomeFragment;
+import com.object.haru.Fragment.HomeFragment_Slide;
+import com.object.haru.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm;
     private FragmentTransaction ft;
 
-    private HomeFragment home;
+    private HomeFragment_Slide home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
              }
          });
 
-         home = new HomeFragment();
+         home = new HomeFragment_Slide();
 
         setFrag(0);
     }

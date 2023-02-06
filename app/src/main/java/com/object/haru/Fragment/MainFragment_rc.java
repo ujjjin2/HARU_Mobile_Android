@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +13,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.object.haru.Adapter.CustomAdapter;
+import com.object.haru.Adapter.RecruitAdapter;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
-import com.object.haru.retrofit.RetroService;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.util.ArrayList;
@@ -27,12 +25,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Fragment1 extends Fragment {
+/*
+ * MainFragment_rc.java
+ * 메인화면 리사이클러뷰
+ * */
+
+public class MainFragment_rc extends Fragment {
 
     private View view;
 
     private List<RecruitDTO> arrayList = new ArrayList<>();
-    private CustomAdapter customAdapter;
+    private RecruitAdapter recruitAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private Call<List<RecruitDTO>> call;
@@ -53,7 +56,7 @@ public class Fragment1 extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        recyclerView.setAdapter(customAdapter);
+        recyclerView.setAdapter(recruitAdapter);
 
         Log.d("[ㅇㅇㅇㅇ] : " , "111111111");
         fetch();
@@ -62,38 +65,19 @@ public class Fragment1 extends Fragment {
     }
 
     private void fetch() {
-//        RetroService service = RetrofitClientInstance.getRetrofitInstance().create(RetroService.class);
-//        service.getAll(1).enqueue(new Callback<List<RecruitDTO>>() {
-//            @Override
-//            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
-//                if (response.isSuccessful() && response.body() !=null){
-//                    Log.d("[ㅇㅇㅇㅇ] : " ,  "222222222222222222");
-//                    arrayList = response.body();
-//                    Log.d("[성공] : " , "성공했습니다.");
-//                    customAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
-//                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-//                Log.d("[실패] : " , "onFailure");
-//            }
-//        });
+        //2023-02-07 허유진 Retrofit 전체보이게 하기
 
         call = RetrofitClientInstance.getApiService().getAll(30,37.450354677762,126.65915614333);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
-//                customAdapter.notifyDataSetChanged();
-//                Log.d("입력이 됐나...?", "=============");
                 
                 if (response.isSuccessful()) {
-                    List<RecruitDTO> user = response.body();
-                    arrayList.addAll(user);
-                    customAdapter = new CustomAdapter(arrayList);
-                    recyclerView.setAdapter(customAdapter);
-                    customAdapter.notifyDataSetChanged();
+                    List<RecruitDTO> recruit = response.body();
+                    arrayList.addAll(recruit);
+                    recruitAdapter = new RecruitAdapter(arrayList);
+                    recyclerView.setAdapter(recruitAdapter);
+                    recruitAdapter.notifyDataSetChanged();
                     Log.d("[입력 성공]", "=============");
                 }
 

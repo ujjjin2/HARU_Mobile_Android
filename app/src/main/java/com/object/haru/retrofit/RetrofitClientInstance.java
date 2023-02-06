@@ -29,7 +29,9 @@ import com.google.gson.GsonBuilder;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+/*
+* 서버 주소 연결 
+* */
 public class RetrofitClientInstance {
     private static final String BASE_URL = "http://114.71.137.141:8080";
 
