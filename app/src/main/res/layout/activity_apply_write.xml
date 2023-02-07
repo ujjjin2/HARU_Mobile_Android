@@ -172,7 +172,7 @@
         android:text="지원하기"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:backgroundTint="#299460"
+        android:background="#299460"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
