@@ -1,30 +1,29 @@
 package com.object.haru.Activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.object.haru.Activity.MainActivity;
 import com.object.haru.R;
-
-import java.util.ArrayList;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    Button category_btn;
-
+    Button category_btn,register_sp_time1,register_sp_time2;
+    Dialog dialogtime1,dialogtime2;
+    EditText year,month,day,hour,min;
+    TextView dialogtime_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +36,89 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//튀로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
         getSupportActionBar().setTitle("구인 등록");
 
+
         category_btn = findViewById(R.id.register_sp_category);
         category_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDialog_Category();
+            }
+        });
+
+
+        dialogtime1 = new Dialog(RegisterActivity.this);
+        dialogtime1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogtime1.setContentView(R.layout.dialogtime);
+        WindowManager.LayoutParams params1 = dialogtime1.getWindow().getAttributes();
+        params1.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params1.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogtime1.getWindow().setAttributes(params1);
+
+
+        register_sp_time1 = findViewById(R.id.register_sp_time1);
+        register_sp_time1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogtime1.show();
+                year = dialogtime1.findViewById(R.id.dialogtime_year);
+                month = dialogtime1.findViewById(R.id.dialogtime_hour);
+                day = dialogtime1.findViewById(R.id.dialogtime_minute);
+                hour = dialogtime1.findViewById(R.id.dialogtime_month);
+                min = dialogtime1.findViewById(R.id.dialogtime_day);
+
+                Button btnok = dialogtime1.findViewById(R.id.button2);
+                btnok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String stryear = year.getText().toString();
+                        String strmonth = month.getText().toString();
+                        String strday = day.getText().toString();
+                        String strhour = hour.getText().toString();
+                        String strmin = min.getText().toString();
+                        register_sp_time1.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
+                        dialogtime1.dismiss();
+                    }
+                });
+
+            }
+        });
+
+        dialogtime2 = new Dialog(RegisterActivity.this);
+        dialogtime2.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogtime2.setContentView(R.layout.dialogtime);
+        WindowManager.LayoutParams params = dialogtime2.getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogtime2.getWindow().setAttributes(params);
+
+        register_sp_time2 = findViewById(R.id.register_sp_time2);
+        register_sp_time2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogtime2.show();
+                dialogtime_title = dialogtime2.findViewById(R.id.dialogtime_title);
+                dialogtime_title.setText("종료 날짜와 시간을 적어주세요");
+
+                year = dialogtime2.findViewById(R.id.dialogtime_year);
+                month = dialogtime2.findViewById(R.id.dialogtime_hour);
+                day = dialogtime2.findViewById(R.id.dialogtime_minute);
+                hour = dialogtime2.findViewById(R.id.dialogtime_month);
+                min = dialogtime2.findViewById(R.id.dialogtime_day);
+
+                Button btnok = dialogtime2.findViewById(R.id.button2);
+                btnok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String stryear = year.getText().toString();
+                        String strmonth = month.getText().toString();
+                        String strday = day.getText().toString();
+                        String strhour = hour.getText().toString();
+                        String strmin = min.getText().toString();
+                        register_sp_time2.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
+                        dialogtime2.dismiss();
+                    }
+                });
+
             }
         });
 

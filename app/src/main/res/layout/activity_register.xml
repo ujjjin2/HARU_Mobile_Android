@@ -56,8 +56,8 @@
         android:background="@color/white"
         android:drawableRight="@drawable/register_btnimg"
         android:paddingRight="10dp"
-        android:text="시작날짜/시간"
-        android:textSize="15dp"
+        android:text="2023-02-08/10:00"
+        android:textSize="13dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.025"
@@ -73,8 +73,8 @@
         android:background="@color/white"
         android:drawableRight="@drawable/register_btnimg"
         android:paddingRight="10dp"
-        android:text="끝 날짜/시간"
-        android:textSize="15dp"
+        android:text="2023-02-08/10:00"
+        android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
