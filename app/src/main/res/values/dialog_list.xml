@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="kind">
+        <item>식당</item>
+        <item>카페</item>
+        <item>편의점</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="kind1">
+        <item>카운터</item>
+        <item>서빙</item>
+        <item>주방(조리)</item>
+        <item>주방(설거지)</item>
+    </string-array>
+
+    <string-array name="kind2">
+        <item>오전타임(6:00~12:00)</item>
+        <item>미들타임(12:00~18:00)</item>
+        <item>오후타임(18:00~00:00)</item>
+        <item>야간타임(00:00~06:00)</item>
+    </string-array>
+
+    <string-array name="kind3">
+        <item>오전타임(6:00~12:00)</item>
+        <item>미들타임(12:00~18:00)</item>
+        <item>오후타임(18:00~00:00)</item>
+        <item>야간타임(00:00~06:00)</item>
+    </string-array>
+
+</resources>
