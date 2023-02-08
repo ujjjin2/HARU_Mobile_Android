@@ -1,18 +1,27 @@
 package com.object.haru.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.object.haru.Activity.RegisterActivity;
 import com.object.haru.Adapter.MainSlideAdapter;
 import com.object.haru.R;
 
@@ -28,6 +37,11 @@ public class HomeFragment_Slide extends Fragment {
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private HomeFragment_Slide homeFragment;
+    private FloatingActionButton floatingActionButton;
+    private FrameLayout frameLayout;
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private MenuItem menuItem;
+    private TextView textView;
 
     private MainFragment_rc fragment1;
 
@@ -55,8 +69,41 @@ public class HomeFragment_Slide extends Fragment {
         }).attach();
 
 
+        floatingActionButton = view.findViewById(R.id.HomeFragment_FAB);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        frameLayout = (FrameLayout) LayoutInflater.from(getActivity()).inflate(R.layout.notification_badge, null);
+        toolbar = (Toolbar) view.findViewById(R.id.HomeFragment_Toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).setTitle("");
+
+        setHasOptionsMenu(true);
+
         return view;
     }
 
+        @Override
+        public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+            super.onCreateOptionsMenu(menu, inflater);
 
-}
+            MenuInflater inflater1 = ((AppCompatActivity)getActivity()).getMenuInflater();
+            inflater1.inflate(R.menu.noti_button, menu);
+
+            menuItem = menu.findItem(R.id.noti);
+
+            menuItem.setActionView(frameLayout);
+            View view = menuItem.getActionView();
+            textView = view.findViewById(R.id.badge_counter);
+
+            textView.setText("3");
+
+            setHasOptionsMenu(true);
+        }
+    }
