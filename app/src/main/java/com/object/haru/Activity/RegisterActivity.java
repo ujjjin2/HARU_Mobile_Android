@@ -4,10 +4,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,8 +26,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     Button category_btn,register_sp_time1,register_sp_time2;
     Dialog dialogtime1,dialogtime2;
-    EditText year,month,day,hour,min;
+    EditText year,month,day,hour,min,addr;
     TextView dialogtime_title;
+    private Handler handler;
+    private WebView webView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +69,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 dialogtime1.show();
                 year = dialogtime1.findViewById(R.id.dialogtime_year);
-                month = dialogtime1.findViewById(R.id.dialogtime_hour);
-                day = dialogtime1.findViewById(R.id.dialogtime_minute);
-                hour = dialogtime1.findViewById(R.id.dialogtime_month);
-                min = dialogtime1.findViewById(R.id.dialogtime_day);
+                month = dialogtime1.findViewById(R.id.dialogtime_month);
+                day = dialogtime1.findViewById(R.id.dialogtime_day);
+                hour = dialogtime1.findViewById(R.id.dialogtime_hour);
+                min = dialogtime1.findViewById(R.id.dialogtime_minute);
 
                 Button btnok = dialogtime1.findViewById(R.id.button2);
                 btnok.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +130,43 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        addr = findViewById(R.id.register_pt_storeinfo);
+
+        //WebView 초기화
+       init_webView();
+        // 핸들러를 통한 JavaScript 이벤트 반응
+        handler = new Handler();
+
+
     }
+
+    private void init_webView() {
+        //webview 설정
+        webView = findViewById(R.id.webView);
+        //자바스크립트의 window.open허용
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        //자바스크립트 이벤트에 대응할 함수를 정의한 클래스를 붙여줌
+        webView.addJavascriptInterface(new AndroidBridge(),"TestApp");
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl("");
+
+    }
+
+    private class AndroidBridge {
+        @JavascriptInterface
+        public void setAddress(final String arg1, final String arg2, final String arg3) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    addr.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
+
+                    // WebView를 초기화 하지않으면 재사용할 수 없음
+                    init_webView();
+                }
+            });
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
