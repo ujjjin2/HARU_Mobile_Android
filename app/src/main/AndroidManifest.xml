@@ -15,23 +15,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HARU_Mobiile.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:name=".kakaoApplication">
         <activity
-            android:name=".Activity.ApplyWriteActivity"
+            android:name=".LoginActivity"
             android:exported="true" >
-
 
 
         </activity>
         <activity
-            android:name=".Activity.RegisterActivity"
+            android:name=".Activity.ApplyWriteActivity"
             android:exported="true"></activity>
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".Activity.DetailActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Activity.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,8 +42,28 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activity.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".TestActivity"
-            android:exported="true"></activity>
+            android:exported="true" >
+
+        </activity>
+
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao45f224d0e6f48c29c62dd5e9b685de3b" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.object.haru.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +32,8 @@ public class DetailActivity extends AppCompatActivity {
             Detail_tv_age2, //우대나이
             Detail_tv_career2, //우대경력
             Detail_tv_sex2; //우대 성별
+
+    boolean i = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,11 @@ public class DetailActivity extends AppCompatActivity {
 //                Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
 //                startActivity(intent);
 //                break;
+            }
+            case R.id.heart:{
+                if (i ==true){
+
+                }
             }
         }
         return super.onOptionsItemSelected(item);

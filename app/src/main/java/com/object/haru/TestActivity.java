@@ -2,48 +2,49 @@ package com.object.haru;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.object.haru.DTO.RecruitDTO;
-import com.object.haru.retrofit.RetrofitClientInstance;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class TestActivity extends AppCompatActivity {
 
-    Call<RecruitDTO> call;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
 
-        textView = findViewById(R.id.textView1);
+        Log.d("getKeyHash",""+getKeyHash(TestActivity.this));
 
-//        call = RetrofitClientInstance.getApiService().getAll("1");
-//        call.enqueue(new Callback<RecruitDTO>() {
-//            @Override
-//            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-//                textView.setText("");
-//                RecruitDTO user = response.body();
-//                Log.d("입력이 됐나...?", "=============");
-//                String str;
-//                str = user.getTitle() + "\n";
-//
-//                textView.setText(str);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<RecruitDTO> call, Throwable t) {
-//                Log.d("입력실패 ㅋ...?", "=============");
-//            }
-//        });
+        }
 
+        public static String getKeyHash(final Context context){
+            PackageManager pm = context.getPackageManager();
+            try {
+                PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+                if (packageInfo == null)
+                    return null;
+
+                for (Signature signature : packageInfo.signatures){
+                    try {
+                        MessageDigest md = MessageDigest.getInstance("SHA");
+                        md.update(signature.toByteArray());
+                        return android.util.Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }

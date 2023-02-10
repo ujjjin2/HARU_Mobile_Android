@@ -24,9 +24,9 @@ import com.object.haru.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    Button category_btn,register_sp_time1,register_sp_time2;
+    Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career;
     Dialog dialogtime1,dialogtime2;
-    EditText year,month,day,hour,min,addr;
+    EditText year,month,day,hour,min,addr,register_pt_age,register_pt_career,register_pt_pay;
     TextView dialogtime_title;
     private Handler handler;
     private WebView webView;
@@ -106,12 +106,11 @@ public class RegisterActivity extends AppCompatActivity {
                 dialogtime2.show();
                 dialogtime_title = dialogtime2.findViewById(R.id.dialogtime_title);
                 dialogtime_title.setText("종료 날짜와 시간을 적어주세요");
-
                 year = dialogtime2.findViewById(R.id.dialogtime_year);
-                month = dialogtime2.findViewById(R.id.dialogtime_hour);
-                day = dialogtime2.findViewById(R.id.dialogtime_minute);
-                hour = dialogtime2.findViewById(R.id.dialogtime_month);
-                min = dialogtime2.findViewById(R.id.dialogtime_day);
+                month = dialogtime2.findViewById(R.id.dialogtime_month);
+                day = dialogtime2.findViewById(R.id.dialogtime_day);
+                hour = dialogtime2.findViewById(R.id.dialogtime_hour);
+                min = dialogtime2.findViewById(R.id.dialogtime_minute);
 
                 Button btnok = dialogtime2.findViewById(R.id.button2);
                 btnok.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +135,33 @@ public class RegisterActivity extends AppCompatActivity {
        init_webView();
         // 핸들러를 통한 JavaScript 이벤트 반응
         handler = new Handler();
+
+        Register_btn_age = findViewById(R.id.Register_btn_age);
+        Register_btn_age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                register_pt_age = findViewById(R.id.register_pt_age);
+                register_pt_age.setText("나이무관");
+            }
+        });
+
+        Register_btn_career = findViewById(R.id.Register_btn_career);
+        Register_btn_career.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                register_pt_career = findViewById(R.id.register_pt_career);
+                register_pt_career.setText("경력무관");
+            }
+        });
+
+        register_btn_pay = findViewById(R.id.register_btn_pay);
+        register_btn_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                register_pt_pay = findViewById(R.id.register_pt_pay);
+                register_pt_pay.setText("최저시급");
+            }
+        });
 
 
     }
