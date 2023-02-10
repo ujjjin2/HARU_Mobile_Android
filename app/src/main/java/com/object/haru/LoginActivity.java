@@ -3,13 +3,21 @@ package com.object.haru;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.Account;
 import com.kakao.sdk.user.model.User;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -24,65 +32,85 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
+        Log.d("KeyHash", getKeyHash());
+
         loginbutton = findViewById(R.id.login);
-
-        // 카카오가 설치되어 있는지 확인 하는 메서드또한 카카오에서 제공 콜백 객체를 이용함
-        Function2<OAuthToken, Throwable, Unit> callback = new  Function2<OAuthToken, Throwable, Unit>() {
+        loginbutton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                // 이때 토큰이 전달이 되면 로그인이 성공한 것이고 토큰이 전달되지 않았다면 로그인 실패
-                if(oAuthToken != null) {
-
+            public void onClick(View v) {
+                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
+                    login();
                 }
-                if (throwable != null) {
-
-                }
-                updateKakaoLoginUi();
-                return null;
-            }
-        };
-        // 로그인 버튼
-        loginbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                    UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, callback);
-                }else {
-                    UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, callback);
+                else{
+                    accountLogin();
                 }
             }
         });
 
     }
-
-
-    private  void updateKakaoLoginUi() {
-        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-            @Override
-            public Unit invoke(User user, Throwable throwable) {
-                // 로그인이 되어있으면
-                if (user != null) {
-
-                    // 유저의 아이디
-                    Log.d(TAG, "invoke: id" + user.getId());
-                    // 유저의 어카운트정보에 이메일
-                    Log.d(TAG, "invoke: nickname" + user.getKakaoAccount().getEmail());
-                    // 유저의 어카운트 정보의 프로파일에 닉네임
-                    Log.d(TAG, "invoke: email" + user.getKakaoAccount().getProfile().getNickname());
-                    // 유저의 어카운트 파일의 성별
-                    Log.d(TAG, "invoke: gerder" + user.getKakaoAccount().getGender());
-                    // 유저의 어카운트 정보에 나이
-                    Log.d(TAG, "invoke: age" + user.getKakaoAccount().getAgeRange());
-                    Log.d("[헤쉬코드]",""+UserApiClient.getInstance().hashCode());
-
-                    loginbutton.setVisibility(View.GONE);
-                } else {
-                    // 로그인이 되어 있지 않다면 위와 반대로
-
-                    loginbutton.setVisibility(View.VISIBLE);
-                }
-                return null;
+    public void login(){
+        String TAG = "login()";
+        UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this,(oAuthToken, error) -> {
+            if (error != null) {
+                Log.e(TAG, "로그인 실패", error);
+            } else if (oAuthToken != null) {
+                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
+                getUserInfo();
             }
+            return null;
         });
+    }
+
+    public void accountLogin(){
+        String TAG = "accountLogin()";
+        UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this,(oAuthToken, error) -> {
+            if (error != null) {
+                Log.e(TAG, "로그인 실패", error);
+            } else if (oAuthToken != null) {
+                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
+                getUserInfo();
+            }
+            return null;
+        });
+    }
+
+    public void getUserInfo(){
+        String TAG = "getUserInfo()";
+        UserApiClient.getInstance().me((user, meError) -> {
+            if (meError != null) {
+                Log.e(TAG, "사용자 정보 요청 실패", meError);
+            } else {
+                System.out.println("로그인 완료");
+                Log.i(TAG, user.toString());
+                {
+                    Log.i(TAG, "사용자 정보 요청 성공" +
+                            "\n회원번호: "+user.getId() +
+                            "\n이메일: "+user.getKakaoAccount().getEmail());
+                }
+                Account user1 = user.getKakaoAccount();
+                System.out.println("사용자 계정" + user1);
+            }
+            return null;
+        });
+    }
+
+    // 키해시 얻기
+    public String getKeyHash(){
+        try{
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            if(packageInfo == null) return null;
+            for(Signature signature: packageInfo.signatures){
+                try{
+                    MessageDigest md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    return android.util.Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+                }catch (NoSuchAlgorithmException e){
+                    Log.w("getKeyHash", "Unable to get MessageDigest. signature="+signature, e);
+                }
+            }
+        }catch(PackageManager.NameNotFoundException e){
+            Log.w("getPackageInfo", "Unable to getPackageInfo");
+        }
+        return null;
     }
 }
