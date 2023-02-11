@@ -17,6 +17,8 @@ public interface RetroService {
     @GET("/api/recruit/select/loaction")
     Call<List<RecruitDTO>> getAll(@Header("X-Auth-Token")String token, @Query("distance")double distance, @Query("latitude")double latitude, @Query("longtitude")double longtitude);
 
+    //DetailActivity 에 깂 넣어서 띄우기
+    @GET("/api/recruit/select/{id}")
+    Call<RecruitDTO> getDetailRecruit(@Path("id")int rid);
 
-    
 }

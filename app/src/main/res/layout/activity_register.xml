@@ -7,6 +7,11 @@
     android:background="@color/white"
     tools:context=".Activity.RegisterActivity">
 
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/Register_toolbar"
         android:layout_width="match_parent"
@@ -51,16 +56,15 @@
         android:id="@+id/register_sp_time1"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="28dp"
         android:background="@color/white"
         android:drawableRight="@drawable/register_btnimg"
         android:paddingRight="10dp"
-        android:text="2023-02-08/10:00"
-        android:textSize="13dp"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
+        android:text="시작날짜/시간"
+        android:textAlignment="center"
+        android:textSize="13dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
@@ -68,14 +72,16 @@
         android:id="@+id/register_sp_time2"
         android:layout_width="150dp"
         android:layout_height="40dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="36dp"
         android:background="@color/white"
         android:drawableRight="@drawable/register_btnimg"
         android:paddingRight="10dp"
-        android:text="2023-02-08/10:00"
+        android:text="종료날짜/시간"
         android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/register_tv_wave"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
     <EditText
@@ -102,7 +108,9 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:enabled="false"
-        android:hint="매장 도로명 주소"
+        android:hint="주소"
+        android:editable="false"
+        android:focusable="false"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
@@ -257,14 +265,11 @@
         android:id="@+id/register_tv_wave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="165dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="14dp"
         android:text="~"
         android:textSize="18dp"
-        app:layout_constraintEnd_toStartOf="@+id/register_sp_time2"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/register_sp_time1"
+        app:layout_constraintStart_toEndOf="@+id/register_sp_time1"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
 
