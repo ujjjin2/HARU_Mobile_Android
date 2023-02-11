@@ -24,11 +24,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 //
 //}
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 /*
 * 서버 주소 연결 
 * */
@@ -36,7 +31,7 @@ public class RetrofitClientInstance {
     private static final String BASE_URL = "http://114.71.137.141:8080";
 
 
-    public static RetroService getApiService(){return getInstance().create(RetroService.class);}
+    public static RetrofitService getApiService(){return getInstance().create(RetrofitService.class);}
 
     private static Retrofit getInstance(){
         Gson gson = new GsonBuilder().setLenient().create();

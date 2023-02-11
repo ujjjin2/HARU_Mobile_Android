@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface RetroService {
+public interface RetrofitService {
 
     //일정한 위치 근처의 구인글 다 띄움
     @GET("/api/recruit/select/loaction")
