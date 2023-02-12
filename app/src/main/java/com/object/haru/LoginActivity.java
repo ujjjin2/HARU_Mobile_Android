@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.kakao.auth.ISessionCallback;
 import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -31,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
     Call<KakaoDTO> call;
-    String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-//        Log.d("KeyHash", getKeyHash());
+        Log.d("KeyHash", getKeyHash());
 
         loginbutton = findViewById(R.id.login);
         loginbutton.setOnClickListener(new View.OnClickListener(){
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
             } else if (oAuthToken != null) {
 
-                String code = "https://kauth.kakao.com/oauth/authorize?client_id=a91d97f1d08c184bf4385f5553d57b6a&redirect_uri=http://localhost:8080/kakao/oauth&response_type=code";
+                String code = oAuthToken.getAccessToken();
                 call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
 
-                String code ="https://kauth.kakao.com/oauth/authorize?client_id=a91d97f1d08c184bf4385f5553d57b6a&redirect_uri=http://localhost:8080/kakao/oauth&response_type=code";
+                String code = oAuthToken.getAccessToken();
                 call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
@@ -155,4 +155,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 }

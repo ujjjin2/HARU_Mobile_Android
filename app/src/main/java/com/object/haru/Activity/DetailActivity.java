@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -63,33 +64,31 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(1);
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MTAxMjQ4LCJleHAiOjE2Nzg2OTMyNDh9.c2NFrbOsSRBgK5RtTO0dcg_FCoeZWN-x89WMEVLskHg",
+                                                                                        1);
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                 if (response.isSuccessful()){
                     RecruitDTO recruit = response.body();
-//                    Detail_tv_writeTime.setText(recruit.w);
-//                            Detail_tv_title, //제목
-//                            Detail_tv_name, //작성자
-//                            detail_three_pay2,Detail_tv_pay2, // 최저시급, 최저시급(총)
-//                            detail_three_date2,Detail_tv_date2, //근무일자
-//                            detail_three_time2, Detail_tv_time2,//근무시간
-//                            Detail_tv_category2, //분야
-//                            Detail_tv_storeinfo2, //매장정보
-//                            Detail_tv_age2, //우대나이
-//                            Detail_tv_career2, //우대경력
-//                            Detail_tv_sex2;
-
-
-
-
+                    Detail_tv_writeTime.setText(recruit.getRtime());
+                            Detail_tv_title.setText(recruit.getTitle()); //제목
+                            Detail_tv_name.setText(recruit.getName()); //작성자
+                            detail_three_pay2.setText(recruit.getPay()); Detail_tv_pay2.setText(recruit.getPay()); // 최저시급, 최저시급(총)
+                            detail_three_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime());Detail_tv_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); //근무일자
+                            detail_three_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); Detail_tv_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime());//근무시간
+                            Detail_tv_category2.setText(recruit.getSubject()); //분야
+                            Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
+                            Detail_tv_age2.setText(recruit.getRage()); //우대나이
+                            Detail_tv_career2.setText(recruit.getRcareer()); //우대경력
+                            Detail_tv_sex2.setText(recruit.getRsex());;
+//2022-02-13/10:00
                 }
             }
 
             @Override
             public void onFailure(Call<RecruitDTO> call, Throwable t) {
-
+                Toast.makeText(DetailActivity.this, "Retrofit 받아오는거 실패", Toast.LENGTH_SHORT).show();
             }
         });
     }

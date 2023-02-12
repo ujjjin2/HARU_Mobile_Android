@@ -20,7 +20,7 @@ public interface RetrofitService {
 
     //DetailActivity 에 깂 넣어서 띄우기
     @GET("/api/recruit/select/{id}")
-    Call<RecruitDTO> getDetailRecruit(@Path("id")int rid);
+    Call<RecruitDTO> getDetailRecruit(@Header("X-Auth-Token")String token,@Path("id")int rid);
 
     //카카오
     @GET("/kakao/oauth")
