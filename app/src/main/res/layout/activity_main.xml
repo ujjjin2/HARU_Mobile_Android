@@ -24,13 +24,18 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/Main_edittext_search"
+                android:id="@+id/HomeFragment_edittext_search"
                 android:layout_width="365dp"
                 android:layout_height="35dp"
                 android:background="@drawable/border_layout_edittext"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:hint="검색"
                 android:textSize="13dp"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:layout_gravity="center_horizontal"
                 android:paddingLeft="9dp"> <!-- 힌트 메시지 위치 조정 -->
             </EditText>

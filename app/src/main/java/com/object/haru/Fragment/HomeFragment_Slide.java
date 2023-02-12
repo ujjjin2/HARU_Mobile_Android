@@ -1,5 +1,6 @@
 package com.object.haru.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.object.haru.Activity.RegisterActivity;
+import com.object.haru.Activity.SearchActivity;
 import com.object.haru.Adapter.MainSlideAdapter;
 import com.object.haru.R;
 
@@ -44,7 +48,7 @@ public class HomeFragment_Slide extends Fragment {
     private TextView textView;
 
     private MainFragment_rc fragment1;
-
+    private EditText editText_search;
 
     @Nullable
     @Override
@@ -53,6 +57,7 @@ public class HomeFragment_Slide extends Fragment {
 
         tabLayout = view.findViewById(R.id.Home_TabLayout);
         viewPager2 = view.findViewById(R.id.Home_ViewPager);
+        editText_search = view.findViewById(R.id.HomeFragment_edittext_search);
 
         MainSlideAdapter contentsPagerAdapter = new MainSlideAdapter(getActivity());
         viewPager2.setAdapter(contentsPagerAdapter);
@@ -68,6 +73,9 @@ public class HomeFragment_Slide extends Fragment {
             }
         }).attach();
 
+
+        InputMethodManager mInputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager.hideSoftInputFromWindow(editText_search.getWindowToken(), 0);
 
         floatingActionButton = view.findViewById(R.id.HomeFragment_FAB);
 
@@ -85,6 +93,14 @@ public class HomeFragment_Slide extends Fragment {
         ((AppCompatActivity)getActivity()).setTitle("");
 
         setHasOptionsMenu(true);
+
+        editText_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

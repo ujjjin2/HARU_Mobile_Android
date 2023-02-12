@@ -12,9 +12,12 @@ import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomViewHolder>{
+
+    private ArrayList<RecruitDTO> items = null;
 
     private List<RecruitDTO> arrayList;
 
@@ -29,7 +32,6 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
         return holder;
-
 
     }
 
@@ -65,4 +67,5 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
         }
     }
+
 }
