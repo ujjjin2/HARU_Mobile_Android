@@ -1,5 +1,6 @@
 package com.object.haru.retrofit;
 
+import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.TestDTO;
 
@@ -20,5 +21,9 @@ public interface RetrofitService {
     //DetailActivity 에 깂 넣어서 띄우기
     @GET("/api/recruit/select/{id}")
     Call<RecruitDTO> getDetailRecruit(@Path("id")int rid);
+
+    //카카오
+    @GET("/kakao/oauth")
+    Call<KakaoDTO> kakaoLogin( @Query("code")String code);
 
 }

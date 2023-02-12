@@ -2,7 +2,6 @@ package com.object.haru;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -10,21 +9,29 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.auth.ISessionCallback;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
-import com.kakao.sdk.user.model.User;
+import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.retrofit.RetrofitClientInstance;
+
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
+    Call<KakaoDTO> call;
+    String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        Log.d("KeyHash", getKeyHash());
+//        Log.d("KeyHash", getKeyHash());
 
         loginbutton = findViewById(R.id.login);
         loginbutton.setOnClickListener(new View.OnClickListener(){
@@ -53,8 +60,25 @@ public class LoginActivity extends AppCompatActivity {
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this,(oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
+
             } else if (oAuthToken != null) {
-                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
+
+                String code = "https://kauth.kakao.com/oauth/authorize?client_id=a91d97f1d08c184bf4385f5553d57b6a&redirect_uri=http://localhost:8080/kakao/oauth&response_type=code";
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
+                call.enqueue(new Callback<KakaoDTO>() {
+                    @Override
+                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+
+                            KakaoDTO kakao = response.body();
+                            Log.d("[로그인 성공]","야호~~~");
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
+
+                    }
+                });
                 getUserInfo();
             }
             return null;
@@ -67,7 +91,25 @@ public class LoginActivity extends AppCompatActivity {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
-                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
+
+                String code ="https://kauth.kakao.com/oauth/authorize?client_id=a91d97f1d08c184bf4385f5553d57b6a&redirect_uri=http://localhost:8080/kakao/oauth&response_type=code";
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
+                call.enqueue(new Callback<KakaoDTO>() {
+                    @Override
+                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+
+                            KakaoDTO kakao = response.body();
+
+                            Log.d("[로그인 성공]","gg"+kakao);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
+                        Log.d("[로그인 실패]","ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ");
+
+                    }
+                });
                 getUserInfo();
             }
             return null;

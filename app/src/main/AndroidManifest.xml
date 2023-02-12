@@ -4,7 +4,7 @@
     package="com.object.haru">
 
     <!-- 인터넷 사용 권한 설정-->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -58,7 +58,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <!-- Redirect URI: "kakao45f224d0e6f48c29c62dd5e9b685de3b://oauth" -->
                 <data android:host="oauth"
                     android:scheme="kakao45f224d0e6f48c29c62dd5e9b685de3b" />
             </intent-filter>
