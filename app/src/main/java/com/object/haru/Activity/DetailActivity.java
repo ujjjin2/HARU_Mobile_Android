@@ -1,8 +1,8 @@
 package com.object.haru.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.object.haru.Activity.MainActivity;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -36,10 +35,15 @@ public class DetailActivity extends AppCompatActivity {
 
     boolean i = true;
 
+    private String rId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        Intent intent = getIntent();
+        rId = intent.getStringExtra("rId");
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
         Detail_tv_name = findViewById(R.id.Detail_tv_name);
@@ -64,8 +68,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MTAxMjQ4LCJleHAiOjE2Nzg2OTMyNDh9.c2NFrbOsSRBgK5RtTO0dcg_FCoeZWN-x89WMEVLskHg",
-                                                                                        1);
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
+                Integer.parseInt(rId));
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
@@ -74,7 +78,7 @@ public class DetailActivity extends AppCompatActivity {
                     Detail_tv_writeTime.setText(recruit.getRtime());
                             Detail_tv_title.setText(recruit.getTitle()); //제목
                             Detail_tv_name.setText(recruit.getName()); //작성자
-                            detail_three_pay2.setText(recruit.getPay()); Detail_tv_pay2.setText(recruit.getPay()); // 최저시급, 최저시급(총)
+//                            detail_three_pay2.setText(recruit.getPay()); Detail_tv_pay2.setText(recruit.getPay()); // 최저시급, 최저시급(총)
                             detail_three_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime());Detail_tv_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); //근무일자
                             detail_three_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); Detail_tv_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime());//근무시간
                             Detail_tv_category2.setText(recruit.getSubject()); //분야
@@ -104,8 +108,6 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
                 finish();
                 return true;
             }

@@ -1,5 +1,8 @@
 package com.object.haru.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.object.haru.Activity.DetailActivity;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
@@ -17,20 +21,24 @@ import java.util.List;
 
 public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomViewHolder>{
 
-    private ArrayList<RecruitDTO> items = null;
-
+    private ArrayList<RecruitDTO> items;
     private List<RecruitDTO> arrayList;
+    private RecruitDTO recruitDTO;
+    private Context context;
 
-    public RecruitAdapter(List<RecruitDTO> arrayList) {
+    public RecruitAdapter(List<RecruitDTO> arrayList, Context context) {
         this.arrayList = arrayList;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public RecruitAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
+
         return holder;
 
     }
@@ -64,6 +72,19 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
             this.time = itemView.findViewById(R.id.text_time);
             this.money = itemView.findViewById(R.id.text_money);
             this.location = itemView.findViewById(R.id.text_location);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAbsoluteAdapterPosition();
+
+                    recruitDTO = arrayList.get(position);
+
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("rId", recruitDTO.getRid().toString());
+                    context.startActivity(intent);
+                }
+            });
 
         }
     }

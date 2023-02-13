@@ -68,7 +68,7 @@ public class MainFragment_rc extends Fragment {
     private void fetch() {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
-        call = RetrofitClientInstance.getApiService().getAll("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MTAxMjQ4LCJleHAiOjE2Nzg2OTMyNDh9.c2NFrbOsSRBgK5RtTO0dcg_FCoeZWN-x89WMEVLskHg",
+        call = RetrofitClientInstance.getApiService().getAll("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
                 30,37.450354677762,126.65915614333);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
@@ -77,7 +77,7 @@ public class MainFragment_rc extends Fragment {
                 if (response.isSuccessful()) {
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList);
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext());
                     recyclerView.setAdapter(recruitAdapter);
                     recruitAdapter.notifyDataSetChanged();
                     Log.d("[입력 성공]", "=============");
