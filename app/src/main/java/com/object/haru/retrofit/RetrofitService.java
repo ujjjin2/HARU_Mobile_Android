@@ -23,13 +23,13 @@ public interface RetrofitService {
     Call<RecruitDTO> getDetailRecruit(@Header("X-Auth-Token")String token,@Path("id") int rid);
 
     //카카오
+
     @GET("/kakao/oauth")
-    Call<KakaoDTO> kakaoLogin( @Query("acccesstoken")String acccesstoken);
+    Call<KakaoDTO> kakaoLogin(@Query("acccesstoken")String acccesstoken);
 
     // 검색
     @GET("api/recruit/select/search")
     Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token, @Query("distance")double distance,
                                       @Query("latitude")double latitude, @Query("longtitude")double longtitude,
                                       @Query("search")String search);
-
 }

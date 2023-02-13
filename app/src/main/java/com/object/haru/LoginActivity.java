@@ -63,21 +63,25 @@ public class LoginActivity extends AppCompatActivity {
 
             } else if (oAuthToken != null) {
 
-                String acccesstoken = oAuthToken.getAccessToken();
-                call =  RetrofitClientInstance.getApiService().kakaoLogin(acccesstoken);
+                String code = oAuthToken.getAccessToken();
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(code.toString());
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
-
+                        if (response.isSuccessful()) {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","야호~~~");
+                        } else {
+                            Log.d("[로그인 실패]","ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
+                        }
 
                     }
 
                     @Override
                     public void onFailure(Call<KakaoDTO> call, Throwable t) {
-
+                        t.printStackTrace();
                     }
+
                 });
                 getUserInfo();
             }
@@ -93,24 +97,26 @@ public class LoginActivity extends AppCompatActivity {
             } else if (oAuthToken != null) {
                 System.out.println("토큰"+oAuthToken.getAccessToken());
 
-                call =  RetrofitClientInstance.getApiService().kakaoLogin(oAuthToken.getAccessToken());
+                call = RetrofitClientInstance.getApiService().kakaoLogin(oAuthToken.getAccessToken().toString());
                 call.enqueue(new Callback<KakaoDTO>() {
-                    @Override
-                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+                                 @Override
+                                 public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+                                     if (response.isSuccessful()){
+                                         KakaoDTO kakao = response.body();
+                                         Log.d("[로그인 성공]","야호~~~");
+                                     } else {
+                                         Log.d("[로그인 실패]","ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
+                                     }
+                                 }
 
-                            KakaoDTO kakao = response.body();
+                                 @Override
+                                 public void onFailure(Call<KakaoDTO> call, Throwable t) {
+                                     Log.d("[로그인 실패]","ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ");
+                                     t.printStackTrace();
+                                 }
+                             });
 
-                            Log.d("[로그인 성공]","gg"+kakao);
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
-                        Log.d("[로그인 실패]","ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ");
-
-                    }
-                });
-                getUserInfo();
+                        getUserInfo();
             }
             return null;
         });
