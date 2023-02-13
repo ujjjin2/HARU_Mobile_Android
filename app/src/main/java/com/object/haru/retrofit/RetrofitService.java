@@ -24,7 +24,7 @@ public interface RetrofitService {
 
     //카카오
     @GET("/kakao/oauth")
-    Call<KakaoDTO> kakaoLogin( @Query("code")String code);
+    Call<KakaoDTO> kakaoLogin( @Query("acccesstoken")String acccesstoken);
 
     // 검색
     @GET("api/recruit/select/search")

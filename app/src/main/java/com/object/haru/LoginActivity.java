@@ -63,8 +63,8 @@ public class LoginActivity extends AppCompatActivity {
 
             } else if (oAuthToken != null) {
 
-                String code = oAuthToken.getAccessToken();
-                call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
+                String acccesstoken = oAuthToken.getAccessToken();
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(acccesstoken);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
@@ -91,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
+                System.out.println("토큰"+oAuthToken.getAccessToken());
 
-                String code = oAuthToken.getAccessToken();
-                call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(oAuthToken.getAccessToken());
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {

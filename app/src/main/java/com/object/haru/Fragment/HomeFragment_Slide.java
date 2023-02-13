@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.object.haru.Activity.RegisterActivity;
-import com.object.haru.Activity.SearchActivity;
+//import com.object.haru.Activity.SearchActivity;
 import com.object.haru.Adapter.MainSlideAdapter;
 import com.object.haru.R;
 
@@ -97,8 +97,8 @@ public class HomeFragment_Slide extends Fragment {
         editText_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), SearchActivity.class);
+//                startActivity(intent);
             }
         });
 

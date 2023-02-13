@@ -4,15 +4,15 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class KakaoDTO {
-    @SerializedName("code")
+    @SerializedName("acccesstoken")
     @Expose
-    private String code;
+    private String acccesstoken;
 
-    public String getCode() {
-        return code;
+    public String getacccesstoken() {
+        return acccesstoken;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setacccesstoken(String code) {
+        this.acccesstoken = acccesstoken;
     }
 }
