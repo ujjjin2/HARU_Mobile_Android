@@ -15,7 +15,8 @@ public interface RetrofitService {
 
     //일정한 위치 근처의 구인글 다 띄움
     @GET("/api/recruit/select/loaction")
-    Call<List<RecruitDTO>> getAll(@Header("X-Auth-Token")String token, @Query("distance")double distance, @Query("latitude")double latitude, @Query("longtitude")double longtitude);
+    Call<List<RecruitDTO>> getAll(@Header("X-Auth-Token")String token, @Query("distance")double distance,
+                                  @Query("latitude")double latitude, @Query("longtitude")double longtitude);
 
     //DetailActivity 에 깂 넣어서 띄우기
     @GET("/api/recruit/select/{id}")
@@ -24,5 +25,11 @@ public interface RetrofitService {
     //카카오
     @GET("/kakao/oauth")
     Call<KakaoDTO> kakaoLogin( @Query("code")String code);
+
+    // 검색
+    @GET("api/recruit/select/search")
+    Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token, @Query("distance")double distance,
+                                      @Query("latitude")double latitude, @Query("longtitude")double longtitude,
+                                      @Query("search")String search);
 
 }

@@ -4,19 +4,18 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class TestDTO {
-    @Expose
-    @SerializedName("id")
-    private String id;
 
-    public TestDTO(String id) {
-        this.id = id;
+    private String title;
+
+    public TestDTO(String title) {
+        this.title = title;
     }
 
-    public String getId() {
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
