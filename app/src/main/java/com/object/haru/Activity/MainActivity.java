@@ -1,6 +1,8 @@
 package com.object.haru.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeFragment_Slide home;
     private MyPageFragment_Slide myPage;
+    public String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bottom);
 
         bottomNavigationView = findViewById(R.id.Main_bottomNavi);
+
+        Intent intent = getIntent();
+        accessToken = intent.getStringExtra("token");
 
          bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
              @Override
@@ -67,7 +73,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 
 }

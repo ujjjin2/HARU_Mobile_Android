@@ -1,22 +1,30 @@
 package com.object.haru.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.object.haru.Activity.MainActivity;
 import com.object.haru.Adapter.RecruitAdapter;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +32,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /*
  * MainFragment_rc.java
@@ -39,16 +48,27 @@ public class MainFragment_rc extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private Call<List<RecruitDTO>> call;
+    private NestedScrollView nestedScrollView;
+    private ProgressBar progressBar;
+    private String token;
 
+    int page = 1, limit = 3;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
+
         view = inflater.inflate(R.layout.activity_whole_list, container, false);
         recyclerView = view.findViewById(R.id.Fragment1_recyclerview);
-
+        nestedScrollView = view.findViewById(R.id.scrollView);
+        progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+
+        Intent intent = getActivity().getIntent();
+        token = intent.getStringExtra("token");
+
 
         layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
@@ -59,22 +79,37 @@ public class MainFragment_rc extends Fragment {
 
         recyclerView.setAdapter(recruitAdapter);
 
-        Log.d("[ㅇㅇㅇㅇ] : " , "111111111");
-        fetch();
+        Log.d("[ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ] : " , token);
 
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                    fetch();
+                }
+            }
+        });
+
+
+        fetch();
         return view;
     }
 
     private void fetch() {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
-        call = RetrofitClientInstance.getApiService().getAll("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
-                30,37.450354677762,126.65915614333);
+        call = RetrofitClientInstance.getApiService().getAll(token,
+                30,37.450354677762,126.65915614333, 4);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
                 
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
                     recruitAdapter = new RecruitAdapter(arrayList, getContext());
@@ -91,6 +126,8 @@ public class MainFragment_rc extends Fragment {
             }
         });
     }
+
+
 
 
 }

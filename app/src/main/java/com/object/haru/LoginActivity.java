@@ -2,6 +2,7 @@ package com.object.haru;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.kakao.sdk.user.model.Account;
+import com.object.haru.Activity.MainActivity;
 import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
 
@@ -64,13 +67,21 @@ public class LoginActivity extends AppCompatActivity {
             } else if (oAuthToken != null) {
 
                 String code = oAuthToken.getAccessToken();
-                call =  RetrofitClientInstance.getApiService().kakaoLogin("", code.toString());
+                call =  RetrofitClientInstance.getApiService().kakaoLogin("", code);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
                         if (response.isSuccessful()) {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","야호~~~");
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("token", kakao.getacccesstoken());
+
+                            Intent intent1 = new Intent(LoginActivity.this, MainFragment_rc.class);
+                            intent1.putExtra("token", kakao.getacccesstoken());
+
+                            startActivity(intent);
                         } else {
                             Log.d("[로그인 실패]","ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
                         }
@@ -104,6 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                                      if (response.isSuccessful()){
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
+                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                         intent.putExtra("token", kakao.getacccesstoken());
+                                         startActivity(intent);
                                      } else {
                                          Log.d("[로그인 실패]","ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
                                      }
