@@ -6,6 +6,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,8 @@ public class DetailActivity extends AppCompatActivity {
             Detail_tv_career2, //우대경력
             Detail_tv_sex2; //우대 성별
 
+    private int min = 9620;
+
     boolean i = true;
 
     private String rId;
@@ -57,14 +63,66 @@ public class DetailActivity extends AppCompatActivity {
         Detail_tv_career2 = findViewById(R.id.Detail_tv_career2);
         Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
 
-
-        //툴바 생성
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//튀로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
-        getSupportActionBar().setTitle("");
+        buttonaction();
 
         fetch();
+    }
+
+    private void buttonaction() {
+        ImageButton back_btn = findViewById(R.id.imageButton_left);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+             startActivity(intent);
+            }
+        });
+
+        ImageButton heart_btn = findViewById(R.id.imageButton_heart);
+        heart_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (i == true){
+                    heart_btn.setImageResource(R.drawable.full_heart);
+                    i = false;
+                }else{
+                    heart_btn.setImageResource(R.drawable.detail_img);
+                    i = true;
+                }
+            }
+        });
+        ImageButton option_btn = findViewById(R.id.imageButton_option);
+        option_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_item1){
+                            Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
+                        }else if (menuItem.getItemId() == R.id.action_item2){
+                            Toast.makeText(DetailActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
+        Button apply_btn = findViewById(R.id.apply_btn);
+        apply_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ApplyWriteActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     private void fetch() {
@@ -78,9 +136,26 @@ public class DetailActivity extends AppCompatActivity {
                     Detail_tv_writeTime.setText(recruit.getRtime());
                             Detail_tv_title.setText(recruit.getTitle()); //제목
                             Detail_tv_name.setText(recruit.getName()); //작성자
-//                            detail_three_pay2.setText(recruit.getPay()); Detail_tv_pay2.setText(recruit.getPay()); // 최저시급, 최저시급(총)
-                            detail_three_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime());Detail_tv_date2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); //근무일자
-                            detail_three_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime()); Detail_tv_time2.setText(recruit.getStTime()+"~"+recruit.getEndTime());//근무시간
+                            detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
+
+                            String stdate = recruit.getStTime().substring(0,10);
+                            String enddate = recruit.getEndTime().substring(0,10);
+                            detail_three_date2.setText(stdate);//상단 근무일자
+                            Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
+
+                            String sttime = recruit.getStTime().substring(12,16);
+                            String endtime = recruit.getEndTime().substring(12,16);
+
+                            String sttime2 = recruit.getStTime().substring(12,13);
+                            String endtime2 = recruit.getEndTime().substring(12,13);
+                            int st = Integer.parseInt(sttime2);
+                            int ed = Integer.parseInt(endtime2);
+                            int result = ed-st;
+                            detail_three_time2.setText(result+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+
+
+                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*result)+"원)"); // 최저시급(총)
+
                             Detail_tv_category2.setText(recruit.getSubject()); //분야
                             Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
                             Detail_tv_age2.setText(recruit.getRage()); //우대나이
@@ -97,37 +172,5 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
-                finish();
-                return true;
-            }
-            case R.id.action_item1: {
-//                Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
-//                startActivity(intent);
-//                break;
-            }
-
-            case R.id.action_item2: {
-//                Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
-//                startActivity(intent);
-//                break;
-            }
-            case R.id.heart:{
-                if (i ==true){
-
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

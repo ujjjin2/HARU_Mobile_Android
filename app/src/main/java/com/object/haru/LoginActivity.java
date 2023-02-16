@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             } else if (oAuthToken != null) {
 
                 String code = oAuthToken.getAccessToken();
-                call =  RetrofitClientInstance.getApiService().kakaoLogin(code.toString());
+                call =  RetrofitClientInstance.getApiService().kakaoLogin(code);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {

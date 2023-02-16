@@ -2,13 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/heart"
-        android:title="heart"
-        android:icon="@drawable/heart"
-        app:showAsAction="always" />
-
-
     <group>
     <item android:id="@+id/action_item1"
         android:title="수정"
