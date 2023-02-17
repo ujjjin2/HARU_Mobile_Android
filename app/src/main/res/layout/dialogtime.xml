@@ -120,45 +120,41 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+
+            <Spinner
                 android:id="@+id/dialogtime_hour"
-                android:layout_width="77dp"
+                android:layout_width="100dp"
                 android:layout_height="33dp"
-                android:layout_marginStart="80dp"
-                android:ems="10"
-                android:hint="00"
-                android:inputType="number"
+                android:layout_marginStart="56dp"
+                android:entries="@array/time_hour"
                 android:textAlignment="center"
                 android:textSize="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="44dp"
                 android:text=":"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dialogtime_hour"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/dialogtime_minute"
-                android:layout_width="77dp"
+                android:layout_width="100dp"
                 android:layout_height="33dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="00"
-                android:inputType="number"
                 android:textAlignment="center"
+                android:entries="@array/time_minute"
                 android:textSize="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.034"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -173,6 +169,8 @@
             android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="#299460"
             android:text="완료" />
 
     </LinearLayout>

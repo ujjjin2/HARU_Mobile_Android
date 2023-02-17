@@ -28,7 +28,7 @@ public class Search_register extends AppCompatActivity {
         });
 
         //최초 웹뷰 로드
-        webView.loadUrl("http://10.0.2.2:8080/roadSearch.html");
+        webView.loadUrl("http://192.168.0.12:8080/roadSearch.html");
     }
 
     private class BridgeInterface {

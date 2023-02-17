@@ -12,8 +12,11 @@ import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -28,10 +31,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career;
     Dialog dialogtime1,dialogtime2,dialogAddr;
-    EditText year,month,day,hour,min,addr,register_pt_age,register_pt_career,register_pt_pay;
+    EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay;
     TextView dialogtime_title;
+    Spinner hour,min;
+    String strhour,strmin;
     private Handler handler;
-
 
 
     @Override
@@ -75,6 +79,18 @@ public class RegisterActivity extends AppCompatActivity {
                 hour = dialogtime1.findViewById(R.id.dialogtime_hour);
                 min = dialogtime1.findViewById(R.id.dialogtime_minute);
 
+                ArrayAdapter hourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                        R.array.time_hour, android.R.layout.select_dialog_item);
+
+                ArrayAdapter minAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                        R.array.time_minute, android.R.layout.select_dialog_item);
+
+                minAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+                min.setAdapter(minAdapter);
+
+                hourAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+                hour.setAdapter(hourAdapter);
+
                 Button btnok = dialogtime1.findViewById(R.id.button2);
                 btnok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -82,8 +98,28 @@ public class RegisterActivity extends AppCompatActivity {
                         String stryear = year.getText().toString();
                         String strmonth = month.getText().toString();
                         String strday = day.getText().toString();
-                        String strhour = hour.getText().toString();
-                        String strmin = min.getText().toString();
+                        hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                strhour = adapterView.getItemAtPosition(i).toString();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
+                        min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                strmin = adapterView.getItemAtPosition(i).toString();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
                         register_sp_time1.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
                         dialogtime1.dismiss();
                     }
@@ -100,6 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialogtime2.getWindow().setAttributes(params);
 
+
         register_sp_time2 = findViewById(R.id.register_sp_time2);
         register_sp_time2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +150,8 @@ public class RegisterActivity extends AppCompatActivity {
                 hour = dialogtime2.findViewById(R.id.dialogtime_hour);
                 min = dialogtime2.findViewById(R.id.dialogtime_minute);
 
+
+
                 Button btnok = dialogtime2.findViewById(R.id.button2);
                 btnok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -120,8 +159,44 @@ public class RegisterActivity extends AppCompatActivity {
                         String stryear = year.getText().toString();
                         String strmonth = month.getText().toString();
                         String strday = day.getText().toString();
-                        String strhour = hour.getText().toString();
-                        String strmin = min.getText().toString();
+                        hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                if (!hour.getItemAtPosition(i).equals("0시")) {
+//                                    spinnerMonth.setEnabled(true);
+                                    strhour = (String) hour.getSelectedItem();
+                                } else {
+//                                    spinnerMonth.setEnabled(false);
+//                                    spinnerDay.setEnabled(false);
+                                    strhour = "";
+                                }
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
+                        min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                                strmin = adapterView.getItemAtPosition(i).toString();
+                                if (!min.getItemAtPosition(i).equals("0분")) {
+//                                    spinnerMonth.setEnabled(true);
+                                    strmin = (String)min.getSelectedItem();
+                                } else {
+//                                    spinnerMonth.setEnabled(false);
+//                                    spinnerDay.setEnabled(false);
+                                    strhour = "";
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
                         register_sp_time2.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
                         dialogtime2.dismiss();
                     }
@@ -157,7 +232,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 register_pt_age = findViewById(R.id.register_pt_age);
-                register_pt_age.setText("나이무관");
+                register_pt_age.setText("연령무관");
             }
         });
 

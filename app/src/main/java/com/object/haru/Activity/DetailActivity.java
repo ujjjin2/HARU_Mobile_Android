@@ -69,6 +69,14 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void buttonaction() {
+        Detail_tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ImageButton back_btn = findViewById(R.id.imageButton_left);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +112,19 @@ public class DetailActivity extends AppCompatActivity {
                             Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
                         }else if (menuItem.getItemId() == R.id.action_item2){
                             Toast.makeText(DetailActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
+                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
+                                    Integer.parseInt(rId));
+                            call.enqueue(new Callback<RecruitDTO>() {
+                                @Override
+                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                    RecruitDTO recruit = response.body();
+                                }
+
+                                @Override
+                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
+
+                                }
+                            });
                         }
 
                         return false;
