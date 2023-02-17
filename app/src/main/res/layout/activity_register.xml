@@ -7,11 +7,6 @@
     android:background="@color/white"
     tools:context=".Activity.RegisterActivity">
 
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/Register_toolbar"
         android:layout_width="match_parent"
@@ -107,10 +102,8 @@
         android:layout_height="38dp"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:enabled="false"
-        android:hint="주소"
-        android:editable="false"
         android:focusable="false"
+        android:hint="주소"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textColorHint="@color/black"

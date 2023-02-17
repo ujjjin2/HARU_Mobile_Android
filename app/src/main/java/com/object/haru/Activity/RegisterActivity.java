@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,11 +27,10 @@ import com.object.haru.R;
 public class RegisterActivity extends AppCompatActivity {
 
     Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career;
-    Dialog dialogtime1,dialogtime2;
+    Dialog dialogtime1,dialogtime2,dialogAddr;
     EditText year,month,day,hour,min,addr,register_pt_age,register_pt_career,register_pt_pay;
     TextView dialogtime_title;
     private Handler handler;
-    private WebView webView;
 
 
 
@@ -129,12 +130,27 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        addr = findViewById(R.id.register_pt_storeinfo);
+        dialogAddr = new Dialog(RegisterActivity.this);
+        dialogAddr.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogAddr.setContentView(R.layout.activity_search_register);
 
-        //WebView 초기화
-       init_webView();
-        // 핸들러를 통한 JavaScript 이벤트 반응
-        handler = new Handler();
+        WindowManager.LayoutParams params2 = dialogAddr.getWindow().getAttributes();
+        params2.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogAddr.getWindow().setAttributes(params2);
+
+        addr = findViewById(R.id.register_pt_storeinfo);
+        addr.setFocusable(false);
+        addr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //주소 검색 웹뷰 화면으로 이동
+                dialogAddr.show();
+                Intent intent = getIntent();
+                getSearchResult.launch(intent);
+
+            }
+        });
 
         Register_btn_age = findViewById(R.id.Register_btn_age);
         Register_btn_age.setOnClickListener(new View.OnClickListener() {
@@ -166,32 +182,32 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void init_webView() {
-        //webview 설정
-        webView = findViewById(R.id.webView);
-        //자바스크립트의 window.open허용
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        //자바스크립트 이벤트에 대응할 함수를 정의한 클래스를 붙여줌
-        webView.addJavascriptInterface(new AndroidBridge(),"TestApp");
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("");
-
-    }
-
-    private class AndroidBridge {
-        @JavascriptInterface
-        public void setAddress(final String arg1, final String arg2, final String arg3) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    addr.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
-
-                    // WebView를 초기화 하지않으면 재사용할 수 없음
-                    init_webView();
-                }
-            });
-        }
-    }
+//    private void init_webView() {
+//        //webview 설정
+//        webView = findViewById(R.id.webView);
+//        //자바스크립트의 window.open허용
+//        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+//        //자바스크립트 이벤트에 대응할 함수를 정의한 클래스를 붙여줌
+//        webView.addJavascriptInterface(new AndroidBridge(),"roadSearch");
+//        webView.setWebChromeClient(new WebChromeClient());
+//        webView.loadUrl("http://10.0.0.2:8080/roadSearch.html");
+//
+//    }
+//
+//    private class AndroidBridge {
+//        @JavascriptInterface
+//        public void setAddress(final String arg1, final String arg2, final String arg3) {
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    addr.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
+//
+//                    // WebView를 초기화 하지않으면 재사용할 수 없음
+//                    init_webView();
+//                }
+//            });
+//        }
+//    }
 
 
     @Override
@@ -272,4 +288,17 @@ public class RegisterActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
+
+        private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    //Search_register로 부터의 결과 값을 받아 이곳으로 전달
+                    if (result.getResultCode() == RESULT_OK){
+                        if (result.getData() != null){
+                            String data = result.getData().getStringExtra("data");
+                            addr.setText(data);
+                        }
+                    }
+                }
+        );
 }
