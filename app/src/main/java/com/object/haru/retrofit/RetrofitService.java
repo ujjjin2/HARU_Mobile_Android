@@ -24,7 +24,6 @@ public interface RetrofitService {
     Call<RecruitDTO> getDetailRecruit(@Header("X-Auth-Token")String token,@Path("id") int rid);
 
     //카카오
-
     @GET("/kakao/oauth")
     Call<KakaoDTO> kakaoLogin(@Header("X-Auth-Token") String token, @Query("acccesstoken")String acccesstoken);
 
@@ -34,6 +33,7 @@ public interface RetrofitService {
                                       @Query("latitude")double latitude, @Query("longtitude")double longtitude,
                                       @Query("search")String search);
 
-    @PUT("/api/recruit/remove")
-    Call<RecruitDTO> Deleterecruit(@Header("X-Auth-Token")String token,@Path("id") int rid);
+    //상세페이지-삭제
+    @PUT("/api/recruit/remove/{rid}")
+    Call<RecruitDTO> Deleterecruit(@Header("X-Auth-Token")String token,@Path("rid") int rid);
 }

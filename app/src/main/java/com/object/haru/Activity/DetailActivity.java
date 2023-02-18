@@ -41,7 +41,7 @@ public class DetailActivity extends AppCompatActivity {
 
     boolean i = true;
 
-    private String rId;
+    private String rId,token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,11 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         rId = intent.getStringExtra("rId");
+        Log.d("[rid확인]",rId.toString());
+
+//        Intent intent2 = getIntent();
+//        token = intent2.getStringExtra("token");
+//        Log.d("[token 확인]",token);
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
         Detail_tv_name = findViewById(R.id.Detail_tv_name);
@@ -111,18 +116,22 @@ public class DetailActivity extends AppCompatActivity {
                         if (menuItem.getItemId() == R.id.action_item1){
                             Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
                         }else if (menuItem.getItemId() == R.id.action_item2){
-                            Toast.makeText(DetailActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
-                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
+                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
                                     Integer.parseInt(rId));
                             call.enqueue(new Callback<RecruitDTO>() {
                                 @Override
                                 public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                                     RecruitDTO recruit = response.body();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
+
                                 }
 
                                 @Override
                                 public void onFailure(Call<RecruitDTO> call, Throwable t) {
-
+                                    Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
+                                    t.printStackTrace();
                                 }
                             });
                         }
@@ -147,7 +156,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk",
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
                 Integer.parseInt(rId));
         call.enqueue(new Callback<RecruitDTO>() {
             @Override

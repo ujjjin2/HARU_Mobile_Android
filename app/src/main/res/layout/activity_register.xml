@@ -28,7 +28,7 @@
         android:textColorHint="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintHorizontal_bias="0.417"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Register_toolbar" />
 
@@ -59,7 +59,7 @@
 
         android:text="시작날짜/시간"
         android:textAlignment="center"
-        android:textSize="13dp"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
@@ -74,7 +74,7 @@
         android:drawableRight="@drawable/register_btnimg"
         android:paddingRight="10dp"
         android:text="종료날짜/시간"
-        android:textSize="13dp"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/register_tv_wave"
         app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
@@ -166,13 +166,13 @@
         android:id="@+id/Register_tv_condition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:text="지원조건"
         android:textColor="#299460"
         android:textSize="17dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.088"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_pt_storeinfo2" />
 

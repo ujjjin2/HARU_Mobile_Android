@@ -77,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                 month = dialogtime1.findViewById(R.id.dialogtime_month);
                 day = dialogtime1.findViewById(R.id.dialogtime_day);
                 hour = dialogtime1.findViewById(R.id.dialogtime_hour);
+
                 min = dialogtime1.findViewById(R.id.dialogtime_minute);
 
                 ArrayAdapter hourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
@@ -85,10 +86,10 @@ public class RegisterActivity extends AppCompatActivity {
                 ArrayAdapter minAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
                         R.array.time_minute, android.R.layout.select_dialog_item);
 
-                minAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+                minAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 min.setAdapter(minAdapter);
 
-                hourAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+                hourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 hour.setAdapter(hourAdapter);
 
                 Button btnok = dialogtime1.findViewById(R.id.button2);
