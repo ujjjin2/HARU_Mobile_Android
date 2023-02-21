@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/scrollView"
+    android:background="#f1f1f1"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -21,12 +22,12 @@
             app:layout_constraintBottom_toBottomOf="parent">
         </androidx.recyclerview.widget.RecyclerView>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-        </ProgressBar>
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progress_bar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+<!--        </ProgressBar>-->
 
 
     </LinearLayout>

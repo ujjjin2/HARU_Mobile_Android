@@ -5,29 +5,66 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:background="#f1f1f1">
 
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:orientation="horizontal">
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="7dp"
-                android:layout_gravity="center">
+                android:layout_margin="15dp" >
 
-                <TextView
-                    android:id="@+id/text_category"
+
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="서빙"
-                    android:textSize="13dp" >
-                </TextView>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="서빙"
+                        android:textSize="13dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_marginTop="3dp">
+                    </TextView>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2시간전"
+                        android:textSize="12dp"
+                        android:layout_marginTop="3dp">
+                    </TextView>
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:src="@drawable/zzim"
+                        android:layout_marginLeft="4dp" >
+                    </ImageView>
+
+                </LinearLayout>
+
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -37,10 +74,11 @@
                         android:id="@+id/text_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="카페에서 알바 대타하실분 구합니다"
+                        android:text="평일 오후 홀서빙 알바구합니다."
                         android:textColor="#2b2824"
-                        android:textSize="16dp"
-                        android:textStyle="bold">
+                        android:textSize="15dp"
+                        android:layout_marginTop="3dp"
+>
                     </TextView>
 
 
@@ -51,46 +89,103 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text_time"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="#3시간"
-                        android:textColor="#2b2824"
-                        android:textSize="13dp" >
-                    </TextView>
+                        android:layout_marginTop="5dp">
 
-                    <TextView
-                        android:id="@+id/text_money"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="#최저시급"
-                        android:textColor="#2b2824"
-                        android:textSize="13dp"
-                        android:layout_marginLeft="10dp">
-                    </TextView>
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/location"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="1dp">
+                        </ImageView>
 
                     <TextView
                         android:id="@+id/text_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="#매장위치"
-                        android:textColor="#2b2824"
-                        android:textSize="13dp"
-                        android:layout_marginLeft="10dp">
+                        android:text="충남 천안시 신부동"
+                        android:textColor="#525256"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="1dp"
+                        android:textSize="12dp" >
                     </TextView>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="2dp">
+
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/time"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="1dp">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/text_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="주3일 · 24:00~09:00"
+                        android:textColor="#525256"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="12dp"
+                        android:layout_gravity="center" >
+                        </TextView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="13dp">
+
+                        <TextView
+                            android:id="@+id/text_money1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="시급"
+                            android:textColor="#299460"
+                            android:textSize="13dp"
+                            android:textStyle="bold">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/text_money"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9,620원"
+                            android:textColor="#2b2824"
+                            android:textSize="14dp"
+                            android:layout_marginLeft="3dp"
+                            android:textStyle="bold">
+                        </TextView>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
 
 <!--            <ImageView-->
 <!--                android:id="@+id/image"-->
@@ -98,8 +193,6 @@
 <!--                android:layout_height="80dp"-->
 <!--                android:src="@mipmap/ic_launcher">-->
 <!--            </ImageView>-->
-        </LinearLayout>
-
-
+        </androidx.cardview.widget.CardView>
 
 </LinearLayout>

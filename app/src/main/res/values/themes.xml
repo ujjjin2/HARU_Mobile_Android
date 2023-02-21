@@ -10,7 +10,7 @@
         <item name="android:windowFullscreen">true</item>
         <!--NO title Bar-->
         <item name="windowActionBar">false</item>
-
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="Theme.HARU_Mobiile.NoActionBar">
@@ -21,4 +21,16 @@
     <style name="Theme.HARU_Mobiile.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.HARU_Mobiile.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModelStyle</item>
+    </style>
+
+    <style name="AppModelStyle"
+        parent="Widget.Design.BottomSheet.Modal" >
+        <item name="android:background">@drawable/dialog_style</item>
+    </style>
+
 </resources>

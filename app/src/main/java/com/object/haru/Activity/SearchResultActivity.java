@@ -71,9 +71,9 @@ public class SearchResultActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 구분선
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        // 구분선
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setAdapter(recruitAdapter);
 

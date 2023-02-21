@@ -50,7 +50,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
         holder.title.setText(arrayList.get(position).getTitle());
         holder.category.setText(arrayList.get(position).getSubject());
         holder.time.setText(arrayList.get(position).getStTime() + "~" + arrayList.get(position).getEndTime());
-        holder.money.setText(arrayList.get(position).getPay().toString());
+        holder.money.setText(arrayList.get(position).getPay().toString() + "원");
         holder.location.setText(arrayList.get(position).getAddr());
 
     }

@@ -46,23 +46,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
-                app:layout_collapseMode="pin" >
+                app:layout_collapseMode="pin">
 
                 <TextView
+                    android:id="@+id/text_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="인천 미추홀구 용현동"
-                    android:textSize="17dp"
+                    android:text="인천 미추홀구 인천 미추홀구 인천미"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:ellipsize="end"
+                    android:maxEms="11"
+                    android:maxLines="1"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" >"
-                    android:textSize="16dp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -86,10 +90,9 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/Home_TabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="#fff"
                 android:textAlignment="center"
-                app:tabContentStart="20dp"
                 app:tabGravity="start"
                 app:tabMode="scrollable"
                 app:tabSelectedTextColor="#299460"
@@ -103,7 +106,8 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/Home_ViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="#f1f1f1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
