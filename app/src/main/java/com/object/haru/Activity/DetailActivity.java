@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.object.haru.DTO.RecruitDTO;
+import com.object.haru.DTO.zzimRequestDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
@@ -97,10 +98,45 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (i == true){
                     heart_btn.setImageResource(R.drawable.full_heart);
-                    i = false;
+
+                    zzimRequestDTO zzim = new zzimRequestDTO(Integer.parseInt(rId),13);
+
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
+                                                                                                    ,zzim);
+                    call.enqueue(new Callback<zzimRequestDTO>() {
+                        @Override
+                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
+                            zzimRequestDTO zzimRequestDTO = response.body();
+                            Toast.makeText(DetailActivity.this, "좋아요 저장", Toast.LENGTH_SHORT).show();
+                            i = false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
+                            Toast.makeText(DetailActivity.this, "좋아요 저장 실패", Toast.LENGTH_SHORT).show();
+                            i = false;
+                            t.printStackTrace();
+                        }
+                    });
+
                 }else{
                     heart_btn.setImageResource(R.drawable.detail_img);
-                    i = true;
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
+                                                                                                    ,13,Integer.parseInt(rId));
+                    call.enqueue(new Callback<zzimRequestDTO>() {
+                        @Override
+                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
+                            zzimRequestDTO zzimRequestDTO = response.body();
+                            Toast.makeText(DetailActivity.this, "좋아요 삭제", Toast.LENGTH_SHORT).show();
+                            i = true;
+                        }
+
+                        @Override
+                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
+                            Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
+                            t.printStackTrace();
+                        }
+                    });
                 }
             }
         });
@@ -147,7 +183,7 @@ public class DetailActivity extends AppCompatActivity {
         apply_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ApplyWriteActivity.class);
+                Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
                 startActivity(intent);
             }
         });

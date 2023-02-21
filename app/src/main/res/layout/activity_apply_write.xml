@@ -152,7 +152,7 @@
         app:layout_constraintTop_toBottomOf="@+id/applywrite_sex2" />
 
     <EditText
-        android:id="@+id/applywrite_sex_et2"
+        android:id="@+id/applywrite_myself"
         android:layout_width="363dp"
         android:layout_height="161dp"
         android:layout_marginTop="24dp"
