@@ -204,6 +204,7 @@ public class MainFragment_rc extends Fragment {
                 altitude = location.getAltitude();
                 fetch();
             }
+
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
                     gpsLocationListener);
             lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1, gpsLocationListener);
