@@ -84,13 +84,7 @@
             android:launchMode="singleTask">
 
         </activity>
-        <activity android:name=".Activity.LocationActivity"
-            android:exported="true">
 
-
-
-
-        </activity>
     </application>
 
 </manifest>

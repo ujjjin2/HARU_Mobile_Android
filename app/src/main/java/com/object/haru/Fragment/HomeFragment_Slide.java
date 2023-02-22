@@ -39,7 +39,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.object.haru.Activity.BottomSheetDialog;
-import com.object.haru.Activity.LocationActivity;
 import com.object.haru.Activity.RegisterActivity;
 //import com.object.haru.Activity.SearchActivity;
 import com.object.haru.Activity.SearchActivity;
