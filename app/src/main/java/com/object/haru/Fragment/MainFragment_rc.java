@@ -159,7 +159,7 @@ public class MainFragment_rc extends Fragment {
     private void fetch() {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
-        call = RetrofitClientInstance.getApiService().getAll("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2NTg3NTA2LCJleHAiOjE2NzkxNzk1MDZ9.lK58dcvNORimNjjJpnbG7Q07ekibFG8yypLWQeVk6RU",
+        call = RetrofitClientInstance.getApiService().getAll(token,
                 30,latitude,longitude, 4);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
