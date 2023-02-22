@@ -86,6 +86,7 @@ public class MainFragment_rc extends Fragment {
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
 
+
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
@@ -171,7 +172,7 @@ public class MainFragment_rc extends Fragment {
                     List<RecruitDTO> recruit = response.body();
                     arrayList.clear();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getContext());
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext(),token);
                     recyclerView.setAdapter(recruitAdapter);
                     recruitAdapter.notifyDataSetChanged();
                     Log.d("[입력 성공]", "=============");

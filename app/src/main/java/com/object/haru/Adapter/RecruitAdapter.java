@@ -26,9 +26,12 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
     private RecruitDTO recruitDTO;
     private Context context;
 
-    public RecruitAdapter(List<RecruitDTO> arrayList, Context context) {
+    private String token;
+
+    public RecruitAdapter(List<RecruitDTO> arrayList, Context context,String token) {
         this.arrayList = arrayList;
         this.context = context;
+        this.token = token;
     }
 
     @NonNull
@@ -82,6 +85,8 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("rId", recruitDTO.getRid().toString());
+                    intent.putExtra("token", token);
+
                     context.startActivity(intent);
                 }
             });

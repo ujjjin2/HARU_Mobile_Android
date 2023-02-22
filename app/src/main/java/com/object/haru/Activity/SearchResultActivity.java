@@ -39,8 +39,9 @@ public class SearchResultActivity extends AppCompatActivity {
     private RecruitAdapter recruitAdapter;
     private LinearLayoutManager layoutManager;
     private Call<List<RecruitDTO>> call;
-
+    private String token;
     private String searchWord;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +52,9 @@ public class SearchResultActivity extends AppCompatActivity {
         Log.d("검색 결과 액티비티 시작", "시작되었음");
         Intent intent = getIntent();
         searchWord = intent.getStringExtra("searchWord");
+
+        Intent intent2 = getIntent();
+        token = intent.getStringExtra("token");
 
 
         back_btn = findViewById(R.id.back_btn);
@@ -91,15 +95,14 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        call = RetrofitClientInstance.getApiService().getSearchRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjYwODU4NjU5IiwiaWF0IjoxNjc2MjUyMTc5LCJleHAiOjE2Nzg4NDQxNzl9.e7XfU8fOIR20USIgYcyKi8QA9aaQMKUBI8VEg65o-wk"
-                                                                        , 30, 37.450354677762, 126.65915614333, searchWord);
+        call = RetrofitClientInstance.getApiService().getSearchRecruit(token,30,37.450354677762,126.65915614333, searchWord);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
                 if (response.isSuccessful()) {
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getBaseContext());
+                    recruitAdapter = new RecruitAdapter(arrayList, getBaseContext(),token);
                     recyclerView.setAdapter(recruitAdapter);
                     recruitAdapter.notifyDataSetChanged();
                 }

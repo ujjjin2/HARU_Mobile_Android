@@ -77,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent1 = new Intent(LoginActivity.this, MainFragment_rc.class);
                             intent1.putExtra("token", kakao.getacccesstoken());
 
+                            Intent intent2 = new Intent(LoginActivity.this, SearchResultActivity.class);
+                            intent.putExtra("token", kakao.getacccesstoken());
+
                             startActivity(intent);
                         } else {
                             Log.d("[로그인 실패]","===================");
