@@ -17,10 +17,10 @@ public class RecruitDTO {
     private String endTime;
     @SerializedName("lat")
     @Expose
-    private Integer lat;
+    private double lat;
     @SerializedName("lon")
     @Expose
-    private Integer lon;
+    private double lon;
     @SerializedName("name")
     @Expose
     private String name;
@@ -38,7 +38,7 @@ public class RecruitDTO {
     private String rcareer;
     @SerializedName("rid")
     @Expose
-    private Integer rid;
+    private long rid;
     @SerializedName("rsex")
     @Expose
     private String rsex;
@@ -57,6 +57,9 @@ public class RecruitDTO {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("uid")
+    @Expose
+    private long uid;
 
     public String getAddr() {
         return addr;
@@ -82,19 +85,19 @@ public class RecruitDTO {
         this.endTime = endTime;
     }
 
-    public Integer getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Integer getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(Integer lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
@@ -138,11 +141,11 @@ public class RecruitDTO {
         this.rcareer = rcareer;
     }
 
-    public Integer getRid() {
+    public long getRid() {
         return rid;
     }
 
-    public void setRid(Integer rid) {
+    public void setRid(long rid) {
         this.rid = rid;
     }
 
@@ -194,4 +197,26 @@ public class RecruitDTO {
         this.title = title;
     }
 
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public RecruitDTO(String addr, String endTime, double lat, double lon, Integer pay, String rage, String rcareer, String rsex, String stTime, String subject, String title, long uid) {
+        this.addr = addr;
+        this.endTime = endTime;
+        this.lat = lat;
+        this.lon = lon;
+        this.pay = pay;
+        this.rage = rage;
+        this.rcareer = rcareer;
+        this.rsex = rsex;
+        this.stTime = stTime;
+        this.subject = subject;
+        this.title = title;
+        this.uid = uid;
+    }
 }

@@ -84,7 +84,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
                     recruitDTO = arrayList.get(position);
 
                     Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra("rId", recruitDTO.getRid().toString());
+                    intent.putExtra("rId", recruitDTO.getRid());
                     intent.putExtra("token", token);
 
                     context.startActivity(intent);

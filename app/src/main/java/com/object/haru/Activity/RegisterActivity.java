@@ -3,21 +3,21 @@ package com.object.haru.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,17 +25,28 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
+import com.object.haru.Search_register;
+import com.object.haru.retrofit.RetrofitClientInstance;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career;
+    Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career,Register_btn_register;
     Dialog dialogtime1,dialogtime2,dialogAddr;
-    EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay;
-    TextView dialogtime_title;
+    EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
+    TextView dialogtime_title,register_pt_storeinfo2;
     Spinner hour,min;
-    String strhour,strmin;
-    private Handler handler;
+    String strhour,strmin,data;
+    int minpay = 9620;
+
 
 
     @Override
@@ -206,27 +217,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        dialogAddr = new Dialog(RegisterActivity.this);
-        dialogAddr.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogAddr.setContentView(R.layout.activity_search_register);
-
-        WindowManager.LayoutParams params2 = dialogAddr.getWindow().getAttributes();
-        params2.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params2.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialogAddr.getWindow().setAttributes(params2);
-
         addr = findViewById(R.id.register_pt_storeinfo);
         addr.setFocusable(false);
         addr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //주소 검색 웹뷰 화면으로 이동
-                dialogAddr.show();
-                Intent intent = getIntent();
-                getSearchResult.launch(intent);
-
+                Log.i("주소설정페이지", "주소입력창 클릭");
+                Intent i = new Intent(getApplicationContext(), Search_register.class);
+                // 화면전환 애니메이션 없애기
+                overridePendingTransition(0, 0);
+                // 주소결과
+               getSearchResult.launch(i);
             }
         });
+
 
         Register_btn_age = findViewById(R.id.Register_btn_age);
         Register_btn_age.setOnClickListener(new View.OnClickListener() {
@@ -246,45 +251,66 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        Register_pt_title = findViewById(R.id.Register_pt_title);
+        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
         register_btn_pay = findViewById(R.id.register_btn_pay);
+        register_pt_pay = findViewById(R.id.register_pt_pay);
         register_btn_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                register_pt_pay = findViewById(R.id.register_pt_pay);
                 register_pt_pay.setText("최저시급");
             }
         });
 
+        final Geocoder geocoder = new Geocoder(this);
+        Register_btn_register=findViewById(R.id.Register_btn_register);
+        Register_btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Address> list = null;
+
+                try {
+                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (list!=null){
+                    if (list.size()==0){
+                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    }else{
+                       Address address = list.get(0);
+                       double lat = address.getLatitude();
+                       double lon = address.getLongitude();
+                       Log.d("위치 출력",lat+"//////"+lon);
+
+                       RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                                                    register_sp_time2.getText().toString(),
+                                                                    lat,
+                                                                    lon,
+                                                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),"여성우대",register_sp_time1.getText().toString(),
+                                                                    category_btn.getText().toString(),
+                                                                    Register_pt_title.getText().toString(),2);
+                       Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
+                                                                                                recruitDTO);
+                       call.enqueue(new Callback<RecruitDTO>() {
+                           @Override
+                           public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                               RecruitDTO recruit = response.body();
+                               Log.d("[성공]","================");
+                           }
+
+                           @Override
+                           public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                               Log.d("[실페]","================");
+                           }
+                       });
+                    }
+                }
+
+            }
+        });
 
     }
-
-//    private void init_webView() {
-//        //webview 설정
-//        webView = findViewById(R.id.webView);
-//        //자바스크립트의 window.open허용
-//        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//        //자바스크립트 이벤트에 대응할 함수를 정의한 클래스를 붙여줌
-//        webView.addJavascriptInterface(new AndroidBridge(),"roadSearch");
-//        webView.setWebChromeClient(new WebChromeClient());
-//        webView.loadUrl("http://10.0.0.2:8080/roadSearch.html");
-//
-//    }
-//
-//    private class AndroidBridge {
-//        @JavascriptInterface
-//        public void setAddress(final String arg1, final String arg2, final String arg3) {
-//            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    addr.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
-//
-//                    // WebView를 초기화 하지않으면 재사용할 수 없음
-//                    init_webView();
-//                }
-//            });
-//        }
-//    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -371,7 +397,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //Search_register로 부터의 결과 값을 받아 이곳으로 전달
                     if (result.getResultCode() == RESULT_OK){
                         if (result.getData() != null){
-                            String data = result.getData().getStringExtra("data");
+                            data = result.getData().getStringExtra("data");
                             addr.setText(data);
                         }
                     }

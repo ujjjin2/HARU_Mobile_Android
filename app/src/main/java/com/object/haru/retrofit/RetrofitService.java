@@ -53,4 +53,8 @@ public interface RetrofitService {
     //지원서 작성하기
     @POST("/apply/v1/save")
     Call<ApplyDTO> applyWrite(@Header("X-Auth-Token")String token, @Body ApplyDTO applyDTO);
+
+    @POST("/api/recruit/post")
+    Call<RecruitDTO> register(@Header("X-Auth-Token")String token,@Body RecruitDTO recruitDTO);
+
 }

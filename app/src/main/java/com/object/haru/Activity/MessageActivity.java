@@ -1,8 +1,10 @@
-package com.object.haru;
+package com.object.haru.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.object.haru.R;
 
 public class MessageActivity extends AppCompatActivity {
 
