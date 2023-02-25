@@ -289,7 +289,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     lon,
                                                                     Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),"여성우대",register_sp_time1.getText().toString(),
                                                                     category_btn.getText().toString(),
-                                                                    Register_pt_title.getText().toString(),2);
+                                                                    Register_pt_title.getText().toString(),6);
                        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
                                                                                                 recruitDTO);
                        call.enqueue(new Callback<RecruitDTO>() {

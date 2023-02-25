@@ -27,11 +27,19 @@ public class ApplyWriteActivity extends AppCompatActivity {
     TextView applywrite_age2,applywrite_career2,applywrite_sex2;
     Button applywrite_btn;
     EditText applywrite_age_et,applywrite_career_et,applywrite_sex_et,applywrite_myself;
+    private int rId;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_write);
+
+        Intent intent = getIntent();
+        rId = intent.getIntExtra("rId",1);
+        token = intent.getStringExtra("token");
+        Log.d("[rid확인]", String.valueOf(rId));
+        Log.d("[token확인]", token);
 
         applywrite_age2 = findViewById(R.id.applywrite_age2);
         applywrite_career2 = findViewById(R.id.applywrite_career2);
@@ -49,8 +57,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("지원서");
 
         //TextView 에 정보 가져오기
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
-                                                                                        ,1) ;
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token,rId) ;
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
@@ -79,17 +86,15 @@ public class ApplyWriteActivity extends AppCompatActivity {
                 String sexWrite = applywrite_sex_et.getText().toString();
                 String myselfWrite = applywrite_myself.getText().toString();
 
-                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite,3,13);
+                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite,rId,1);
 
-                Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
-                                                                                            ,applyDTO);
+                Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite(token,applyDTO);
                 call.enqueue(new Callback<ApplyDTO>() {
                     @Override
                     public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
                         ApplyDTO apply = response.body();
                         Log.w("[지원하기-값 넣기 성공]","===========================");
-                        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                        startActivity(intent);
+                        finish();
 
                     }
 
@@ -109,8 +114,6 @@ public class ApplyWriteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: { //toolbar의 back키 눌렀을 때 동작
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                startActivity(intent);
                 finish();
                 return true;
             }

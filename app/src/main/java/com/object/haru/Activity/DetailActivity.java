@@ -42,7 +42,8 @@ public class DetailActivity extends AppCompatActivity {
 
     boolean i = true;
 
-    private String rId,token;
+    private int rId;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +51,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        rId = intent.getStringExtra("rId");
-        Log.d("[rid확인]",rId.toString());
-
-//        Intent intent2 = getIntent();
-//        token = intent2.getStringExtra("token");
-//        Log.d("[token 확인]",token);
+        rId = intent.getIntExtra("rId",1);
+        token = intent.getStringExtra("token");
+        Log.d("[rid확인]", String.valueOf(rId));
+//        Log.d("[token확인]", token);
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
         Detail_tv_name = findViewById(R.id.Detail_tv_name);
@@ -98,10 +97,9 @@ public class DetailActivity extends AppCompatActivity {
                 if (i == true){
                     heart_btn.setImageResource(R.drawable.full_heart);
 
-                    zzimRequestDTO zzim = new zzimRequestDTO(Integer.parseInt(rId),13);
+                    zzimRequestDTO zzim = new zzimRequestDTO(rId,1);
 
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
-                                                                                                    ,zzim);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token,zzim);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -120,8 +118,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 }else{
                     heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4"
-                                                                                                    ,13,Integer.parseInt(rId));
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,1,rId);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -151,8 +148,7 @@ public class DetailActivity extends AppCompatActivity {
                         if (menuItem.getItemId() == R.id.action_item1){
                             Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
                         }else if (menuItem.getItemId() == R.id.action_item2){
-                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
-                                    Integer.parseInt(rId));
+                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
                             call.enqueue(new Callback<RecruitDTO>() {
                                 @Override
                                 public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
@@ -183,6 +179,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
+                intent.putExtra("rId", rId);
+                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });
@@ -191,8 +189,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
-                Integer.parseInt(rId));
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token, rId);
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
