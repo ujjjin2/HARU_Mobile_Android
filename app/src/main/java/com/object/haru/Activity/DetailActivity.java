@@ -55,7 +55,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        rId = intent.getIntExtra("rId",1);
+        rId = Math.toIntExact(intent.getLongExtra("rId", 1));
         token = intent.getStringExtra("token");
         Log.d("[rid확인]", String.valueOf(rId));
 //        Log.d("[token확인]", token);
