@@ -21,6 +21,10 @@ import com.object.haru.DTO.zzimRequestDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -205,18 +209,36 @@ public class DetailActivity extends AppCompatActivity {
                             detail_three_date2.setText(stdate);//상단 근무일자
                             Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
 
-                            String sttime = recruit.getStTime().substring(12,16);
-                            String endtime = recruit.getEndTime().substring(12,16);
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                        String sttime = recruit.getStTime().substring(12,16);
+                        String endtime = recruit.getEndTime().substring(12,16);
+                        Date date1 = sdf.parse(sttime);
+                        Date date2 = sdf.parse(endtime);
 
-                            String sttime2 = recruit.getStTime().substring(12,13);
-                            String endtime2 = recruit.getEndTime().substring(12,13);
-                            int st = Integer.parseInt(sttime2);
-                            int ed = Integer.parseInt(endtime2);
-                            int result = ed-st;
-                            detail_three_time2.setText(result+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+                        //문자열 -> Date
+                        long timeMil1 = date1.getTime();
+                        long timeMil2 = date2.getTime();
 
+                        //비교
+                        long diff = timeMil2-timeMil1;
 
-                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*result)+"원)"); // 최저시급(총)
+                        long diffHour = diff/(1000*60*24);
+                        long diffMin = diff/(1000*60);
+                        long hour = diffMin/60;
+                        long Min = diffMin%60;
+
+                        if (Min == 0){
+                            detail_three_time2.setText(hour+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour)+"원)"); // 최저시급(총)
+                        }else{
+                            detail_three_time2.setText(hour+"시간"+Min+"분"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour+recruit.getPay()/60*Min)+"원)"); // 최저시급(총)
+                        }
+
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
 
                             Detail_tv_category2.setText(recruit.getSubject()); //분야
                             Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
