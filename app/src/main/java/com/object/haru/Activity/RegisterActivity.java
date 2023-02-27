@@ -42,7 +42,7 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career,Register_btn_register;
-    Dialog dialogtime1,dialogtime2,dialogAddr;
+    Dialog dialogtime1,dialogtime2;
     EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
     TextView dialogtime_title,register_pt_storeinfo2;
     Spinner hour,min;
@@ -116,7 +116,11 @@ public class RegisterActivity extends AppCompatActivity {
                         hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                strhour = adapterView.getItemAtPosition(i).toString();
+                                if (!hour.getItemAtPosition(i).equals("0시")) {
+                                    strhour = (String) hour.getSelectedItem();
+                                } else {
+                                    strhour = "";
+                                }
                             }
 
                             @Override
@@ -127,7 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
                         min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                strmin = adapterView.getItemAtPosition(i).toString();
+                                if (!min.getItemAtPosition(i).equals("0분")) {
+                                    strmin = (String)min.getSelectedItem();
+                                } else {
+                                    strmin = "";
+                                }
                             }
 
                             @Override
@@ -178,11 +186,8 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (!hour.getItemAtPosition(i).equals("0시")) {
-//                                    spinnerMonth.setEnabled(true);
                                     strhour = (String) hour.getSelectedItem();
                                 } else {
-//                                    spinnerMonth.setEnabled(false);
-//                                    spinnerDay.setEnabled(false);
                                     strhour = "";
                                 }
 
@@ -196,13 +201,9 @@ public class RegisterActivity extends AppCompatActivity {
                         min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                                strmin = adapterView.getItemAtPosition(i).toString();
                                 if (!min.getItemAtPosition(i).equals("0분")) {
-//                                    spinnerMonth.setEnabled(true);
                                     strmin = (String)min.getSelectedItem();
                                 } else {
-//                                    spinnerMonth.setEnabled(false);
-//                                    spinnerDay.setEnabled(false);
                                     strmin = "";
                                 }
                             }
