@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +46,9 @@ public class RegisterActivity extends AppCompatActivity {
     EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
     TextView dialogtime_title,register_pt_storeinfo2;
     Spinner hour,min;
-    String strhour,strmin,data;
+    String strhour,strmin,data,strsex;
     int minpay = 9620;
+    RadioButton radioBtn,radioBtn2,radioBtn3;
 
 
 
@@ -200,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 } else {
 //                                    spinnerMonth.setEnabled(false);
 //                                    spinnerDay.setEnabled(false);
-                                    strhour = "";
+                                    strmin = "";
                                 }
                             }
 
@@ -287,7 +290,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     register_sp_time2.getText().toString(),
                                                                     lat,
                                                                     lon,
-                                                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),"여성우대",register_sp_time1.getText().toString(),
+                                                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
                                                                     category_btn.getText().toString(),
                                                                     Register_pt_title.getText().toString(),6);
                        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
@@ -307,6 +310,28 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
+            }
+        });
+
+        radioBtn = findViewById(R.id.radioButton);
+        radioBtn2 = findViewById(R.id.radioButton2);
+        radioBtn3 = findViewById(R.id.radioButton3);
+
+        RadioGroup radioGroup= findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioButton:
+                        strsex = "성별 무관";
+                        break;
+                    case R.id.radioButton2:
+                        strsex = "남성 우대";
+                        break;
+                    case R.id.radioButton3:
+                        strsex = "여성 우대";
+                        break;
+                }
             }
         });
 
