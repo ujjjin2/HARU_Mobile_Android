@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.object.haru">
-
-    <!-- 인터넷 사용 권한 설정-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 인터넷 사용 권한 설정 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".kakaoApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,73 +18,70 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HARU_Mobiile.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31"
-        android:name=".kakaoApplication">
+        tools:targetApi="31">
+        <activity
+            android:name=".Activity.ApplyDetailActivity"
+            android:exported="true" >
+
+        </activity>
+        <activity
+            android:name=".Activity.MessageActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".Activity.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".Activity.ApplyWriteActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.RegisterActivity"
-            android:exported="true">
-
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.DetailActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.MainActivity"
-            android:exported="true">
-
-        </activity>
-
+            android:exported="true" />
         <activity
             android:name=".TestActivity"
-            android:exported="true" >
-
-        </activity>
-
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- Redirect URI: "kakao45f224d0e6f48c29c62dd5e9b685de3b://oauth" -->
-                <data android:host="oauth"
+                <data
+                    android:host="oauth"
                     android:scheme="kakao45f224d0e6f48c29c62dd5e9b685de3b" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activity.ProfileActivity"
-            android:exported="true">
-
-        </activity>
-
-        <activity android:name=".Activity.SearchActivity"
-            android:exported="true">
-
-        </activity>
-
-        <activity android:name=".Activity.SearchResultActivity"
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.SearchActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Search_register"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.SearchResultActivity"
             android:exported="true"
-            android:launchMode="singleTask">
-
-        </activity>
-
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

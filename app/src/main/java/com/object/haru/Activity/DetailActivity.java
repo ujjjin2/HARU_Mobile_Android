@@ -199,20 +199,37 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                 if (response.isSuccessful()){
                     RecruitDTO recruit = response.body();
-                    Detail_tv_writeTime.setText(recruit.getRtime());
-                            Detail_tv_title.setText(recruit.getTitle()); //제목
-                            Detail_tv_name.setText(recruit.getName()); //작성자
-                            detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
+                    String writetime_date = recruit.getRtime().substring(0,10);
+                    String writetime_time = recruit.getRtime().substring(11,19);
+
+                    Detail_tv_writeTime.setText(writetime_date+"/"+writetime_time);
+
+
+                    Detail_tv_title.setText(recruit.getTitle()); //제목
+                    Detail_tv_name.setText(recruit.getName()); //작성자
+                    detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
 
                             String stdate = recruit.getStTime().substring(0,10);
                             String enddate = recruit.getEndTime().substring(0,10);
-                            detail_three_date2.setText(stdate);//상단 근무일자
-                            Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
+
+                    try {
+                        Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);
+                        Date format2 = new SimpleDateFormat("yyyy-MM-dd").parse(enddate);
+
+                        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
+                        long diffDays = diffSec / (24*60*60); //일자수 차이
+
+                        detail_three_date2.setText((Math.toIntExact(diffDays)+1)+"일");//상단 근무일자
+
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
 
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                        String sttime = recruit.getStTime().substring(12,16);
-                        String endtime = recruit.getEndTime().substring(12,16);
+                        String sttime = recruit.getStTime().substring(11,16);
+                        String endtime = recruit.getEndTime().substring(11,16);
                         Date date1 = sdf.parse(sttime);
                         Date date2 = sdf.parse(endtime);
 

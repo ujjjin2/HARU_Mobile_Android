@@ -219,29 +219,77 @@
         app:layout_constraintStart_toEndOf="@+id/register_pt_career"
         app:layout_constraintTop_toBottomOf="@+id/Register_btn_age" />
 
-    <Button
-        android:id="@+id/Register_btn_man"
-        android:layout_width="74dp"
+<!--    <Button-->
+<!--        android:id="@+id/Register_btn_man"-->
+<!--        android:layout_width="74dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="35dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:background="@drawable/register_btn"-->
+<!--        android:text="남성 우대"-->
+<!--        android:textColor="@drawable/register_btn_txt"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/register_pt_career" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/register_btn_woman"-->
+<!--        android:layout_width="74dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="28dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:background="@drawable/register_btn"-->
+<!--        android:text="여성 우대"-->
+<!--        android:textColor="@drawable/register_btn_txt"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/Register_btn_man"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/register_pt_career" />-->
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/register_btn"
-        android:text="남성 우대"
-        android:textColor="@drawable/register_btn_txt"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_pt_career" />
+        app:layout_constraintTop_toBottomOf="@+id/register_pt_career">
 
-    <Button
-        android:id="@+id/register_btn_woman"
-        android:layout_width="74dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/register_btn"
-        android:text="여성 우대"
-        android:textColor="@drawable/register_btn_txt"
-        app:layout_constraintStart_toEndOf="@+id/Register_btn_man"
-        app:layout_constraintTop_toBottomOf="@+id/register_pt_career" />
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:checked="true"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="성별무관"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="남성우대"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="여성우대"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/Register_btn_register"
@@ -255,15 +303,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/register_tv_wave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="36dp"
-        android:text="~"
-        android:textSize="18dp"
-        app:layout_constraintStart_toEndOf="@+id/register_sp_time1"
-        app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
+            android:id="@+id/register_tv_wave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="36dp"
+            android:text="~"
+            android:textSize="18dp"
+            app:layout_constraintStart_toEndOf="@+id/register_sp_time1"
+            app:layout_constraintTop_toBottomOf="@+id/register_sp_category" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
