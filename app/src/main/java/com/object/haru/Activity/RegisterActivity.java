@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -46,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
     TextView dialogtime_title,register_pt_storeinfo2;
     Spinner hour,min;
-    String strhour,strmin,data,strsex;
+    String strhour,strmin,data,strsex,token;
     int minpay = 9620;
     RadioButton radioBtn,radioBtn2,radioBtn3;
 
@@ -57,12 +58,19 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //툴바 생성
-        Toolbar toolbar = findViewById(R.id.Register_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//튀로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
-        getSupportActionBar().setTitle("구인 등록");
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
+        Log.d("[RegisterActivity 토큰]",token);
 
+
+
+        ImageButton back_btn = findViewById(R.id.imageButton_left_register);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         category_btn = findViewById(R.id.register_sp_category);
         category_btn.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +263,29 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        radioBtn = findViewById(R.id.radioButton);
+        radioBtn2 = findViewById(R.id.radioButton2);
+        radioBtn3 = findViewById(R.id.radioButton3);
+
+        RadioGroup radioGroup= findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioButton:
+                        strsex = "성별 무관";
+                        break;
+                    case R.id.radioButton2:
+                        strsex = "남성 우대";
+                        break;
+                    case R.id.radioButton3:
+                        strsex = "여성 우대";
+                        break;
+                }
+            }
+        });
+        System.out.println(strsex);
+
         Register_pt_title = findViewById(R.id.Register_pt_title);
         register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
         register_btn_pay = findViewById(R.id.register_btn_pay);
@@ -287,68 +318,66 @@ public class RegisterActivity extends AppCompatActivity {
                        double lon = address.getLongitude();
                        Log.d("위치 출력",lat+"//////"+lon);
 
-                       RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                                                    register_sp_time2.getText().toString(),
-                                                                    lat,
-                                                                    lon,
-                                                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
-                                                                    category_btn.getText().toString(),
-                                                                    Register_pt_title.getText().toString(),6);
-                       Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
-                                                                                                recruitDTO);
-                       call.enqueue(new Callback<RecruitDTO>() {
-                           @Override
-                           public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                               RecruitDTO recruit = response.body();
-                               Log.d("[성공]","================");
-                           }
+                       if (register_pt_pay.getText().equals("최저시급")){//최저시급이 적혀있으면 최저시급이 들어감
+                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                   register_sp_time2.getText().toString(),
+                                   lat,
+                                   lon,
+                                   minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
+                                   category_btn.getText().toString(),
+                                   Register_pt_title.getText().toString(),1);
+                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                           call.enqueue(new Callback<RecruitDTO>() {
+                               @Override
+                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                   RecruitDTO recruit = response.body();
+                                   Log.d("[성공]","================");
+                                   finish();
+                               }
 
-                           @Override
-                           public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                               Log.d("[실페]","================");
-                           }
-                       });
+                               @Override
+                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                   Log.d("[실페]","================");
+                               }
+                           });
+                       }else{
+                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                   register_sp_time2.getText().toString(),
+                                   lat,
+                                   lon,
+                                   Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
+                                   category_btn.getText().toString(),
+                                   Register_pt_title.getText().toString(),1);
+                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                           call.enqueue(new Callback<RecruitDTO>() {
+                               @Override
+                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                   RecruitDTO recruit = response.body();
+                                   Log.d("[성공]","================");
+                                   finish();
+//                                   finish();
+//                                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                                   intent.putExtra("token",token);
+//                                   startActivity(intent);
+                               }
+
+                               @Override
+                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                   Log.d("[실페]","================");
+                               }
+                           });
+                       }
+
+
                     }
                 }
 
             }
         });
 
-        radioBtn = findViewById(R.id.radioButton);
-        radioBtn2 = findViewById(R.id.radioButton2);
-        radioBtn3 = findViewById(R.id.radioButton3);
-
-        RadioGroup radioGroup= findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
-                    case R.id.radioButton:
-                        strsex = "성별 무관";
-                        break;
-                    case R.id.radioButton2:
-                        strsex = "남성 우대";
-                        break;
-                    case R.id.radioButton3:
-                        strsex = "여성 우대";
-                        break;
-                }
-            }
-        });
-
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: { //toolbar의 back키 눌렀을 때 동작
-                finish();
-                return true;
-            }
-        }
-            return super.onOptionsItemSelected(item);
-        }
-
+    //카테고리 다이얼로그 드게 하는 함수 부분
         public void showDialog_Category(){
             String[] kind = getResources().getStringArray(R.array.kind);
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
@@ -416,6 +445,7 @@ public class RegisterActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
+
 
         private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
