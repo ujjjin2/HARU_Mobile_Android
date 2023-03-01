@@ -20,16 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.ApplyDetailActivity"
-            android:exported="true" >
-
-        </activity>
-        <activity
-            android:name=".Activity.MessageActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".ReviewActivity"
             android:exported="true">
 
             <intent-filter>
@@ -37,6 +28,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity.ApplyDetailActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".Activity.MessageActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:exported="true">
 
         </activity>
         <activity

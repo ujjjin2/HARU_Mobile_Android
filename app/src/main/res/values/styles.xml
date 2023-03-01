@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GlassRating" parent="@android:style/Widget.RatingBar">
+        <item name="android:minHeight">32dip</item>
+        <item name="android:minWidth">36dip</item>
+        <item name="android:progressDrawable">@drawable/rating_bar_bg</item>
+    </style>
+</resources>
