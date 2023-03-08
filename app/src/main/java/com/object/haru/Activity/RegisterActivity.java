@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
     TextView dialogtime_title,register_pt_storeinfo2;
     Spinner hour,min;
-    String strhour,strmin,data,strsex,token;
+    String strhour,strmin,data,strsex;
     int minpay = 9620;
     RadioButton radioBtn,radioBtn2,radioBtn3;
 
@@ -58,19 +58,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Intent intent = getIntent();
-        token = intent.getStringExtra("token");
-        Log.d("[RegisterActivity 토큰]",token);
-
-
-
-        ImageButton back_btn = findViewById(R.id.imageButton_left_register);
-        back_btn.setOnClickListener(new View.OnClickListener() {
+        ImageButton imageButton_left_register = findViewById(R.id.imageButton_left_register);
+        imageButton_left_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
 
         category_btn = findViewById(R.id.register_sp_category);
         category_btn.setOnClickListener(new View.OnClickListener() {
@@ -263,6 +258,65 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        Register_pt_title = findViewById(R.id.Register_pt_title);
+        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
+        register_btn_pay = findViewById(R.id.register_btn_pay);
+        register_pt_pay = findViewById(R.id.register_pt_pay);
+        register_btn_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                register_pt_pay.setText(minpay);
+            }
+        });
+
+        final Geocoder geocoder = new Geocoder(this);
+        TextView register_register = findViewById(R.id.register_register);
+        register_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Address> list = null;
+
+                try {
+                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (list!=null){
+                    if (list.size()==0){
+                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    }else{
+                       Address address = list.get(0);
+                       double lat = address.getLatitude();
+                       double lon = address.getLongitude();
+                       Log.d("위치 출력",lat+"//////"+lon);
+
+                       RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                                                    register_sp_time2.getText().toString(),
+                                                                    lat,
+                                                                    lon,
+                                                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
+                                                                    category_btn.getText().toString(),
+                                                                    Register_pt_title.getText().toString(),6);
+                       Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNjU3ODYxMDY5IiwiaWF0IjoxNjc2NzM5NTMxLCJleHAiOjE2NzkzMzE1MzF9.1KlV8AJcOVb62n_am2dHQuB63ic_PGERRNoRVPNuuJ4",
+                                                                                                recruitDTO);
+                       call.enqueue(new Callback<RecruitDTO>() {
+                           @Override
+                           public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                               RecruitDTO recruit = response.body();
+                               Log.d("[성공]","================");
+                           }
+
+                           @Override
+                           public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                               Log.d("[실페]","================");
+                           }
+                       });
+                    }
+                }
+
+            }
+        });
+
         radioBtn = findViewById(R.id.radioButton);
         radioBtn2 = findViewById(R.id.radioButton2);
         radioBtn3 = findViewById(R.id.radioButton3);
@@ -284,100 +338,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        System.out.println(strsex);
-
-        Register_pt_title = findViewById(R.id.Register_pt_title);
-        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
-        register_btn_pay = findViewById(R.id.register_btn_pay);
-        register_pt_pay = findViewById(R.id.register_pt_pay);
-        register_btn_pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                register_pt_pay.setText("최저시급");
-            }
-        });
-
-        final Geocoder geocoder = new Geocoder(this);
-        Register_btn_register=findViewById(R.id.Register_btn_register);
-        Register_btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Address> list = null;
-
-                try {
-                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                if (list!=null){
-                    if (list.size()==0){
-                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
-                    }else{
-                       Address address = list.get(0);
-                       double lat = address.getLatitude();
-                       double lon = address.getLongitude();
-                       Log.d("위치 출력",lat+"//////"+lon);
-
-                       if (register_pt_pay.getText().equals("최저시급")){//최저시급이 적혀있으면 최저시급이 들어감
-                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                   register_sp_time2.getText().toString(),
-                                   lat,
-                                   lon,
-                                   minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
-                                   category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(),1);
-                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                           call.enqueue(new Callback<RecruitDTO>() {
-                               @Override
-                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                   RecruitDTO recruit = response.body();
-                                   Log.d("[성공]","================");
-                                   finish();
-                               }
-
-                               @Override
-                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                   Log.d("[실페]","================");
-                               }
-                           });
-                       }else{
-                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                   register_sp_time2.getText().toString(),
-                                   lat,
-                                   lon,
-                                   Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
-                                   category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(),1);
-                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                           call.enqueue(new Callback<RecruitDTO>() {
-                               @Override
-                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                   RecruitDTO recruit = response.body();
-                                   Log.d("[성공]","================");
-                                   finish();
-//                                   finish();
-//                                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                                   intent.putExtra("token",token);
-//                                   startActivity(intent);
-                               }
-
-                               @Override
-                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                   Log.d("[실페]","================");
-                               }
-                           });
-                       }
-
-
-                    }
-                }
-
-            }
-        });
 
     }
 
-    //카테고리 다이얼로그 드게 하는 함수 부분
         public void showDialog_Category(){
             String[] kind = getResources().getStringArray(R.array.kind);
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
@@ -445,7 +408,6 @@ public class RegisterActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
-
 
         private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
