@@ -1,14 +1,16 @@
-package com.object.haru;
+package com.object.haru.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ReviewActivity extends AppCompatActivity {
+import com.object.haru.R;
+
+public class WritedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
+        setContentView(R.layout.activity_writed);
     }
 }

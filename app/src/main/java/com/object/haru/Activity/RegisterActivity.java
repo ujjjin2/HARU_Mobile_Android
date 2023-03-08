@@ -293,13 +293,13 @@ public class RegisterActivity extends AppCompatActivity {
         register_btn_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                register_pt_pay.setText("최저시급");
+                register_pt_pay.setText(String.valueOf(minpay));
             }
         });
 
         final Geocoder geocoder = new Geocoder(this);
-        Register_btn_register=findViewById(R.id.Register_btn_register);
-        Register_btn_register.setOnClickListener(new View.OnClickListener() {
+        TextView register_register = findViewById(R.id.register_registerbtn);
+        register_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Address> list = null;
@@ -355,15 +355,12 @@ public class RegisterActivity extends AppCompatActivity {
                                    RecruitDTO recruit = response.body();
                                    Log.d("[성공]","================");
                                    finish();
-//                                   finish();
-//                                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                                   intent.putExtra("token",token);
-//                                   startActivity(intent);
+
                                }
 
                                @Override
                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                   Log.d("[실페]","================");
+                                   Log.d("[실패]","================");
                                }
                            });
                        }
