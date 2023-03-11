@@ -15,6 +15,7 @@ import android.view.View;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.Fragment.HomeFragment_Slide;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
     Call<KakaoDTO> call;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +76,6 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("token", kakao.getacccesstoken());
 
-                            Intent intent1 = new Intent(LoginActivity.this, MainFragment_rc.class);
-                            intent1.putExtra("token", kakao.getacccesstoken());
-
-                            Intent intent2 = new Intent(LoginActivity.this, SearchResultActivity.class);
-                            intent.putExtra("token", kakao.getacccesstoken());
-
                             startActivity(intent);
                         } else {
                             Log.d("[로그인 실패]","===================");
@@ -114,10 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                                      if (response.isSuccessful()){
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
-                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                         intent.putExtra("token", kakao.getacccesstoken());
 
-                                         Intent intent2 = new Intent(LoginActivity.this, DetailActivity.class);
+                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                          intent.putExtra("token", kakao.getacccesstoken());
 
                                          startActivity(intent);

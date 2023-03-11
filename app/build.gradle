@@ -44,6 +44,9 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    // refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
     implementation "com.kakao.sdk:v2-all:2.12.1" // 전체 모듈 설치, 2.11.0 버전부터 지원
     implementation "com.kakao.sdk:v2-user:2.12.1" // 카카오 로그인
     implementation "com.kakao.sdk:v2-talk:2.12.1" // 친구, 메시지(카카오톡)

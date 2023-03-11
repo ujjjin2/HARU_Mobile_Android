@@ -209,8 +209,8 @@ public class DetailActivity extends AppCompatActivity {
                     Detail_tv_name.setText(recruit.getName()); //작성자
                     detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
 
-                            String stdate = recruit.getStTime().substring(0,10);
-                            String enddate = recruit.getEndTime().substring(0,10);
+                    String stdate = recruit.getStTime().substring(0,10);
+                    String enddate = recruit.getEndTime().substring(0,10);
 
                     try {
                         Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);

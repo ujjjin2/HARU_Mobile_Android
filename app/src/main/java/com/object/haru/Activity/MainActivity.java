@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         accessToken = intent.getStringExtra("token");
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getApplicationContext(),

@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
-        Log.d("[RegisterActivity 토큰]",token);
+      Log.d("[RegisterActivity 토큰]",token);
 
 
 

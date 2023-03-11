@@ -20,7 +20,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ReviewActivity"
+            android:name=".Activity.ReviewActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".Activity.ApplyDetailActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Activity.MessageActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Activity.LoginActivity"
             android:exported="true">
 
             <intent-filter>
@@ -28,17 +41,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Activity.ApplyDetailActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Activity.MessageActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Activity.LoginActivity"
-            android:exported="true">
-
         </activity>
         <activity
             android:name=".Activity.ApplyWriteActivity"
@@ -70,6 +72,7 @@
                     android:scheme="kakao45f224d0e6f48c29c62dd5e9b685de3b" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Activity.ProfileActivity"
             android:exported="true" />
@@ -83,6 +86,16 @@
             android:name=".Activity.SearchResultActivity"
             android:exported="true"
             android:launchMode="singleTask" />
+
+        <activity android:name=".Activity.ReceiveReviewActivity"
+            android:exported="true" />
+
+        <activity android:name=".Activity.WriteReviewActivity"
+            android:exported="true" />
+
+        <activity android:name=".Activity.ZzimListActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

@@ -67,7 +67,9 @@ public class HomeFragment_Slide extends Fragment {
     private MainFragment_rc fragment1;
     private EditText editText_search;
         private double longitude, latitude, altitude;
-        private String name,token;
+        private String name;
+
+    private String token;
 
         @Nullable
     @Override
@@ -76,7 +78,6 @@ public class HomeFragment_Slide extends Fragment {
 
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
-//        Log.d("[HomeFragment 토큰]",token);
 
         tabLayout = view.findViewById(R.id.Home_TabLayout);
         viewPager2 = view.findViewById(R.id.Home_ViewPager);
@@ -161,7 +162,7 @@ public class HomeFragment_Slide extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                intent.putExtra("token",token);
+                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });

@@ -7,6 +7,7 @@
     tools:context=".Activity.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#000000"
@@ -16,8 +17,8 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:background="#ffffff" >
+            android:background="#ffffff"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="wrap_content"
@@ -25,19 +26,21 @@
 
             <EditText
                 android:id="@+id/HomeFragment_edittext_search"
-                android:layout_width="365dp"
+                android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:background="@drawable/border_layout_edittext"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="?attr/actionBarSize"
-                android:hint="검색"
-                android:textSize="13dp"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:imeOptions="actionSearch"
+                android:background="@drawable/border_layout_edittext"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:layout_gravity="center_horizontal"
-                android:paddingLeft="9dp"> <!-- 힌트 메시지 위치 조정 -->
+                android:hint="검색"
+                android:imeOptions="actionSearch"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingLeft="9dp"
+                android:textSize="13dp"> <!-- 힌트 메시지 위치 조정 -->
             </EditText>
 
 
@@ -52,12 +55,12 @@
                     android:id="@+id/text_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="인천 미추홀구 인천 미추홀구 인천미"
-                    android:textColor="@color/black"
                     android:ellipsize="end"
                     android:maxEms="11"
                     android:maxLines="1"
-                    android:textSize="17dp"
+                    android:text="인천 미추홀구 인천 미추홀구 인천미"
+                    android:textColor="@color/black"
+                    android:textSize="19dp"
                     android:textStyle="bold" />
 
                 <TextView

@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.object.haru.Activity.MainActivity;
 import com.object.haru.Adapter.RecruitAdapter;
@@ -67,24 +68,35 @@ public class MainFragment_rc extends Fragment {
     private ProgressBar progressBar;
     private String token;
     private Double longitude, latitude, altitude;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
-    int page = 1, limit = 3;
+    int page = 0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-
         view = inflater.inflate(R.layout.activity_whole_list, container, false);
         recyclerView = view.findViewById(R.id.Fragment1_recyclerview);
         nestedScrollView = view.findViewById(R.id.scrollView);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+
 //        progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
 
+
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
+
+        swipeRefreshLayout.setDistanceToTriggerSync(400);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetch(0);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
 
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -100,39 +112,27 @@ public class MainFragment_rc extends Fragment {
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
                 altitude = location.getAltitude();
-                fetch();
+                fetch(page);
             }
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
                     gpsLocationListener);
             lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1, gpsLocationListener);
-
         }
-
-
-
-
         layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 구분선
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-
         recyclerView.setAdapter(recruitAdapter);
 
-//        Log.d("[토큰] : " , token);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    fetch(page);
+                }
+            }
+        });
 
-
-//        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-//                    page++;
-//                    progressBar.setVisibility(View.VISIBLE);
-//                    fetch();
-//                }
-//            }
-//        });
 
         return view;
     }
@@ -157,11 +157,11 @@ public class MainFragment_rc extends Fragment {
         }
     };
 
-    private void fetch() {
+    private void fetch(int page) {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
         call = RetrofitClientInstance.getApiService().getAll(token,
-                30,latitude,longitude, 4);
+                30,latitude,longitude, page);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
@@ -170,12 +170,12 @@ public class MainFragment_rc extends Fragment {
 //                    progressBar.setVisibility(View.GONE);
 
                     List<RecruitDTO> recruit = response.body();
-                    arrayList.clear();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getContext(),token);
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token);
                     recyclerView.setAdapter(recruitAdapter);
-                    recruitAdapter.notifyDataSetChanged();
                     Log.d("[입력 성공]", "=============");
+                } else {
+//                    progressBar.setVisibility(View.GONE);
                 }
 
             }
@@ -187,31 +187,52 @@ public class MainFragment_rc extends Fragment {
         });
     }
 
+    private void update(int page) {
+        call = RetrofitClientInstance.getApiService().getAll(token, 30, latitude, longitude, page);
+        call.enqueue(new Callback<List<RecruitDTO>>() {
+            @Override
+            public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    arrayList.clear();
+                    List<RecruitDTO> recruit = response.body();
+                    arrayList.addAll(recruit);
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token);
+                    recyclerView.setAdapter(recruitAdapter);
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RecruitDTO>> call, Throwable t) {
+                Log.d("[업데이트 실패]", "=============");
+            }
+        });
+    }
+
+
+
+
     @Override
     public void onResume() {
         super.onResume();
-        final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION }, 0);
-        } else {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            if (location != null) {
-                longitude = location.getLongitude();
-                latitude = location.getLatitude();
-                altitude = location.getAltitude();
-                fetch();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                update(0);
+                page = 0;
+                swipeRefreshLayout.setRefreshing(false);
             }
+        });
 
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
-                    gpsLocationListener);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1, gpsLocationListener);
-
-        }
-
-
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    fetch(page);
+                }
+            }
+        });
     }
 }

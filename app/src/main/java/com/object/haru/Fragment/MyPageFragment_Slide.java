@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.object.haru.Activity.ProfileActivity;
+import com.object.haru.Activity.ZzimListActivity;
 import com.object.haru.R;
 
 public class MyPageFragment_Slide extends Fragment  {
@@ -18,7 +20,6 @@ public class MyPageFragment_Slide extends Fragment  {
     private View view;
     private View profile;
     private View zzim;
-
 
     @Nullable
     @Override
@@ -37,7 +38,13 @@ public class MyPageFragment_Slide extends Fragment  {
             }
         });
 
-
+        zzim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ZzimListActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }
