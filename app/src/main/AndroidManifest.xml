@@ -19,8 +19,18 @@
         android:theme="@style/Theme.HARU_Mobiile.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Add FCM service -->
+        <service
+            android:name=".Fcm.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
-            android:name=".ReviewActivity"
+            android:name=".Activity.ReviewActivity"
             android:exported="true">
 
             <intent-filter>
