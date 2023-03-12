@@ -38,7 +38,7 @@ public interface RetrofitService {
                                       @Query("latitude")double latitude, @Query("longtitude")double longtitude,
                                       @Query("search")String search);
 
-    //상세페이지-삭제
+    //상세 페이지-삭제
     @PUT("/api/recruit/remove/{rid}")
     Call<RecruitDTO> Deleterecruit(@Header("X-Auth-Token")String token,@Path("rid") int rid);
 
@@ -46,15 +46,26 @@ public interface RetrofitService {
     @POST("/zzim/v1/save")
     Call<zzimRequestDTO> zzimSave(@Header("X-Auth-Token")String token, @Body zzimRequestDTO zzim);
 
-    //찜 삭제하기
+    //찜 삭제 하기
     @DELETE("/zzim/v1/delete/{uid}/{rid}")
     Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("uid")int uid, @Query("rid")int rid);
 
-    //지원서 작성하기
+    //지원서 작성 하기
     @POST("/apply/v1/save")
     Call<ApplyDTO> applyWrite(@Header("X-Auth-Token")String token, @Body ApplyDTO applyDTO);
 
+    //구인 등록 하기
     @POST("/api/recruit/post")
     Call<RecruitDTO> register(@Header("X-Auth-Token")String token,@Body RecruitDTO recruitDTO);
+
+    //지원자 리스트
+    @GET("/apply/v1/select/rid")
+    Call<List<ApplyDTO>> apply_list(@Header("X-Auth-Token")String token,@Query("rid")int rid);
+
+    //작성글 리스트
+    @GET("/api/recruit/select/user/{kakaoid}")
+    Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")String kakaoid);
+
+
 
 }

@@ -22,6 +22,15 @@ public class ApplyDTO {
     @SerializedName("uid")
     @Expose
     private Integer uid;
+    @SerializedName("aid")
+    @Expose
+    private Integer aid;
+    @SerializedName("avgRating")
+    @Expose
+    private Integer avgRating;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
 
     public String getAage() {
         return aage;
@@ -69,6 +78,30 @@ public class ApplyDTO {
 
     public void setUid(Integer uid) {
         this.uid = uid;
+    }
+
+    public Integer getAid() {
+        return aid;
+    }
+
+    public void setAid(Integer aid) {
+        this.aid = aid;
+    }
+
+    public Integer getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Integer avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer uid) {

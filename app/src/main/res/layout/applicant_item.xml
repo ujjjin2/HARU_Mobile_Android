@@ -27,6 +27,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/applicant_userImg"
                 android:layout_width="66dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="25dp"
