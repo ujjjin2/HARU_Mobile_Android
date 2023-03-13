@@ -49,6 +49,8 @@ public class DetailActivity extends AppCompatActivity {
     private int rId;
     private String token;
 
+    private ImageButton heart_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +75,28 @@ public class DetailActivity extends AppCompatActivity {
         Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
 
         buttonaction();
-
+        checkZzim();
         fetch();
+    }
+
+    private void checkZzim() {
+        Call<Boolean> call = RetrofitClientInstance.getApiService().zzimCheck(token, 0 , rId);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean check = response.body();
+                if (check == true) {
+                    heart_btn.setImageResource(R.drawable.full_heart);
+                } else {
+                    heart_btn.setImageResource(R.drawable.detail_img);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private void buttonaction() {
@@ -87,23 +109,25 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         ImageButton back_btn = findViewById(R.id.imageButton_left);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             finish();
-            }
-        });
 
-        ImageButton heart_btn = findViewById(R.id.imageButton_heart);
+
+                back_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+        heart_btn = findViewById(R.id.imageButton_heart);
         heart_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (i == true){
                     heart_btn.setImageResource(R.drawable.full_heart);
 
-                    zzimRequestDTO zzim = new zzimRequestDTO(rId,1);
+                    zzimRequestDTO zzim = new zzimRequestDTO(rId,0);
 
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token,zzim);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -120,9 +144,9 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     });
 
-                }else{
+                }else {
                     heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,1,rId);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,0,rId);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {

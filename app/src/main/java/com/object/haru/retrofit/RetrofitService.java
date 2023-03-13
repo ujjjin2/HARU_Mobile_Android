@@ -48,7 +48,11 @@ public interface RetrofitService {
 
     //찜 삭제 하기
     @DELETE("/zzim/v1/delete/{uid}/{rid}")
-    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("uid")int uid, @Query("rid")int rid);
+    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("kakaoid")int kakaoid, @Query("rid")int rid);
+
+    // 찜 확인 하기
+    @GET("/zzim/v1/count/{rid}/{kakaoid}")
+    Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")int kakaoid, @Query("rid")int rid);
 
     //지원서 작성 하기
     @POST("/apply/v1/save")
