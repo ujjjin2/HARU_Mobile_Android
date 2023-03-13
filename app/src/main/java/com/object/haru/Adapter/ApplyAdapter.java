@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHolder>{
 
-
+//    지원자 리스트 Adapter
     private ArrayList<ApplyDTO> arrayList;
 
     public ApplyAdapter(ArrayList<ApplyDTO> arrayList) {

@@ -22,7 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplicantActivity extends AppCompatActivity {
-
+//지원자 리스트
     private RecyclerView recyclerView;
     private  RecyclerView.LayoutManager layoutManager;
     private ArrayList<ApplyDTO> arrayList;

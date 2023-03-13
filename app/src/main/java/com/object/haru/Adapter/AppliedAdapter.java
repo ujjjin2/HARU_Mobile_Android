@@ -1,30 +1,25 @@
 package com.object.haru.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.object.haru.Activity.ProfileActivity;
-import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
 import java.util.ArrayList;
 
-//내가 작성한 글 Adapter
-public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomViewHolder>{
+//내가 지원한 글 목록 Adapter(일단 recruit으로 해놈)
+public class AppliedAdapter extends RecyclerView.Adapter<AppliedAdapter.CustomViewHolder>{
 
 
     private ArrayList<RecruitDTO> arrayList;
 
-    public WritedAdapter(ArrayList<RecruitDTO> arrayList) {
+    public AppliedAdapter(ArrayList<RecruitDTO> arrayList) {
         this.arrayList = arrayList;
     }
 
@@ -47,6 +42,7 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
         holder.apply_writed_title.setText(arrayList.get(position).getTitle());
 
         RecruitDTO recruitDTO = arrayList.get(position);
+
 
     }
 
