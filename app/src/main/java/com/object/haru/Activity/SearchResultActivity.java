@@ -41,6 +41,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private Call<List<RecruitDTO>> call;
     private String token;
     private String searchWord;
+    private Long kakaoId;
 
 
     @Override
@@ -55,8 +56,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
         Intent intent2 = getIntent();
         token = intent.getStringExtra("token");
-
-
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
         back_btn = findViewById(R.id.back_btn);
 
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +103,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getBaseContext(),token);
+                    recruitAdapter = new RecruitAdapter(arrayList, getBaseContext(),token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
                     recruitAdapter.notifyDataSetChanged();
                 }

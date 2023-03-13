@@ -9,7 +9,7 @@ public class zzimRequestDTO {
     private Integer rid;
     @SerializedName("kakaoid")
     @Expose
-    private Integer kakaoid;
+    private Long kakaoid;
 
     public Integer getRid() {
         return rid;
@@ -19,15 +19,15 @@ public class zzimRequestDTO {
         this.rid = rid;
     }
 
-    public Integer getKakaoid() {
+    public Long getKakaoid() {
         return kakaoid;
     }
 
-    public void setKakaoid(Integer kakaoid) {
+    public void setKakaoid(Long kakaoid) {
         this.kakaoid = kakaoid;
     }
 
-    public zzimRequestDTO(Integer rid, Integer kakaoid) {
+    public zzimRequestDTO(Integer rid, Long kakaoid) {
         this.rid = rid;
         this.kakaoid = kakaoid;
     }

@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
     Call<KakaoDTO> call;
+    private Long kakaoId;
 
 
     @Override
@@ -75,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("token", kakao.getacccesstoken());
+                            intent.putExtra("kakaoId", kakaoId);
 
                             startActivity(intent);
                         } else {
@@ -112,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
 
                                          Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                         intent.putExtra("kakaoId", kakaoId);
                                          intent.putExtra("token", kakao.getacccesstoken());
 
                                          startActivity(intent);
@@ -145,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i(TAG, "사용자 정보 요청 성공" +
                             "\n회원번호: "+user.getId() +
                             "\n이메일: "+user.getKakaoAccount().getEmail());
+                    kakaoId = user.getId();
                 }
                 Account user1 = user.getKakaoAccount();
                 System.out.println("사용자 계정" + user1);

@@ -70,6 +70,7 @@ public class HomeFragment_Slide extends Fragment {
         private String name;
 
     private String token;
+        private Long kakaoId;
 
         @Nullable
     @Override
@@ -78,6 +79,8 @@ public class HomeFragment_Slide extends Fragment {
 
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId",0);
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
 
         tabLayout = view.findViewById(R.id.Home_TabLayout);
         viewPager2 = view.findViewById(R.id.Home_ViewPager);
@@ -163,6 +166,7 @@ public class HomeFragment_Slide extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 intent.putExtra("token", token);
+                intent.putExtra("kakaoId", kakaoId);
                 startActivity(intent);
             }
         });
@@ -178,6 +182,7 @@ public class HomeFragment_Slide extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("kakaoId", kakaoId);
                 startActivity(intent);
             }
         });

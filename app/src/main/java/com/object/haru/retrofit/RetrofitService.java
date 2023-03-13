@@ -52,7 +52,7 @@ public interface RetrofitService {
 
     // 찜 확인 하기
     @GET("/zzim/v1/count/{rid}/{kakaoid}")
-    Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")int kakaoid, @Query("rid")int rid);
+    Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")int rid);
 
     //지원서 작성 하기
     @POST("/apply/v1/save")
@@ -69,7 +69,5 @@ public interface RetrofitService {
     //작성글 리스트
     @GET("/api/recruit/select/user/{kakaoid}")
     Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")String kakaoid);
-
-
 
 }

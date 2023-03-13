@@ -72,6 +72,7 @@ public class MainFragment_rc extends Fragment {
 
 
     int page = 0;
+    private Long kakaoId;
 
     @Nullable
     @Override
@@ -88,6 +89,8 @@ public class MainFragment_rc extends Fragment {
 
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
 
         swipeRefreshLayout.setDistanceToTriggerSync(400);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -171,7 +174,7 @@ public class MainFragment_rc extends Fragment {
 
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token);
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
                     Log.d("[입력 성공]", "=============");
                 } else {
@@ -196,7 +199,7 @@ public class MainFragment_rc extends Fragment {
                     arrayList.clear();
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token);
+                    recruitAdapter = new RecruitAdapter(arrayList, getContext(), token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
                 } else {
 

@@ -19,9 +19,9 @@ public class ApplyDTO {
     @SerializedName("rid")
     @Expose
     private Integer rid;
-    @SerializedName("uid")
+    @SerializedName("kakaoid")
     @Expose
-    private Integer uid;
+    private Integer kakaoid;
     @SerializedName("aid")
     @Expose
     private Integer aid;
@@ -73,11 +73,11 @@ public class ApplyDTO {
     }
 
     public Integer getUid() {
-        return uid;
+        return kakaoid;
     }
 
     public void setUid(Integer uid) {
-        this.uid = uid;
+        this.kakaoid = kakaoid;
     }
 
     public Integer getAid() {
@@ -104,12 +104,12 @@ public class ApplyDTO {
         this.userName = userName;
     }
 
-    public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer uid) {
+    public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer kakaoid) {
         this.aage = aage;
         this.acareer = acareer;
         this.asex = asex;
         this.myself = myself;
         this.rid = rid;
-        this.uid = uid;
+        this.kakaoid = kakaoid;
     }
 }

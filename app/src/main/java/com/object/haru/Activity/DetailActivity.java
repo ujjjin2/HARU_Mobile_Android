@@ -44,12 +44,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private int min = 9620;
 
-    boolean i = true;
+    boolean i = false;
 
     private int rId;
     private String token;
 
     private ImageButton heart_btn;
+    private Long kakaoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,9 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         rId = Math.toIntExact(intent.getLongExtra("rId", 1));
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
         Log.d("[rid확인]", String.valueOf(rId));
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
 //        Log.d("[token확인]", token);
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
@@ -80,7 +83,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void checkZzim() {
-        Call<Boolean> call = RetrofitClientInstance.getApiService().zzimCheck(token, 0 , rId);
+        Call<Boolean> call = RetrofitClientInstance.getApiService().zzimCheck(token, kakaoId, rId);
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -125,7 +128,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (i == true){
                     heart_btn.setImageResource(R.drawable.full_heart);
 
-                    zzimRequestDTO zzim = new zzimRequestDTO(rId,0);
+                    zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
 
                     Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
                     call.enqueue(new Callback<zzimRequestDTO>() {
