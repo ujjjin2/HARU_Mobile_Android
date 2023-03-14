@@ -175,6 +175,46 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="7dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.kofigyan.stateprogressbar.StateProgressBar
+                        android:id="@+id/progress_bar_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="29dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:spb_stateBackgroundColor="#BDBDBD"
+                        app:spb_stateForegroundColor="#299460"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_title2"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:spb_checkStateCompleted="true"
+                        app:spb_currentStateNumber="two"
+                        app:spb_maxStateNumber="three" />
+
+                    <TextView
+                        android:id="@+id/profile_title2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="31dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="216dp"
+                        android:text="서빙할 사람 구합니다."
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -204,6 +244,46 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="7dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.kofigyan.stateprogressbar.StateProgressBar
+                        android:id="@+id/progress_bar_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="29dp"
+                        app:spb_stateBackgroundColor="#BDBDBD"
+                        app:spb_stateForegroundColor="#299460"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_title1"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:spb_checkStateCompleted="true"
+                        app:spb_currentStateNumber="two"
+                        app:spb_maxStateNumber="three" />
+
+                    <TextView
+                        android:id="@+id/profile_title1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="31dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="216dp"
+                        android:text="서빙할 사람 구합니다."
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -60,6 +60,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.kakao.sdk/usermgmt
     implementation 'com.kakao.sdk:usermgmt:1.30.7'
 
+    implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
+
     // https://mvnrepository.com/artifact/com.googlecode.libphonenumber/geocoder
     implementation 'com.googlecode.libphonenumber:geocoder:2.200'
 
