@@ -34,6 +34,14 @@ public class MyPageFragment_Slide extends Fragment  {
         zzim = view.findViewById(R.id.view2);
 
         StateProgressBar stateProgressBar = (StateProgressBar) view.findViewById(R.id.progress_bar_1);
+        if (){
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("one"));
+        }else if (){
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("two"));
+        }else if (){
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("three"));
+            stateProgressBar.setAllStatesCompleted(true);
+        }
         stateProgressBar.setStateDescriptionData(descriptionData);
 
         StateProgressBar stateProgressBar2 = (StateProgressBar) view.findViewById(R.id.progress_bar_2);
