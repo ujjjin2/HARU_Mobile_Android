@@ -46,7 +46,7 @@ public class ApplyActivity extends AppCompatActivity {
 
     private void fetch() {
 
-        Call<List<RecruitDTO>> call = RetrofitClientInstance.getApiService().writed_list("","");
+        Call<List<RecruitDTO>> call = RetrofitClientInstance.getApiService().writed_list("",null);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {

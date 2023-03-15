@@ -31,6 +31,12 @@ public class ApplyDTO {
     @SerializedName("userName")
     @Expose
     private String userName;
+    @SerializedName("step")
+    @Expose
+    private String step;
+    @SerializedName("title")
+    @Expose
+    private String title;
 
     public String getAage() {
         return aage;
@@ -103,6 +109,23 @@ public class ApplyDTO {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
     public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer kakaoid) {
         this.aage = aage;

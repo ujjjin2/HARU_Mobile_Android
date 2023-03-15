@@ -79,7 +79,14 @@ public class DetailActivity extends AppCompatActivity {
 
         buttonaction();
         checkZzim();
+        mapView();
         fetch();
+    }
+
+    private void mapView() {
+//        mapView = new MapView(this);
+//        mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+//        mapViewContainer.addView(mapView);
     }
 
     private void checkZzim() {

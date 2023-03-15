@@ -48,6 +48,7 @@ dependencies {
     
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation "com.kakao.sdk:v2-all:2.12.1" // 전체 모듈 설치, 2.11.0 버전부터 지원
     implementation "com.kakao.sdk:v2-user:2.12.1" // 카카오 로그인
@@ -60,6 +61,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.kakao.sdk/usermgmt
     implementation 'com.kakao.sdk:usermgmt:1.30.7'
 
+    //프로그래스 바
     implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
 
     // https://mvnrepository.com/artifact/com.googlecode.libphonenumber/geocoder

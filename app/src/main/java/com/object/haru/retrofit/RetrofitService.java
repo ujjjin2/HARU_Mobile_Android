@@ -68,6 +68,14 @@ public interface RetrofitService {
 
     //작성글 리스트
     @GET("/api/recruit/select/user/{kakaoid}")
-    Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")String kakaoid);
+    Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")Long kakaoid);
+
+    //마이 리스트 - 내가 작성한 글
+    @GET("/api/recruit/select/user/one/{kakaoid}")
+    Call<RecruitDTO> MypageSHOW(@Header("X-Auth-Token")String token,@Path("kakaoid")Long kakaoid);
+
+    //마이 리스트 - 내가 지원한 알바
+    @GET("/apply/v1/recentApply")
+    Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
 
 }
