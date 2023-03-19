@@ -89,7 +89,7 @@ public class MainFragment_rc extends Fragment {
 
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
-        kakaoId = intent.getLongExtra("kakaoId", 0);
+        kakaoId = intent.getExtras().getLong("kakaoId");
         Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
 
         swipeRefreshLayout.setDistanceToTriggerSync(400);

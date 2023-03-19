@@ -5,17 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class TestDTO {
 
-    private String title;
+    @SerializedName("acccesstoken")
+    @Expose
+    private String acccesstoken;
 
-    public TestDTO(String title) {
-        this.title = title;
+    public String getAcccesstoken() {
+        return acccesstoken;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAcccesstoken(String acccesstoken) {
+        this.acccesstoken = acccesstoken;
     }
 }

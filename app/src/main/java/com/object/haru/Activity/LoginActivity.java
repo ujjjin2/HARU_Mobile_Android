@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 // import com.kakao.auth.ISessionCallback;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.DTO.TestDTO;
 import com.object.haru.Fragment.HomeFragment_Slide;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private View loginbutton;
     Call<KakaoDTO> call;
     private Long kakaoId;
+    private Button loginbtn;
 
 
     @Override
@@ -53,6 +56,30 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     accountLogin();
                 }
+            }
+        });
+
+        loginbtn = findViewById(R.id.loginbtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
+                testDTOCall.enqueue(new Callback<TestDTO>() {
+                    @Override
+                    public void onResponse(Call<TestDTO> call, Response<TestDTO> response) {
+                        TestDTO testDTO = response.body();
+                        String Test_token = testDTO.getAcccesstoken();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("token", Test_token);
+                        intent.putExtra("kakaoId",9999999999L);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<TestDTO> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
             }
         });
 

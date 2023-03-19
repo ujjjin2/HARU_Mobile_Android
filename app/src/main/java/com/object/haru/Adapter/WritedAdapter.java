@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.object.haru.Activity.ProfileActivity;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.RecruitDTO;
@@ -41,10 +42,8 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-//        //각 아이템 매칭
-//        Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
-        //서버로 부터 이미지를 받아와 bindview 될때 삽입시켜줌
         holder.apply_writed_title.setText(arrayList.get(position).getTitle());
+        String step = arrayList.get(position).getStep();
 
         RecruitDTO recruitDTO = arrayList.get(position);
 
@@ -58,12 +57,14 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         TextView apply_writed_title;
+        StateProgressBar progress_bar_writed;
+
 
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.apply_writed_title = itemView.findViewById(R.id.apply_writed_title);
-
+            this.progress_bar_writed = itemView.findViewById(R.id.progress_bar_writed);
 
         }
 

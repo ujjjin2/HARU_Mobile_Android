@@ -3,6 +3,7 @@ package com.object.haru.retrofit;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.RecruitDTO;
+import com.object.haru.DTO.TestDTO;
 import com.object.haru.DTO.zzimRequestDTO;
 
 import java.util.List;
@@ -77,5 +78,8 @@ public interface RetrofitService {
     //마이 리스트 - 내가 지원한 알바
     @GET("/apply/v1/recentApply")
     Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
+
+    @GET("/test/login")
+    Call<TestDTO> Test_Login();
 
 }
