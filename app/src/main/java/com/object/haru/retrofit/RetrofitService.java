@@ -4,6 +4,7 @@ import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.TestDTO;
+import com.object.haru.DTO.UserDTO;
 import com.object.haru.DTO.zzimRequestDTO;
 
 import java.util.List;
@@ -81,5 +82,8 @@ public interface RetrofitService {
 
     @GET("/test/login")
     Call<TestDTO> Test_Login();
+
+    @GET("/kakao/select/user")
+    Call<UserDTO> Show_user_info(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
 
 }
