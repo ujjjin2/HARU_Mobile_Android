@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -20,6 +21,10 @@ import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.zzimRequestDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +57,8 @@ public class DetailActivity extends AppCompatActivity {
     private ImageButton heart_btn;
     private Long kakaoId;
 
+    private double lat,lon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,16 +84,50 @@ public class DetailActivity extends AppCompatActivity {
         Detail_tv_career2 = findViewById(R.id.Detail_tv_career2);
         Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
 
+        fetch();
         buttonaction();
         checkZzim();
         mapView();
-        fetch();
+
     }
 
     private void mapView() {
-//        mapView = new MapView(this);
-//        mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
-//        mapViewContainer.addView(mapView);
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup)findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        // 중심점 변경 - 인하공전
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(lat, lon), true);
+        // 줌 레벨 변경
+        mapView.setZoomLevel(1, true);
+
+        // 줌 인
+        mapView.zoomIn(true);
+        // 줌 아웃
+        mapView.zoomOut(true);
+
+        /*마커 추가*/
+        //마커 찍기 (인하공전)
+        MapPoint MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(lat, lon);
+
+        // 마커 아이콘 추가하는 함수
+        MapPOIItem customMarker = new MapPOIItem();
+        // 클릭 했을 때 나오는 호출 값
+        customMarker.setItemName("매장 위치");
+
+        customMarker.setTag(1);
+
+        // 좌표를 입력받아 현 위치로 출력
+        customMarker.setMapPoint(MARKER_POINT1);
+
+        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+        customMarker.setCustomImageResourceId(R.drawable.marker); // 마커 이미지.
+        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+        customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+
+        // 지도화면 위에 추가되는 아이콘을 추가하기 위한 호출(말풍선 모양)
+        mapView.addPOIItem(customMarker);
     }
 
     private void checkZzim() {
@@ -233,6 +274,11 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                 if (response.isSuccessful()){
                     RecruitDTO recruit = response.body();
+
+                    lat = recruit.getLat();
+                    lon = recruit.getLon();
+                    Log.d("[위도, 경도]","["+lat+","+lon+"]");
+
                     String writetime_date = recruit.getRtime().substring(0,10);
                     String writetime_time = recruit.getRtime().substring(11,19);
 

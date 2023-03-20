@@ -355,6 +355,8 @@
 
                     </LinearLayout>
 
+
+
                     <LinearLayout
                         android:id="@+id/Detail_condition2"
                         android:layout_width="match_parent"
@@ -463,6 +465,15 @@
                             android:textColor="@color/black" />
 
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+
+
                 </LinearLayout>
 
 <!--                <com.google.android.gms.maps.MapView-->
