@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
 
     <application
@@ -20,10 +22,19 @@
         android:theme="@style/Theme.HARU_Mobiile.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Add FCM service -->
+        <service
+            android:name=".Fcm.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".Activity.ReviewActivity"
             android:exported="true">
-
         </activity>
         <activity
             android:name=".Activity.ApplyDetailActivity"
@@ -36,6 +47,11 @@
         <activity
             android:name=".Activity.LoginActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
