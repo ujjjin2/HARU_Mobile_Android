@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -20,6 +21,10 @@ import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.zzimRequestDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,10 +49,15 @@ public class DetailActivity extends AppCompatActivity {
 
     private int min = 9620;
 
-    boolean i = true;
+    boolean i = false;
 
     private int rId;
     private String token;
+
+    private ImageButton heart_btn;
+    private Long kakaoId;
+
+    private double lat,lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +67,9 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         rId = Math.toIntExact(intent.getLongExtra("rId", 1));
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
         Log.d("[rid확인]", String.valueOf(rId));
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
 //        Log.d("[token확인]", token);
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
@@ -72,9 +84,70 @@ public class DetailActivity extends AppCompatActivity {
         Detail_tv_career2 = findViewById(R.id.Detail_tv_career2);
         Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
 
-        buttonaction();
-
         fetch();
+        buttonaction();
+        checkZzim();
+        mapView();
+
+    }
+
+    private void mapView() {
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup)findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        // 중심점 변경 - 인하공전
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(lat, lon), true);
+        // 줌 레벨 변경
+        mapView.setZoomLevel(1, true);
+
+        // 줌 인
+        mapView.zoomIn(true);
+        // 줌 아웃
+        mapView.zoomOut(true);
+
+        /*마커 추가*/
+        //마커 찍기 (인하공전)
+        MapPoint MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(lat, lon);
+
+        // 마커 아이콘 추가하는 함수
+        MapPOIItem customMarker = new MapPOIItem();
+        // 클릭 했을 때 나오는 호출 값
+        customMarker.setItemName("매장 위치");
+
+        customMarker.setTag(1);
+
+        // 좌표를 입력받아 현 위치로 출력
+        customMarker.setMapPoint(MARKER_POINT1);
+
+        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+        customMarker.setCustomImageResourceId(R.drawable.marker); // 마커 이미지.
+        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+        customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+
+        // 지도화면 위에 추가되는 아이콘을 추가하기 위한 호출(말풍선 모양)
+        mapView.addPOIItem(customMarker);
+    }
+
+    private void checkZzim() {
+        Call<Boolean> call = RetrofitClientInstance.getApiService().zzimCheck(token, kakaoId, rId);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean check = response.body();
+                if (check == true) {
+                    heart_btn.setImageResource(R.drawable.full_heart);
+                } else {
+                    heart_btn.setImageResource(R.drawable.detail_img);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private void buttonaction() {
@@ -87,23 +160,25 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         ImageButton back_btn = findViewById(R.id.imageButton_left);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             finish();
-            }
-        });
 
-        ImageButton heart_btn = findViewById(R.id.imageButton_heart);
+
+                back_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+        heart_btn = findViewById(R.id.imageButton_heart);
         heart_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (i == true){
                     heart_btn.setImageResource(R.drawable.full_heart);
 
-                    zzimRequestDTO zzim = new zzimRequestDTO(rId,1);
+                    zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
 
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token,zzim);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -120,9 +195,9 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     });
 
-                }else{
+                }else {
                     heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,1,rId);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,0,rId);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -199,6 +274,11 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                 if (response.isSuccessful()){
                     RecruitDTO recruit = response.body();
+
+                    lat = recruit.getLat();
+                    lon = recruit.getLon();
+                    Log.d("[위도, 경도]","["+lat+","+lon+"]");
+
                     String writetime_date = recruit.getRtime().substring(0,10);
                     String writetime_time = recruit.getRtime().substring(11,19);
 
@@ -209,8 +289,8 @@ public class DetailActivity extends AppCompatActivity {
                     Detail_tv_name.setText(recruit.getName()); //작성자
                     detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
 
-                            String stdate = recruit.getStTime().substring(0,10);
-                            String enddate = recruit.getEndTime().substring(0,10);
+                    String stdate = recruit.getStTime().substring(0,10);
+                    String enddate = recruit.getEndTime().substring(0,10);
 
                     try {
                         Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);

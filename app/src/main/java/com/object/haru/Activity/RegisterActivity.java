@@ -50,7 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
     String strhour,strmin,data,strsex,token;
     int minpay = 9620;
     RadioButton radioBtn,radioBtn2,radioBtn3;
-
+    private Long kakaoId;
 
 
     @Override
@@ -60,9 +60,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+        
         Log.d("[RegisterActivity 토큰]",token);
-
-
+        Log.d("[카카오Id 확인]", String.valueOf(kakaoId));
 
         ImageButton back_btn = findViewById(R.id.imageButton_left_register);
         back_btn.setOnClickListener(new View.OnClickListener() {

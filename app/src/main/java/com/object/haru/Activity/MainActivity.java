@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment_Slide home;
     private MyPageFragment_Slide myPage;
     public String accessToken;
+    Long kakaoId;
     private double longitude, latitude, altitude;
 
 
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         accessToken = intent.getStringExtra("token");
+//        kakaoId = intent.getLongExtra("kakaoId",0);
+        kakaoId = intent.getExtras().getLong("kakaoId");
+        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getApplicationContext(),

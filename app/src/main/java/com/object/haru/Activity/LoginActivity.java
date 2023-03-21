@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 // import com.kakao.auth.ISessionCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.KakaoDTO;
-import com.object.haru.Fcm.MyFirebaseMessagingService;
+import com.object.haru.DTO.TestDTO;
+import com.object.haru.Fragment.HomeFragment_Slide;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -38,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
     Call<KakaoDTO> call;
+    private Long kakaoId;
+    private Button loginbtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        loginbtn = findViewById(R.id.loginbtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
+                testDTOCall.enqueue(new Callback<TestDTO>() {
+                    @Override
+                    public void onResponse(Call<TestDTO> call, Response<TestDTO> response) {
+                        TestDTO testDTO = response.body();
+                        String Test_token = testDTO.getAcccesstoken();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("token", Test_token);
+                        intent.putExtra("kakaoId",9999999999L);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<TestDTO> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+            }
+        });
+
     }
     public void login(){
         String TAG = "login()";
@@ -93,12 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("token", kakao.getacccesstoken());
-
-                            Intent intent1 = new Intent(LoginActivity.this, MainFragment_rc.class);
-                            intent1.putExtra("token", kakao.getacccesstoken());
-
-                            Intent intent2 = new Intent(LoginActivity.this, SearchResultActivity.class);
-                            intent.putExtra("token", kakao.getacccesstoken());
+                            intent.putExtra("kakaoId", kakaoId);
 
                             startActivity(intent);
                         } else {
@@ -134,10 +158,9 @@ public class LoginActivity extends AppCompatActivity {
                                      if (response.isSuccessful()){
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
-                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                         intent.putExtra("token", kakao.getacccesstoken());
 
-                                         Intent intent2 = new Intent(LoginActivity.this, DetailActivity.class);
+                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                         intent.putExtra("kakaoId", kakaoId);
                                          intent.putExtra("token", kakao.getacccesstoken());
 
                                          startActivity(intent);
@@ -171,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i(TAG, "사용자 정보 요청 성공" +
                             "\n회원번호: "+user.getId() +
                             "\n이메일: "+user.getKakaoAccount().getEmail());
+                    kakaoId = user.getId();
                 }
                 Account user1 = user.getKakaoAccount();
                 System.out.println("사용자 계정" + user1);

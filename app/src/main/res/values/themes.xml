@@ -3,14 +3,18 @@
     <style name="Theme.HARU_Mobiile" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/teal_200</item>
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
         <!--NO title Bar-->
         <item name="windowActionBar">false</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
     </style>
 
     <style name="Theme.HARU_Mobiile.NoActionBar">

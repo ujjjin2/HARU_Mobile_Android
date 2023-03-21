@@ -19,9 +19,24 @@ public class ApplyDTO {
     @SerializedName("rid")
     @Expose
     private Integer rid;
-    @SerializedName("uid")
+    @SerializedName("kakaoid")
     @Expose
-    private Integer uid;
+    private Integer kakaoid;
+    @SerializedName("aid")
+    @Expose
+    private Integer aid;
+    @SerializedName("avgRating")
+    @Expose
+    private Integer avgRating;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+    @SerializedName("step")
+    @Expose
+    private String step;
+    @SerializedName("title")
+    @Expose
+    private String title;
 
     public String getAage() {
         return aage;
@@ -64,19 +79,60 @@ public class ApplyDTO {
     }
 
     public Integer getUid() {
-        return uid;
+        return kakaoid;
     }
 
     public void setUid(Integer uid) {
-        this.uid = uid;
+        this.kakaoid = kakaoid;
     }
 
-    public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer uid) {
+    public Integer getAid() {
+        return aid;
+    }
+
+    public void setAid(Integer aid) {
+        this.aid = aid;
+    }
+
+    public Integer getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Integer avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public ApplyDTO(String aage, String acareer, String asex, String myself, Integer rid, Integer kakaoid) {
         this.aage = aage;
         this.acareer = acareer;
         this.asex = asex;
         this.myself = myself;
         this.rid = rid;
-        this.uid = uid;
+        this.kakaoid = kakaoid;
     }
 }

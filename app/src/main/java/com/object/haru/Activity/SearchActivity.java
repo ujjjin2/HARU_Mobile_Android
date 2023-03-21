@@ -28,12 +28,18 @@ public class SearchActivity extends AppCompatActivity {
     private ImageView back_btn;
     ArrayList<String> list;
 
+    private Long kakaoId;
+
 
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+
         setContentView(R.layout.activity_search);
         editText_search = findViewById(R.id.search_edittext);
         back_btn = findViewById(R.id.back_btn);
@@ -76,6 +82,7 @@ public class SearchActivity extends AppCompatActivity {
                     case KeyEvent.KEYCODE_ENTER:
                     Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
                     intent.putExtra("searchWord", editText_search.getText().toString());
+                    intent.putExtra("kakaoId", kakaoId);
 //                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     hideKeyboard();
                     startActivity(intent);
