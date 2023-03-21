@@ -1,5 +1,6 @@
 package com.object.haru.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,9 +13,15 @@ import android.util.Log;
 import android.view.View;
 
 // import com.kakao.auth.ISessionCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.Fcm.MyFirebaseMessagingService;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -39,6 +46,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Log.d("KeyHash", getKeyHash());
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    String token = task.getResult();
+                    Log.d("FCM Token", token);
+                } else {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
+                }
+            }
+        });
+
+
 
         loginbutton = findViewById(R.id.login);
         loginbutton.setOnClickListener(new View.OnClickListener(){
@@ -178,6 +198,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 
 
 }
