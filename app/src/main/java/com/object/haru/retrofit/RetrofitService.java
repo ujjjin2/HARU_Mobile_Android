@@ -1,6 +1,7 @@
 package com.object.haru.retrofit;
 
 import com.object.haru.DTO.ApplyDTO;
+import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.TestDTO;
@@ -80,10 +81,18 @@ public interface RetrofitService {
     @GET("/apply/v1/recentApply")
     Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
 
+    // Test 로그인
     @GET("/test/login")
     Call<TestDTO> Test_Login();
 
+    // 마이 페이지 유저 보여주기
     @GET("/kakao/select/user")
     Call<UserDTO> Show_user_info(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
+
+    //fcm save
+    @POST("/fcm/save")
+    Call<FCMDTO> fcm_save(@Header("X-Auth-Token")String token,@Body FCMDTO fcmdto);
+
+
 
 }

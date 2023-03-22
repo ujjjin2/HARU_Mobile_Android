@@ -24,8 +24,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
+import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.TestDTO;
+import com.object.haru.Fcm.MyFirebaseMessagingService;
 import com.object.haru.Fragment.HomeFragment_Slide;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
@@ -93,10 +95,28 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<TestDTO> call, Response<TestDTO> response) {
                         TestDTO testDTO = response.body();
                         String Test_token = testDTO.getAcccesstoken();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("token", Test_token);
-                        intent.putExtra("kakaoId",9999999999L);
-                        startActivity(intent);
+
+                        MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+                        String fcmtoken = myFirebaseMessagingService.getfcmToken();
+
+                        FCMDTO fcmdto = new FCMDTO(fcmtoken,9999999999L);
+                        Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
+                        fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                            @Override
+                            public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                                Log.d("[FCM-설정]","======성공=======");
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("token", Test_token);
+                                intent.putExtra("kakaoId",9999999999L);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Call<FCMDTO> call, Throwable t) {
+                                Log.d("FCM 실패","====================");
+                                t.printStackTrace();
+                            }
+                        });
                     }
 
                     @Override
@@ -125,11 +145,28 @@ public class LoginActivity extends AppCompatActivity {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","===============");
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("token", kakao.getacccesstoken());
-                            intent.putExtra("kakaoId", kakaoId);
+                            MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+                            String fcmtoken = myFirebaseMessagingService.getfcmToken();
 
-                            startActivity(intent);
+                            FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
+                            Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
+                            fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                                @Override
+                                public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                                    Log.d("[FCM-설정]","======성공=======");
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("kakaoId", kakaoId);
+                                    intent.putExtra("token", kakao.getacccesstoken());
+
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailure(Call<FCMDTO> call, Throwable t) {
+                                    Log.d("FCM 실패","====================");
+                                    t.printStackTrace();
+                                }
+                            });
                         } else {
                             Log.d("[로그인 실패]","===================");
                         }
@@ -164,11 +201,29 @@ public class LoginActivity extends AppCompatActivity {
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                         intent.putExtra("kakaoId", kakaoId);
-                                         intent.putExtra("token", kakao.getacccesstoken());
+                                         MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+                                         String fcmtoken = myFirebaseMessagingService.getfcmToken();
 
-                                         startActivity(intent);
+                                         FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
+                                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
+                                         fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                                             @Override
+                                             public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                                                 Log.d("[FCM-설정]","======성공=======");
+                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                 intent.putExtra("kakaoId", kakaoId);
+                                                 intent.putExtra("token", kakao.getacccesstoken());
+
+                                                 startActivity(intent);
+                                             }
+
+                                             @Override
+                                             public void onFailure(Call<FCMDTO> call, Throwable t) {
+                                                Log.d("FCM 실패","====================");
+                                                t.printStackTrace();
+                                             }
+                                         });
+
                                      } else {
                                          Log.d("[로그인 실패]","===================");
                                      }
