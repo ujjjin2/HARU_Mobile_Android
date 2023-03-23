@@ -5,8 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -37,18 +39,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    String fmcToken;
+
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         String getToken = FirebaseMessaging.getInstance().getToken().getResult();  //자신만의 토큰
         Log.v(TAG, getToken);
-        fmcToken = getToken;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("token", getToken);
+        editor.apply();
     }
 
     //이거야 !!!!!!!!!!!!
     public String getfcmToken(){
-        return fmcToken;
+
+
+
+        return FirebaseMessaging.getInstance().getToken().getResult();
     }
 
 

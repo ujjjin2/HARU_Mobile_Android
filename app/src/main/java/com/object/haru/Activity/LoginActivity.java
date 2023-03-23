@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -96,8 +98,12 @@ public class LoginActivity extends AppCompatActivity {
                         TestDTO testDTO = response.body();
                         String Test_token = testDTO.getAcccesstoken();
 
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String token = preferences.getString("token", "");
+                        Log.v("로그인에서 가져온 FCM 토큰 ", token);
+
                         MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
-                        String fcmtoken = myFirebaseMessagingService.getfcmToken();
+                        String fcmtoken = token;
 
                         FCMDTO fcmdto = new FCMDTO(fcmtoken,9999999999L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
