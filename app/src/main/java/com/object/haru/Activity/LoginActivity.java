@@ -99,11 +99,9 @@ public class LoginActivity extends AppCompatActivity {
                         String Test_token = testDTO.getAcccesstoken();
 
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        String token = preferences.getString("token", "");
-                        Log.v("로그인에서 가져온 FCM 토큰 ", token);
+                        String fcmtoken = preferences.getString("token", "");
+                        Log.d("로그인에서 가져온 FCM토큰", fcmtoken);
 
-                        MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
-                        String fcmtoken = token;
 
                         FCMDTO fcmdto = new FCMDTO(fcmtoken,9999999999L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
@@ -151,8 +149,8 @@ public class LoginActivity extends AppCompatActivity {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","===============");
 
-                            MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
-                            String fcmtoken = myFirebaseMessagingService.getfcmToken();
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String fcmtoken = preferences.getString("token", "");
 
                             FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
@@ -207,8 +205,8 @@ public class LoginActivity extends AppCompatActivity {
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                                         MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
-                                         String fcmtoken = myFirebaseMessagingService.getfcmToken();
+                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                         String fcmtoken = preferences.getString("token", "");
 
                                          FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
                                          Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);

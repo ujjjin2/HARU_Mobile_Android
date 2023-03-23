@@ -43,22 +43,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        String getToken = FirebaseMessaging.getInstance().getToken().getResult();  //자신만의 토큰
-        Log.v(TAG, getToken);
+        Log.v(TAG, token);
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("token", getToken);
+        editor.putString("token", token);
         editor.apply();
     }
-
-    //이거야 !!!!!!!!!!!!
-    public String getfcmToken(){
-
-
-
-        return FirebaseMessaging.getInstance().getToken().getResult();
-    }
-
 
 
 
