@@ -43,15 +43,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.v(TAG, token);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("token", token);
-        editor.apply();
+        Log.v("FCM 토큰", token);
     }
-
-
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

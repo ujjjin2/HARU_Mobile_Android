@@ -49,28 +49,29 @@ public class LoginActivity extends AppCompatActivity {
     Call<KakaoDTO> call;
     private Long kakaoId;
     private Button loginbtn;
+    private String FcmToken;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
-
         Log.d("KeyHash", getKeyHash());
+
 
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
-                    String token = task.getResult();
-                    Log.d("FCM Token", token);
+                    FcmToken = task.getResult();
+                    Log.d("FCM Token", FcmToken);
                 } else {
                     Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
                 }
             }
         });
+
 
 
 
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("onClick에 저장된 FCM Token", FcmToken);
                 Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
                 testDTOCall.enqueue(new Callback<TestDTO>() {
                     @Override
@@ -98,12 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                         TestDTO testDTO = response.body();
                         String Test_token = testDTO.getAcccesstoken();
 
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        String fcmtoken = preferences.getString("token", "");
-                        Log.d("로그인에서 가져온 FCM토큰", fcmtoken);
+                        Log.d("로그인 클릭시 api에서 FCM Token", FcmToken);
 
-
-                        FCMDTO fcmdto = new FCMDTO(fcmtoken,9999999999L);
+                        FCMDTO fcmdto = new FCMDTO(FcmToken,9999999999L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
                         fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                             @Override
@@ -133,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     public void login(){
+        Log.d("로그인()에 저장된 FCM Token", FcmToken);
         String TAG = "login()";
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this,(oAuthToken, error) -> {
             if (error != null) {
@@ -149,10 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","===============");
 
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            String fcmtoken = preferences.getString("token", "");
-
-                            FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
+                            FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                                 @Override
@@ -205,10 +202,7 @@ public class LoginActivity extends AppCompatActivity {
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                         String fcmtoken = preferences.getString("token", "");
-
-                                         FCMDTO fcmdto = new FCMDTO(fcmtoken,kakaoId);
+                                         FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                                          Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                                          fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                                              @Override
