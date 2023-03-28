@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kofigyan.stateprogressbar.StateProgressBar;
+import com.object.haru.Activity.DetailActivity;
 import com.object.haru.Activity.ProfileActivity;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.RecruitDTO;
@@ -24,18 +25,29 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
 
 
     private ArrayList<RecruitDTO> arrayList;
+    private RecruitDTO recruitDTO;
 
-    public WritedAdapter(ArrayList<RecruitDTO> arrayList) {
+    private String token;
+
+    private Long kakaoId;
+
+    private Context context;
+
+    String[] descriptionData = {"모집중", "선발중", "모집 완료"};
+
+    public WritedAdapter(ArrayList<RecruitDTO> arrayList, String token, Long kakaoId) {
         this.arrayList = arrayList;
+        this.kakaoId = kakaoId;
+        this.token = token;
     }
 
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apply_writed_item,parent,false);
         CustomViewHolder holder = new CustomViewHolder(view);
-
-
 
         return holder;
     }
@@ -43,10 +55,17 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.apply_writed_title.setText(arrayList.get(position).getTitle());
+
         String step = arrayList.get(position).getStep();
-
-        RecruitDTO recruitDTO = arrayList.get(position);
-
+        if (step.equals("모집중")) {
+            holder.progress_bar_writed.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        } else if (step.equals("선발중")) {
+            holder.progress_bar_writed.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+        } else if (step.equals("모집완료")) {
+            holder.progress_bar_writed.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
+            holder.progress_bar_writed.setAllStatesCompleted(true);
+        }
+        holder.progress_bar_writed.setStateDescriptionData(descriptionData);
     }
 
     @Override
@@ -59,13 +78,26 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
         TextView apply_writed_title;
         StateProgressBar progress_bar_writed;
 
-
-
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.apply_writed_title = itemView.findViewById(R.id.apply_writed_title);
             this.progress_bar_writed = itemView.findViewById(R.id.progress_bar_writed);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAbsoluteAdapterPosition();
+
+                    recruitDTO = arrayList.get(position);
+
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("rId", recruitDTO.getRid());
+                    intent.putExtra("token", token);
+                    intent.putExtra("kakaoId", kakaoId);
+                    context.startActivity(intent);
+
+                }
+            });
         }
 
     }

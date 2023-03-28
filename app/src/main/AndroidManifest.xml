@@ -123,6 +123,10 @@
 
         </activity>
 
+        <activity android:name=".Activity.ProfileEditActivity"
+            android:exported="true" >
+        </activity>
+
     </application>
 
 </manifest>

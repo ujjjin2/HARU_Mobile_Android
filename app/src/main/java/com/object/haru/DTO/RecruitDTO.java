@@ -57,9 +57,9 @@ public class RecruitDTO {
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("uid")
+    @SerializedName("kakaoid")
     @Expose
-    private long uid;
+    private long kakaoid;
 
     public String getAddr() {
         return addr;
@@ -197,15 +197,15 @@ public class RecruitDTO {
         this.title = title;
     }
 
-    public long getUid() {
-        return uid;
+    public long getKakaoid() {
+        return kakaoid;
     }
 
-    public void setUid(long uid) {
-        this.uid = uid;
+    public void setKakaoid(long kakaoid) {
+        this.kakaoid = kakaoid;
     }
 
-    public RecruitDTO(String addr, String endTime, double lat, double lon, Integer pay, String rage, String rcareer, String rsex, String stTime, String subject, String title, long uid) {
+    public RecruitDTO(String addr, String endTime, double lat, double lon, Integer pay, String rage, String rcareer, String rsex, String stTime, String subject, String title, long kakaoid) {
         this.addr = addr;
         this.endTime = endTime;
         this.lat = lat;
@@ -217,6 +217,6 @@ public class RecruitDTO {
         this.stTime = stTime;
         this.subject = subject;
         this.title = title;
-        this.uid = uid;
+        this.kakaoid = kakaoid;
     }
 }

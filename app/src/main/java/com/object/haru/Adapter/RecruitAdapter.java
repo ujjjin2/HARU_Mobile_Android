@@ -30,7 +30,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
     private Long kakaoId;
 
-    public RecruitAdapter(List<RecruitDTO> arrayList, Context context,String token, Long kakaoid) {
+    public RecruitAdapter(List<RecruitDTO> arrayList, Context context, String token, Long kakaoid) {
         this.arrayList = arrayList;
         this.context = context;
         this.token = token;
@@ -46,7 +46,6 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
         CustomViewHolder holder = new CustomViewHolder(view);
 
         return holder;
-
     }
 
     @Override
@@ -58,7 +57,6 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
         holder.time.setText(arrayList.get(position).getStTime() + "~" + arrayList.get(position).getEndTime());
         holder.money.setText(arrayList.get(position).getPay().toString() + "원");
         holder.location.setText(arrayList.get(position).getAddr());
-
     }
 
     @Override

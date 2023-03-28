@@ -29,6 +29,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
     EditText applywrite_age_et,applywrite_career_et,applywrite_sex_et,applywrite_myself;
     private int rId;
     private String token;
+    private Long kakaoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +39,11 @@ public class ApplyWriteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         rId = intent.getIntExtra("rId",1);
         token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+
         Log.d("[rid확인]", String.valueOf(rId));
         Log.d("[token확인]", token);
+        Log.d("[kakaoId확인]", String.valueOf(kakaoId));
 
         applywrite_age2 = findViewById(R.id.applywrite_age2);
         applywrite_career2 = findViewById(R.id.applywrite_career2);
@@ -86,9 +90,9 @@ public class ApplyWriteActivity extends AppCompatActivity {
                 String sexWrite = applywrite_sex_et.getText().toString();
                 String myselfWrite = applywrite_myself.getText().toString();
 
-                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite,rId,1);
+                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite,rId, kakaoId);
 
-                Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite(token,applyDTO);
+                Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite(token, applyDTO);
                 call.enqueue(new Callback<ApplyDTO>() {
                     @Override
                     public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {

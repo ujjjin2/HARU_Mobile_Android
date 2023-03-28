@@ -57,7 +57,11 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intent2 = getIntent();
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
-        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+
+//        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+//        Log.d("[카카오ID 확인]", searchWord);
+//        Log.d("[카카오ID 확인]", token);
+
         back_btn = findViewById(R.id.back_btn);
 
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -73,37 +77,34 @@ public class SearchResultActivity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
 
+        fetch();
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setAdapter(recruitAdapter);
 //        // 구분선
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
 //        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        recyclerView.setAdapter(recruitAdapter);
 
 
         editText = findViewById(R.id.searchResult_edittext);
         editText.setText(searchWord);
         editText.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            finish();
-                                        }
-                                    });
-
-        fetch();
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void fetch() {
-        call = RetrofitClientInstance.getApiService().getSearchRecruit(token,30,37.450354677762,126.65915614333, searchWord);
+        call = RetrofitClientInstance.getApiService().getSearchRecruit(token, searchWord);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    recruitAdapter = new RecruitAdapter(arrayList, getBaseContext(),token, kakaoId);
+                    recruitAdapter = new RecruitAdapter(arrayList, SearchResultActivity.this ,token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
                     recruitAdapter.notifyDataSetChanged();
                 }

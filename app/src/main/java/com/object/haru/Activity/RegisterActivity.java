@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.object.haru.DTO.RecruitDTO;
+import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.Search_register;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -326,7 +327,7 @@ public class RegisterActivity extends AppCompatActivity {
                                    lon,
                                    minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
                                    category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(),1);
+                                   Register_pt_title.getText().toString(),kakaoId);
                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
                            call.enqueue(new Callback<RecruitDTO>() {
                                @Override
@@ -348,7 +349,11 @@ public class RegisterActivity extends AppCompatActivity {
                                    lon,
                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
                                    category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(),1);
+                                   Register_pt_title.getText().toString(), kakaoId);
+                           MainFragment_rc mainFragment_rc = new MainFragment_rc();
+
+                           mainFragment_rc.arrayList.add(recruitDTO);
+
                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
                            call.enqueue(new Callback<RecruitDTO>() {
                                @Override

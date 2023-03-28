@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.object.haru.Activity.ApplyActivity;
+import com.object.haru.Activity.DetailActivity;
 import com.object.haru.Activity.ProfileActivity;
 import com.object.haru.Activity.WritedActivity;
 import com.object.haru.Activity.ZzimListActivity;
@@ -39,6 +41,10 @@ public class MyPageFragment_Slide extends Fragment  {
     private TextView profile_title1,profile_title2,myPageFragment_name,myPageFragment_applyText,myPageFragment_writeText;
     private  String token;
     private Long kakaoId;
+
+    private CardView cardView;
+
+    private RecruitDTO recruitDTO;
     String[] descriptionData = {"모집중", "선발중", "모집 완료"};
 
     ImageView myPageFragment_profile;
@@ -60,12 +66,25 @@ public class MyPageFragment_Slide extends Fragment  {
         profile_title2 = view.findViewById(R.id.profile_title2);
         profile_title1 = view.findViewById(R.id.profile_title1);
 
-        //내가 작성한 알바
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().MypageSHOW(token,kakaoId);
+        cardView = view.findViewById(R.id.myPageFragment_cardView1);
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("kakaoId", kakaoId);
+                intent.putExtra("token", token);
+                intent.putExtra("rId", recruitDTO.getRid());
+                startActivity(intent);
+            }
+        });
+
+                //내가 작성한 알바
+                Call < RecruitDTO > call = RetrofitClientInstance.getApiService().MypageSHOW(token, kakaoId);
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                RecruitDTO recruitDTO = response.body();
+                recruitDTO = response.body();
 
                 String title = recruitDTO.getTitle();
                 if (title.equals(null) ){
@@ -150,6 +169,8 @@ public class MyPageFragment_Slide extends Fragment  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("kakaoId", kakaoId);
+                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });
@@ -158,6 +179,8 @@ public class MyPageFragment_Slide extends Fragment  {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ZzimListActivity.class);
+                intent.putExtra("kakaoId", kakaoId);
+                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });
@@ -168,6 +191,8 @@ public class MyPageFragment_Slide extends Fragment  {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), WritedActivity.class);
+                intent.putExtra("token", token);
+                intent.putExtra("kakaoId", kakaoId);
                 startActivity(intent);
             }
         });

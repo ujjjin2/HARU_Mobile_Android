@@ -59,7 +59,7 @@ public class MainFragment_rc extends Fragment {
 
     private View view;
 
-    private List<RecruitDTO> arrayList = new ArrayList<>();
+    public List<RecruitDTO> arrayList = new ArrayList<>();
     private RecruitAdapter recruitAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
@@ -176,6 +176,7 @@ public class MainFragment_rc extends Fragment {
                     arrayList.addAll(recruit);
                     recruitAdapter = new RecruitAdapter(arrayList, getContext(), token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
+                    recruitAdapter.notifyDataSetChanged();
                     Log.d("[입력 성공]", "=============");
                 } else {
 //                    progressBar.setVisibility(View.GONE);
@@ -201,6 +202,7 @@ public class MainFragment_rc extends Fragment {
                     arrayList.addAll(recruit);
                     recruitAdapter = new RecruitAdapter(arrayList, getContext(), token, kakaoId);
                     recyclerView.setAdapter(recruitAdapter);
+                    recruitAdapter.notifyDataSetChanged();
                 } else {
 
                 }
@@ -219,6 +221,13 @@ public class MainFragment_rc extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        fetch(0);
+        layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setAdapter(recruitAdapter);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

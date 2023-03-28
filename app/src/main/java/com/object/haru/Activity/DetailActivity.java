@@ -49,7 +49,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int min = 9620;
 
-    boolean i = false;
+    boolean i;
 
     private int rId;
     private String token;
@@ -138,8 +138,10 @@ public class DetailActivity extends AppCompatActivity {
                 Boolean check = response.body();
                 if (check == true) {
                     heart_btn.setImageResource(R.drawable.full_heart);
+                    i = false;
                 } else {
                     heart_btn.setImageResource(R.drawable.detail_img);
+                    i = true;
                 }
             }
 
@@ -197,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 }else {
                     heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,0,rId);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,kakaoId,rId);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
@@ -210,6 +212,7 @@ public class DetailActivity extends AppCompatActivity {
                         public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
                             Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
                             t.printStackTrace();
+                            i = true;
                         }
                     });
                 }
@@ -232,8 +235,7 @@ public class DetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                                     RecruitDTO recruit = response.body();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
+                                    finish();
                                     Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
 
                                 }
@@ -260,6 +262,7 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
                 intent.putExtra("rId", rId);
                 intent.putExtra("token", token);
+                intent.putExtra("kakaoId", kakaoId);
                 startActivity(intent);
             }
         });

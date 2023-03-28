@@ -1,5 +1,6 @@
 package com.object.haru.retrofit;
 
+import com.kakao.sdk.user.model.User;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
@@ -36,10 +37,8 @@ public interface RetrofitService {
     Call<KakaoDTO> kakaoLogin(@Header("X-Auth-Token") String token, @Query("acccesstoken")String acccesstoken, @Query("fcmtoken")String fcmtoken);
 
     // 검색
-    @GET("api/recruit/select/search")
-    Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token, @Query("distance")double distance,
-                                      @Query("latitude")double latitude, @Query("longtitude")double longtitude,
-                                      @Query("search")String search);
+    @GET("/api/recruit/select/location/search3")
+    Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token, @Query("search")String search);
 
     //상세 페이지-삭제
     @PUT("/api/recruit/remove/{rid}")
@@ -50,12 +49,16 @@ public interface RetrofitService {
     Call<zzimRequestDTO> zzimSave(@Header("X-Auth-Token")String token, @Body zzimRequestDTO zzim);
 
     //찜 삭제 하기
-    @DELETE("/zzim/v1/delete/{uid}/{rid}")
-    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("kakaoid")int kakaoid, @Query("rid")int rid);
+    @DELETE("/zzim/v1/delete/{kakaoid}/{rid}")
+    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")int rid);
 
     // 찜 확인 하기
     @GET("/zzim/v1/count/{rid}/{kakaoid}")
     Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")int rid);
+
+    // 찜한 리스트 불러오기
+    @GET("/zzim/v1/select/kakaoid")
+    Call<List<RecruitDTO>> getZzimList(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakoid);
 
     //지원서 작성 하기
     @POST("/apply/v1/save")
@@ -93,6 +96,10 @@ public interface RetrofitService {
     @POST("/fcm/save")
     Call<FCMDTO> fcm_save(@Header("X-Auth-Token")String token,@Body FCMDTO fcmdto);
 
+    // 회원정보 수정
+    @PUT("/kakao/change")
+    Call<UserDTO> updateUser(@Header("X-Auth-Token")String token, @Query("age")String age, @Query("career")String career,
+                             @Query("kakaoid")Long kakaoid, @Query("name")String name, @Query("photo")String photo, @Query("sex")String sex);
 
 
 }

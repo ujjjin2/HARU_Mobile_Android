@@ -29,7 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<String> list;
 
     private Long kakaoId;
-
+    private String token;
 
 
 
@@ -39,6 +39,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         kakaoId = intent.getLongExtra("kakaoId", 0);
+        token = intent.getStringExtra("token");
 
         setContentView(R.layout.activity_search);
         editText_search = findViewById(R.id.search_edittext);
@@ -83,6 +84,7 @@ public class SearchActivity extends AppCompatActivity {
                     Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
                     intent.putExtra("searchWord", editText_search.getText().toString());
                     intent.putExtra("kakaoId", kakaoId);
+                    intent.putExtra("token", token);
 //                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     hideKeyboard();
                     startActivity(intent);

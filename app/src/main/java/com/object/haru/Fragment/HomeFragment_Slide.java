@@ -183,6 +183,7 @@ public class HomeFragment_Slide extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("kakaoId", kakaoId);
+                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });
