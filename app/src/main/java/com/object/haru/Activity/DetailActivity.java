@@ -291,6 +291,7 @@ public class DetailActivity extends AppCompatActivity {
                             lon = recruit.getLon();
                             Log.d("[위도, 경도]","["+lat+","+lon+"]");
 
+                            //지도 띄우기
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

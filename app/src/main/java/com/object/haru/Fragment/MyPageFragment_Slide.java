@@ -86,15 +86,17 @@ public class MyPageFragment_Slide extends Fragment  {
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                 recruitDTO = response.body();
 
-                String title = recruitDTO.getTitle();
-                if (title.equals(null) ){
+                StateProgressBar stateProgressBar = (StateProgressBar) view.findViewById(R.id.progress_bar_1);
+
+                if (recruitDTO == null ){
                     profile_title1.setText("작성한 글이 없음");
+                    stateProgressBar.setVisibility(View.GONE);
                 }else {
                     profile_title1.setText(recruitDTO.getTitle());
 
                     String step = recruitDTO.getStep();
-                    StateProgressBar stateProgressBar = (StateProgressBar) view.findViewById(R.id.progress_bar_1);
                     if (step.equals("모집중")){
+                        stateProgressBar.setVisibility(View.VISIBLE);
                         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                     }else if (step.equals("선발중")){
                         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
@@ -113,34 +115,42 @@ public class MyPageFragment_Slide extends Fragment  {
             }
         });
 
-//        //내가 지원한 알바
-//        Call<ApplyDTO> applycall = RetrofitClientInstance.getApiService().MapageSHOW_Apply(token,kakaoId);
-//        applycall.enqueue(new Callback<ApplyDTO>() {
-//            @Override
-//            public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
-//                ApplyDTO applyDTO = response.body();
-//
-//                profile_title2.setText(applyDTO.getTitle());
-//
-//                String step = applyDTO.getStep();
-//                StateProgressBar stateProgressBar2 = (StateProgressBar) view.findViewById(R.id.progress_bar_2);
-//                if (step.equals("모집중")){
-//                    stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("one"));
-//                }else if (step.equals("선발중")){
-//                    stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("two"));
-//                }else if (step.equals("모집 완료")){
-//                    stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("three"));
-//                    stateProgressBar2.setAllStatesCompleted(true);
-//                }
-//                stateProgressBar2.setStateDescriptionData(descriptionData);
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ApplyDTO> call, Throwable t) {
-//                Log.w("실패[내가 지원한 알바]","====================");
-//            }
-//        });
+        //내가 지원한 알바
+        Call<ApplyDTO> applycall = RetrofitClientInstance.getApiService().MapageSHOW_Apply(token,kakaoId);
+        applycall.enqueue(new Callback<ApplyDTO>() {
+            @Override
+            public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
+                ApplyDTO applyDTO = response.body();
+
+                StateProgressBar stateProgressBar2 = (StateProgressBar) view.findViewById(R.id.progress_bar_2);
+
+                if (applyDTO == null){
+                    profile_title2.setText("작성한 글이 없음");
+                    stateProgressBar2.setVisibility(View.GONE);
+                }else{
+                    stateProgressBar2.setVisibility(View.VISIBLE);
+
+                    profile_title2.setText(applyDTO.getTitle());
+
+                    String step = applyDTO.getStep();
+                    if (step.equals("모집중")){
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("one"));
+                    }else if (step.equals("선발중")){
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("two"));
+                    }else if (step.equals("모집 완료")){
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("three"));
+                        stateProgressBar2.setAllStatesCompleted(true);
+                    }
+                    stateProgressBar2.setStateDescriptionData(descriptionData);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ApplyDTO> call, Throwable t) {
+                Log.w("실패[내가 지원한 알바]","====================");
+            }
+        });
 
         myPageFragment_profile = view.findViewById(R.id.myPageFragment_profile);
         myPageFragment_name = view.findViewById(R.id.myPageFragment_name);
@@ -207,6 +217,10 @@ public class MyPageFragment_Slide extends Fragment  {
             }
         });
 
+
+
         return view;
     }
+
+
 }
