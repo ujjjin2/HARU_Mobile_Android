@@ -87,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
         fetch();
         buttonaction();
         checkZzim();
-        mapView();
+
 
     }
 
@@ -230,22 +230,28 @@ public class DetailActivity extends AppCompatActivity {
                         if (menuItem.getItemId() == R.id.action_item1){
                             Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
                         }else if (menuItem.getItemId() == R.id.action_item2){
-                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
-                            call.enqueue(new Callback<RecruitDTO>() {
+                            new Thread(new Runnable() {
                                 @Override
-                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                    RecruitDTO recruit = response.body();
-                                    finish();
-                                    Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
+                                public void run() {
+                                    Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
+                                    call.enqueue(new Callback<RecruitDTO>() {
+                                        @Override
+                                        public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                            RecruitDTO recruit = response.body();
+                                            finish();
+                                            Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
 
-                                }
+                                        }
 
-                                @Override
-                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                    Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
-                                    t.printStackTrace();
+                                        @Override
+                                        public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                            Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
+                                            t.printStackTrace();
+                                        }
+                                    });
                                 }
-                            });
+                            }).start();
+
                         }
 
                         return false;
@@ -271,74 +277,90 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token, rId);
-        call.enqueue(new Callback<RecruitDTO>() {
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                if (response.isSuccessful()){
-                    RecruitDTO recruit = response.body();
+            public void run() {
+                Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token, rId);
+                call.enqueue(new Callback<RecruitDTO>() {
+                    @Override
+                    public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                        if (response.isSuccessful()){
+                            RecruitDTO recruit = response.body();
 
-                    lat = recruit.getLat();
-                    lon = recruit.getLon();
-                    Log.d("[위도, 경도]","["+lat+","+lon+"]");
+                            lat = recruit.getLat();
+                            lon = recruit.getLon();
+                            Log.d("[위도, 경도]","["+lat+","+lon+"]");
 
-                    String writetime_date = recruit.getRtime().substring(0,10);
-                    String writetime_time = recruit.getRtime().substring(11,19);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mapView();
+                                }
+                            });
 
-                    Detail_tv_writeTime.setText(writetime_date+"/"+writetime_time);
+                            String writetime_date = recruit.getRtime().substring(0,10);
+                            String writetime_time = recruit.getRtime().substring(11,19);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Detail_tv_writeTime.setText(writetime_date+"/"+writetime_time);
 
 
-                    Detail_tv_title.setText(recruit.getTitle()); //제목
-                    Detail_tv_name.setText(recruit.getName()); //작성자
-                    detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
+                                    Detail_tv_title.setText(recruit.getTitle()); //제목
+                                    Detail_tv_name.setText(recruit.getName()); //작성자
+                                    detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
 
-                    String stdate = recruit.getStTime().substring(0,10);
-                    String enddate = recruit.getEndTime().substring(0,10);
+                                    String stdate = recruit.getStTime().substring(0,10);
+                                    String enddate = recruit.getEndTime().substring(0,10);
 
-                    try {
-                        Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);
-                        Date format2 = new SimpleDateFormat("yyyy-MM-dd").parse(enddate);
+                                    try {
+                                        Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);
+                                        Date format2 = new SimpleDateFormat("yyyy-MM-dd").parse(enddate);
 
-                        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-                        long diffDays = diffSec / (24*60*60); //일자수 차이
+                                        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
+                                        long diffDays = diffSec / (24*60*60); //일자수 차이
 
-                        detail_three_date2.setText((Math.toIntExact(diffDays)+1)+"일");//상단 근무일자
+                                        detail_three_date2.setText((Math.toIntExact(diffDays)+1)+"일");//상단 근무일자
 
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
+                                    } catch (ParseException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
 
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                        String sttime = recruit.getStTime().substring(11,16);
-                        String endtime = recruit.getEndTime().substring(11,16);
-                        Date date1 = sdf.parse(sttime);
-                        Date date2 = sdf.parse(endtime);
+                                    try {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                                        String sttime = recruit.getStTime().substring(11,16);
+                                        String endtime = recruit.getEndTime().substring(11,16);
+                                        Date date1 = sdf.parse(sttime);
+                                        Date date2 = sdf.parse(endtime);
 
-                        //문자열 -> Date
-                        long timeMil1 = date1.getTime();
-                        long timeMil2 = date2.getTime();
+                                        //문자열 -> Date
+                                        long timeMil1 = date1.getTime();
+                                        long timeMil2 = date2.getTime();
 
-                        //비교
-                        long diff = timeMil2-timeMil1;
+                                        //비교
+                                        long diff = timeMil2-timeMil1;
 
-                        long diffHour = diff/(1000*60*24);
-                        long diffMin = diff/(1000*60);
-                        long hour = diffMin/60;
-                        long Min = diffMin%60;
+                                        long diffHour = diff/(1000*60*24);
+                                        long diffMin = diff/(1000*60);
+                                        long hour = diffMin/60;
+                                        long Min = diffMin%60;
 
-                        if (Min == 0){
-                            detail_three_time2.setText(hour+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
-                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour)+"원)"); // 최저시급(총)
-                        }else{
-                            detail_three_time2.setText(hour+"시간"+Min+"분"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
-                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour+recruit.getPay()/60*Min)+"원)"); // 최저시급(총)
-                        }
+                                        if (Min == 0){
+                                            detail_three_time2.setText(hour+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+                                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour)+"원)"); // 최저시급(총)
+                                        }else{
+                                            detail_three_time2.setText(hour+"시간"+Min+"분"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
+                                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour+recruit.getPay()/60*Min)+"원)"); // 최저시급(총)
+                                        }
 
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
+                                    } catch (ParseException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            });
+
 
                             Detail_tv_category2.setText(recruit.getSubject()); //분야
                             Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
@@ -346,14 +368,17 @@ public class DetailActivity extends AppCompatActivity {
                             Detail_tv_career2.setText(recruit.getRcareer()); //우대경력
                             Detail_tv_sex2.setText(recruit.getRsex());;
 //2022-02-13/10:00
-                }
-            }
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                Toast.makeText(DetailActivity.this, "Retrofit 받아오는거 실패", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                        Toast.makeText(DetailActivity.this, "Retrofit 받아오는거 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        });
+        }).start();
+
     }
 
 
