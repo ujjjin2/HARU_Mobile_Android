@@ -300,8 +300,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         final Geocoder geocoder = new Geocoder(this);
-        TextView register_register = findViewById(R.id.register_registerbtn);
-        register_register.setOnClickListener(new View.OnClickListener() {
+        Register_btn_register = findViewById(R.id.Register_btn_register);
+        Register_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Address> list = null;
