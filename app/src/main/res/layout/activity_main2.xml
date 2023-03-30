@@ -165,7 +165,7 @@
                             android:layout_marginStart="40dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
-                            android:text="시작시간"
+                            android:text="시작 시간"
                             android:textSize="15dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -173,6 +173,36 @@
                             app:layout_constraintVertical_bias="0.0">
 
                         </TextView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/Endtime_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        app:layout_constraintEnd_toStartOf="@+id/textView6"
+                        app:layout_constraintStart_toStartOf="@+id/textView6">
+
+                        <Spinner
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginEnd="36dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Spinner
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="36dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="48dp"
+                            android:layout_marginBottom="14dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,6 +232,38 @@
                         </TextView>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/startTime_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        app:layout_constraintEnd_toStartOf="@+id/textView6"
+                        app:layout_constraintStart_toStartOf="@+id/textView6">
+
+                        <Spinner
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginEnd="36dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Spinner
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="36dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="48dp"
+                            android:layout_marginBottom="14dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -270,6 +332,106 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:textStyle="bold"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/editText4"
+                            android:layout_width="330dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="1dp"
+                            android:hint="원하시는 연령대를 적어주세요"
+                            android:paddingLeft="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/editText4"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/editText5"
+                            android:layout_width="330dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="1dp"
+                            android:hint="원하시는 경력사항을 적어주세요"
+                            android:paddingLeft="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/editText5"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/register_pt_career">
+
+                        <RadioButton
+                            android:id="@+id/radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="30dp"
+                            android:background="@drawable/selector_radio_button"
+                            android:button="@null"
+                            android:checked="true"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="성별무관"
+                            android:textAlignment="center"
+                            android:textColor="@drawable/selector_radio_text" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="30dp"
+                            android:background="@drawable/selector_radio_button"
+                            android:button="@null"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="남성우대"
+                            android:textAlignment="center"
+                            android:textColor="@drawable/selector_radio_text" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/selector_radio_button"
+                            android:button="@null"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="여성우대"
+                            android:textAlignment="center"
+                            android:textColor="@drawable/selector_radio_text" />
+                    </RadioGroup>
 
 
                 </LinearLayout>
