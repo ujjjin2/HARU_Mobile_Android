@@ -272,6 +272,7 @@
                         app:spb_stateBackgroundColor="#BDBDBD"
                         app:spb_stateDescriptionColor="#808080"
                         app:spb_stateForegroundColor="#299460"
+                        app:spb_currentStateDescriptionColor="#299460"
                         app:spb_stateNumberBackgroundColor="#808080"
                         app:spb_stateNumberForegroundColor="#eeeeee" />
 

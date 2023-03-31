@@ -1,6 +1,8 @@
 package com.object.haru.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -50,7 +53,6 @@ public class DetailActivity extends AppCompatActivity {
     private int min = 9620;
 
     boolean i;
-
     private int rId;
     private String token;
 
@@ -58,6 +60,11 @@ public class DetailActivity extends AppCompatActivity {
     private Long kakaoId;
 
     private double lat,lon;
+
+    private Button apply_btn;
+    private ImageButton back_btn, option_btn;
+    private Long check;
+    private ViewGroup mapViewContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +90,18 @@ public class DetailActivity extends AppCompatActivity {
         Detail_tv_age2 = findViewById(R.id.Detail_tv_age2);
         Detail_tv_career2 = findViewById(R.id.Detail_tv_career2);
         Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
+        apply_btn = findViewById(R.id.apply_btn);
+        heart_btn = findViewById(R.id.imageButton_heart);
+        back_btn = findViewById(R.id.imageButton_left);
+        option_btn = findViewById(R.id.imageButton_option);
 
-        fetch();
         buttonaction();
-        checkZzim();
-
 
     }
 
     private void mapView() {
         MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup)findViewById(R.id.map_view);
+        mapViewContainer = (ViewGroup)findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
         // 중심점 변경 - 인하공전
@@ -160,65 +168,12 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        ImageButton back_btn = findViewById(R.id.imageButton_left);
-
-
-                back_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
-                    }
-                });
-
-        heart_btn = findViewById(R.id.imageButton_heart);
-        heart_btn.setOnClickListener(new View.OnClickListener() {
+        back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (i == true){
-                    heart_btn.setImageResource(R.drawable.full_heart);
-
-                    zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
-
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
-                    call.enqueue(new Callback<zzimRequestDTO>() {
-                        @Override
-                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
-                            zzimRequestDTO zzimRequestDTO = response.body();
-                            Toast.makeText(DetailActivity.this, "좋아요 저장", Toast.LENGTH_SHORT).show();
-                            i = false;
-                        }
-
-                        @Override
-                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
-                            Toast.makeText(DetailActivity.this, "좋아요 저장 실패", Toast.LENGTH_SHORT).show();
-                            i = false;
-                            t.printStackTrace();
-                        }
-                    });
-
-                }else {
-                    heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,kakaoId,rId);
-                    call.enqueue(new Callback<zzimRequestDTO>() {
-                        @Override
-                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
-                            zzimRequestDTO zzimRequestDTO = response.body();
-                            Toast.makeText(DetailActivity.this, "좋아요 삭제", Toast.LENGTH_SHORT).show();
-                            i = true;
-                        }
-
-                        @Override
-                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
-                            Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
-                            t.printStackTrace();
-                            i = true;
-                        }
-                    });
-                }
+                finish();
             }
         });
-        ImageButton option_btn = findViewById(R.id.imageButton_option);
         option_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,21 +215,8 @@ public class DetailActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
-
-        Button apply_btn = findViewById(R.id.apply_btn);
-        apply_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
-                intent.putExtra("rId", rId);
-                intent.putExtra("token", token);
-                intent.putExtra("kakaoId", kakaoId);
-                startActivity(intent);
-            }
-        });
-
-
     }
+
 
     private void fetch() {
         new Thread(new Runnable() {
@@ -286,6 +228,13 @@ public class DetailActivity extends AppCompatActivity {
                     public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                         if (response.isSuccessful()){
                             RecruitDTO recruit = response.body();
+
+                            // 자신이 작성한 게시물인지 확인
+                            if (recruit.getKakaoid() == kakaoId) {
+                                changeWriterStatus();
+                            } else {
+                                changeReaderStatus();
+                            }
 
                             lat = recruit.getLat();
                             lon = recruit.getLon();
@@ -306,7 +255,6 @@ public class DetailActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Detail_tv_writeTime.setText(writetime_date+"/"+writetime_time);
-
 
                                     Detail_tv_title.setText(recruit.getTitle()); //제목
                                     Detail_tv_name.setText(recruit.getName()); //작성자
@@ -361,8 +309,6 @@ public class DetailActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-
-
                             Detail_tv_category2.setText(recruit.getSubject()); //분야
                             Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
                             Detail_tv_age2.setText(recruit.getRage()); //우대나이
@@ -371,7 +317,6 @@ public class DetailActivity extends AppCompatActivity {
 //2022-02-13/10:00
                         }
                     }
-
                     @Override
                     public void onFailure(Call<RecruitDTO> call, Throwable t) {
                         Toast.makeText(DetailActivity.this, "Retrofit 받아오는거 실패", Toast.LENGTH_SHORT).show();
@@ -382,5 +327,153 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    private void changeWriterStatus() {
+        apply_btn.setText("지원자 확인하기");
+        apply_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(DetailActivity.this,
+            }
+        });
+        heart_btn.setVisibility(View.INVISIBLE);
+    }
 
+    private void changeReaderStatus() {
+        checkZzim();
+        isApply();
+        heart_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (i == true){
+                    heart_btn.setImageResource(R.drawable.full_heart);
+
+                    zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
+
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
+                    call.enqueue(new Callback<zzimRequestDTO>() {
+                        @Override
+                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
+                            zzimRequestDTO zzimRequestDTO = response.body();
+                            Toast.makeText(DetailActivity.this, "좋아요 저장", Toast.LENGTH_SHORT).show();
+                            i = false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
+                            Toast.makeText(DetailActivity.this, "좋아요 저장 실패", Toast.LENGTH_SHORT).show();
+                            i = false;
+                            t.printStackTrace();
+                        }
+                    });
+
+                }else {
+                    heart_btn.setImageResource(R.drawable.detail_img);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,kakaoId,rId);
+                    call.enqueue(new Callback<zzimRequestDTO>() {
+                        @Override
+                        public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
+                            zzimRequestDTO zzimRequestDTO = response.body();
+                            Toast.makeText(DetailActivity.this, "좋아요 삭제", Toast.LENGTH_SHORT).show();
+                            i = true;
+                        }
+
+                        @Override
+                        public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
+                            Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
+                            t.printStackTrace();
+                            i = true;
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void isApply() {
+        Call<Long> call = RetrofitClientInstance.getApiService().isApply(token, rId, kakaoId);
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                check = response.body();
+                if (check != 0) {
+                    apply_btn.setBackgroundColor(Color.rgb(246, 100, 80));
+                    apply_btn.setText("지원 취소");
+                    apply_btn.setOnClickListener(new View.OnClickListener() {
+                         @Override
+                         public void onClick(View v) {
+                             deleteCheckDialog();
+                         }
+                    });
+                } else {
+                    apply_btn.setBackgroundColor(Color.rgb(41, 148, 96));
+                    apply_btn.setText("지원하기");
+                    apply_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
+                            intent.putExtra("rId", rId);
+                            intent.putExtra("token", token);
+                            intent.putExtra("kakaoId", kakaoId);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void deleteCheckDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+        builder.setTitle("지원취소 확인");
+        builder.setMessage("지원을 취소하시겠습니까?");
+        builder.setCancelable(false);
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteApply();
+                dialog.dismiss();
+
+            }
+        });
+        builder.show();
+    }
+
+    private void deleteApply() {
+        Call<Void> call = RetrofitClientInstance.getApiService().deleteApply(token, check);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                isApply();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetch();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapViewContainer.removeAllViews();
+    }
 }

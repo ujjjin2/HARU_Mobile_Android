@@ -80,7 +80,7 @@ public class MyPageFragment_Slide extends Fragment  {
         });
 
                 //내가 작성한 알바
-                Call < RecruitDTO > call = RetrofitClientInstance.getApiService().MypageSHOW(token, kakaoId);
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().MypageSHOW(token, kakaoId);
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
@@ -128,22 +128,19 @@ public class MyPageFragment_Slide extends Fragment  {
                     profile_title2.setText("작성한 글이 없음");
                     stateProgressBar2.setVisibility(View.GONE);
                 }else{
-                    stateProgressBar2.setVisibility(View.VISIBLE);
-
                     profile_title2.setText(applyDTO.getTitle());
-
                     String step = applyDTO.getStep();
                     if (step.equals("모집중")){
-                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("one"));
+                        stateProgressBar2.setVisibility(View.VISIBLE);
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                     }else if (step.equals("선발중")){
-                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("two"));
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
                     }else if (step.equals("모집 완료")){
-                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.valueOf("three"));
+                        stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
                         stateProgressBar2.setAllStatesCompleted(true);
                     }
                     stateProgressBar2.setStateDescriptionData(descriptionData);
                 }
-
             }
 
             @Override
@@ -207,12 +204,14 @@ public class MyPageFragment_Slide extends Fragment  {
             }
         });
 
-        //내가 작성한 글 > 을 클릭 하면 이동
+        //내가 지원한 알바 글 > 을 클릭 하면 이동
         myPageFragment_applyText = view.findViewById(R.id.myPageFragment_applyText);
         myPageFragment_applyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ApplyActivity.class);
+                intent.putExtra("token", token);
+                intent.putExtra("kakaoId", kakaoId);
                 startActivity(intent);
             }
         });

@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.object.haru.Adapter.AppliedAdapter;
 import com.object.haru.Adapter.ApplyAdapter;
@@ -28,25 +31,42 @@ public class ApplyActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private  RecyclerView.LayoutManager layoutManager;
     private ArrayList<RecruitDTO> arrayList;
-    private AppliedAdapter appliedAdapter;
+    private WritedAdapter appliedAdapter;
+    private String token;
+    private Long kakaoId;
+    private ImageView backButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply);
 
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+
         recyclerView = findViewById(R.id.recyclerView_apply);
-        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        arrayList = new ArrayList<>(); //Information 객체를 담을 ArraryList
+        backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  finish();
+              }
+        });
 
         fetch();
+
+        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        arrayList = new ArrayList<>(); //Information 객체를 담을 ArraryList
 
     }
 
     private void fetch() {
 
-        Call<List<RecruitDTO>> call = RetrofitClientInstance.getApiService().writed_list("",null);
+        Call<List<RecruitDTO>> call = RetrofitClientInstance.getApiService().getApplyList(token,kakaoId);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
@@ -55,7 +75,7 @@ public class ApplyActivity extends AppCompatActivity {
 
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
-                    appliedAdapter = new AppliedAdapter(arrayList);
+                    appliedAdapter = new WritedAdapter(arrayList, token, kakaoId);
                     recyclerView.setAdapter(appliedAdapter);
                     Log.d("[입력 성공]", "=============");
                 }

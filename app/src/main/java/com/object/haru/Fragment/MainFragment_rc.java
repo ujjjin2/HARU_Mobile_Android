@@ -86,7 +86,6 @@ public class MainFragment_rc extends Fragment {
 //        progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
 
-
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
         kakaoId = intent.getExtras().getLong("kakaoId");
@@ -136,15 +135,12 @@ public class MainFragment_rc extends Fragment {
             }
         });
 
-
         return view;
     }
-
 
     final LocationListener gpsLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
-
             // 위치 리스너는 위치 정보를 전달할 때 호출 되므로 onLocationChanged() 메소드 안에 위치정보를 처리를 작업을 구현해야 합니다.
             String provider = location.getProvider();  // 위치정보
             double longitude = location.getLongitude(); // 위도
@@ -222,7 +218,6 @@ public class MainFragment_rc extends Fragment {
     public void onResume() {
         super.onResume();
 
-        fetch(0);
         layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
 

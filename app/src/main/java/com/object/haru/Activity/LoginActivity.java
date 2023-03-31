@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         String Test_token = testDTO.getAcccesstoken();
 
                         Log.d("로그인 클릭시 api에서 FCM Token", FcmToken);
+                        Log.d("로그인 클릭시 AccessToken", Test_token);
 
                         FCMDTO fcmdto = new FCMDTO(FcmToken,9999999999L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);

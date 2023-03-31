@@ -76,13 +76,25 @@ public interface RetrofitService {
     @GET("/api/recruit/select/user/{kakaoid}")
     Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")Long kakaoid);
 
+    //지원 리스트
+    @GET("/apply/v1/select/kakaoid")
+    Call<List<RecruitDTO>> getApplyList(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
+
+    // 해당 구인글에 지원 여부
+    @GET("/apply/v1/count/{rid}/{uid}")
+    Call<Long> isApply(@Header("X-Auth-Token")String token, @Query("rid")Integer rid, @Query("kakaoid")Long kakaoid);
+
+    // 지원취소하기
+    @DELETE("/apply/v1/delete/aid")
+    Call<Void> deleteApply(@Header("X-Auth-Token")String token, @Query("aid")Long aid);
+
     //마이 리스트 - 내가 작성한 글
     @GET("/api/recruit/select/user/one/{kakaoid}")
     Call<RecruitDTO> MypageSHOW(@Header("X-Auth-Token")String token,@Path("kakaoid")Long kakaoid);
 
     //마이 리스트 - 내가 지원한 알바
     @GET("/apply/v1/recentApply")
-    Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
+    Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoId")Long kakaoid);
 
     // Test 로그인
     @GET("/test/login")
@@ -100,6 +112,4 @@ public interface RetrofitService {
     @PUT("/kakao/change")
     Call<UserDTO> updateUser(@Header("X-Auth-Token")String token, @Query("age")String age, @Query("career")String career,
                              @Query("kakaoid")Long kakaoid, @Query("name")String name, @Query("photo")String photo, @Query("sex")String sex);
-
-
 }

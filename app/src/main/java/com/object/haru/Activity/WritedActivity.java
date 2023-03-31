@@ -43,6 +43,7 @@ public class WritedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writed);
 
+        //마이페이지 슬라이드에서 받아옴
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
