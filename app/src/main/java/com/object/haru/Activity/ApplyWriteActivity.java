@@ -27,7 +27,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
     TextView applywrite_age2,applywrite_career2,applywrite_sex2;
     Button applywrite_btn;
     EditText applywrite_age_et,applywrite_career_et,applywrite_sex_et,applywrite_myself;
-    private int rId;
+    private Long rId;
     private String token;
     private Long kakaoId;
 
@@ -37,7 +37,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_apply_write);
 
         Intent intent = getIntent();
-        rId = intent.getIntExtra("rId",1);
+        rId = intent.getLongExtra("rId",0);
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
 
@@ -61,7 +61,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("지원서");
 
         //TextView 에 정보 가져오기
-        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token,rId) ;
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token, rId) ;
         call.enqueue(new Callback<RecruitDTO>() {
             @Override
             public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
@@ -90,7 +90,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
                 String sexWrite = applywrite_sex_et.getText().toString();
                 String myselfWrite = applywrite_myself.getText().toString();
 
-                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite,rId, kakaoId);
+                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite, new Long(rId), kakaoId);
 
                 Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite(token, applyDTO);
                 call.enqueue(new Callback<ApplyDTO>() {

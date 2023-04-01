@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.object.haru.Adapter.ApplyAdapter;
 import com.object.haru.Adapter.RecruitAdapter;
@@ -27,25 +30,42 @@ public class ApplicantActivity extends AppCompatActivity {
     private  RecyclerView.LayoutManager layoutManager;
     private ArrayList<ApplyDTO> arrayList;
     private ApplyAdapter applyAdapter;
+    private String token;
+    private long kakaoId;
+    private Long rid;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_applicant);
 
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+        rid = intent.getLongExtra("rid", 0);
+
         recyclerView = findViewById(R.id.recyclerView_applicant);
-        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+        backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+                recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>(); //Information 객체를 담을 ArraryList
 
         fetch();
-
     }
 
     private void fetch() {
 
-        Call<List<ApplyDTO>> call = RetrofitClientInstance.getApiService().apply_list("",1);
+        Call<List<ApplyDTO>> call = RetrofitClientInstance.getApiService().apply_list(token, rid);
         call.enqueue(new Callback<List<ApplyDTO>>() {
             @Override
             public void onResponse(Call<List<ApplyDTO>> call, Response<List<ApplyDTO>> response) {
@@ -54,11 +74,10 @@ public class ApplicantActivity extends AppCompatActivity {
 
                     List<ApplyDTO> apply = response.body();
                     arrayList.addAll(apply);
-                    applyAdapter = new ApplyAdapter(arrayList);
+                    applyAdapter = new ApplyAdapter(arrayList, token);
                     recyclerView.setAdapter(applyAdapter);
                     Log.d("[입력 성공]", "=============");
                 }
-
             }
 
             @Override

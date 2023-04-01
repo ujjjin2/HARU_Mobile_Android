@@ -135,7 +135,7 @@ public class MyPageFragment_Slide extends Fragment  {
                         stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                     }else if (step.equals("선발중")){
                         stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                    }else if (step.equals("모집 완료")){
+                    }else if (step.equals("모집완료")){
                         stateProgressBar2.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
                         stateProgressBar2.setAllStatesCompleted(true);
                     }

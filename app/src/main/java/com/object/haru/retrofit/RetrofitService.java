@@ -30,7 +30,7 @@ public interface RetrofitService {
 
     //DetailActivity 에 깂 넣어서 띄우기, 지원서 지원조건 띄우기
     @GET("/api/recruit/select/{id}")
-    Call<RecruitDTO> getDetailRecruit(@Header("X-Auth-Token")String token,@Path("id") int rid);
+    Call<RecruitDTO> getDetailRecruit(@Header("X-Auth-Token")String token,@Path("id") Long rid);
 
     //카카오
     @GET("/kakao/oauth")
@@ -42,7 +42,7 @@ public interface RetrofitService {
 
     //상세 페이지-삭제
     @PUT("/api/recruit/remove/{rid}")
-    Call<RecruitDTO> Deleterecruit(@Header("X-Auth-Token")String token,@Path("rid") int rid);
+    Call<RecruitDTO> Deleterecruit(@Header("X-Auth-Token")String token,@Path("rid") Long rid);
 
     //찜 누르기
     @POST("/zzim/v1/save")
@@ -50,11 +50,11 @@ public interface RetrofitService {
 
     //찜 삭제 하기
     @DELETE("/zzim/v1/delete/{kakaoid}/{rid}")
-    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")int rid);
+    Call<zzimRequestDTO> zzimDelete(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")Long rid);
 
     // 찜 확인 하기
     @GET("/zzim/v1/count/{rid}/{kakaoid}")
-    Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")int rid);
+    Call<Boolean> zzimCheck(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid, @Query("rid")Long rid);
 
     // 찜한 리스트 불러오기
     @GET("/zzim/v1/select/kakaoid")
@@ -70,11 +70,14 @@ public interface RetrofitService {
 
     //지원자 리스트
     @GET("/apply/v1/select/rid")
-    Call<List<ApplyDTO>> apply_list(@Header("X-Auth-Token")String token,@Query("rid")int rid);
+    Call<List<ApplyDTO>> apply_list(@Header("X-Auth-Token")String token,@Query("rid")Long rid);
 
     //작성글 리스트
     @GET("/api/recruit/select/user/{kakaoid}")
     Call<List<RecruitDTO>> writed_list(@Header("X-Auth-Token")String token,@Path("kakaoid")Long kakaoid);
+
+    @PUT("/api/recruit/choose/{rid}/{kakaoid}")
+    Call<Void> confirmUser(@Header("X-Auth-Token")String token, @Path("kakaoid")Long kakaoid, @Path("rid")Long rid);
 
     //지원 리스트
     @GET("/apply/v1/select/kakaoid")
@@ -82,7 +85,7 @@ public interface RetrofitService {
 
     // 해당 구인글에 지원 여부
     @GET("/apply/v1/count/{rid}/{uid}")
-    Call<Long> isApply(@Header("X-Auth-Token")String token, @Query("rid")Integer rid, @Query("kakaoid")Long kakaoid);
+    Call<Long> isApply(@Header("X-Auth-Token")String token, @Query("rid")Long rid, @Query("kakaoid")Long kakaoid);
 
     // 지원취소하기
     @DELETE("/apply/v1/delete/aid")

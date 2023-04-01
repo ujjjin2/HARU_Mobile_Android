@@ -31,23 +31,68 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="닉네임"
-                    android:textColor="@color/black"
-                    android:textSize="13dp"
-                    android:layout_marginLeft="8dp">
-                </TextView>
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="닉네임"
-                    android:textSize="11dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp">
-                </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="손윤호손윤호손윤호"
+                        android:textColor="@color/black"
+                        android:maxEms="5"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textSize="13dp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="8dp">
+                    </TextView>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/right"
+                        android:layout_gravity="bottom">
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="별점"
+                        android:textSize="11dp"
+                        android:layout_marginLeft="17dp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.3"
+                        android:textSize="11dp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="3dp">
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="성별"
+                        android:textSize="11dp"
+                        android:layout_marginLeft="10dp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="남"
+                        android:textSize="11dp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="3dp" >
+                    </TextView>
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,7 +103,6 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="3dp">
                 </TextView>
-
 
             </LinearLayout>
 

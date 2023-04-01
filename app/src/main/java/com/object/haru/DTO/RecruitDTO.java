@@ -38,7 +38,7 @@ public class RecruitDTO {
     private String rcareer;
     @SerializedName("rid")
     @Expose
-    private long rid;
+    private Long rid;
     @SerializedName("rsex")
     @Expose
     private String rsex;

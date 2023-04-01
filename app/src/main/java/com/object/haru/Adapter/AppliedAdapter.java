@@ -42,8 +42,6 @@ public class AppliedAdapter extends RecyclerView.Adapter<AppliedAdapter.CustomVi
         holder.apply_writed_title.setText(arrayList.get(position).getTitle());
 
         RecruitDTO recruitDTO = arrayList.get(position);
-
-
     }
 
     @Override
@@ -54,7 +52,6 @@ public class AppliedAdapter extends RecyclerView.Adapter<AppliedAdapter.CustomVi
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         TextView apply_writed_title;
-
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);

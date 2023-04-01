@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 public class zzimRequestDTO {
     @SerializedName("rid")
     @Expose
-    private Integer rid;
+    private Long rid;
     @SerializedName("kakaoid")
     @Expose
     private Long kakaoid;
 
-    public Integer getRid() {
+    public Long getRid() {
         return rid;
     }
 
-    public void setRid(Integer rid) {
+    public void setRid(Long rid) {
         this.rid = rid;
     }
 
@@ -27,7 +27,7 @@ public class zzimRequestDTO {
         this.kakaoid = kakaoid;
     }
 
-    public zzimRequestDTO(Integer rid, Long kakaoid) {
+    public zzimRequestDTO(Long rid, Long kakaoid) {
         this.rid = rid;
         this.kakaoid = kakaoid;
     }

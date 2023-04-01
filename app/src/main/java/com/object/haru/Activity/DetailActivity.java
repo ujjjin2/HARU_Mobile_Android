@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity {
     private int min = 9620;
 
     boolean i;
-    private int rId;
+    private Long rId;
     private String token;
 
     private ImageButton heart_btn;
@@ -72,7 +72,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        rId = Math.toIntExact(intent.getLongExtra("rId", 1));
+        rId = intent.getLongExtra("rId", 0);
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
         Log.d("[rid확인]", String.valueOf(rId));
@@ -96,7 +96,6 @@ public class DetailActivity extends AppCompatActivity {
         option_btn = findViewById(R.id.imageButton_option);
 
         buttonaction();
-
     }
 
     private void mapView() {
@@ -172,47 +171,6 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-        option_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
-                getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_item1){
-                            Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
-                        }else if (menuItem.getItemId() == R.id.action_item2){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
-                                    call.enqueue(new Callback<RecruitDTO>() {
-                                        @Override
-                                        public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                            RecruitDTO recruit = response.body();
-                                            finish();
-                                            Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
-
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                            Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
-                                            t.printStackTrace();
-                                        }
-                                    });
-                                }
-                            }).start();
-
-                        }
-
-                        return false;
-                    }
-                });
-                popupMenu.show();
             }
         });
     }
@@ -332,10 +290,15 @@ public class DetailActivity extends AppCompatActivity {
         apply_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(DetailActivity.this,
+                Intent intent = new Intent(DetailActivity.this, ApplicantActivity.class);
+                intent.putExtra("token",token);
+                intent.putExtra("kakaoId", kakaoId);
+                intent.putExtra("rid", rId);
+                startActivity(intent);
             }
         });
         heart_btn.setVisibility(View.INVISIBLE);
+        option_btn.setVisibility(View.INVISIBLE);
     }
 
     private void changeReaderStatus() {
@@ -385,6 +348,45 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        option_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_item1){
+                            Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
+                        }else if (menuItem.getItemId() == R.id.action_item2){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
+                                    call.enqueue(new Callback<RecruitDTO>() {
+                                        @Override
+                                        public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                            RecruitDTO recruit = response.body();
+                                            finish();
+                                            Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                            Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
+                                            t.printStackTrace();
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
             }
         });
     }
