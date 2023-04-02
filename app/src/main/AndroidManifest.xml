@@ -21,8 +21,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+            android:name=".Activity.RegisterActivity"
+            android:exported="true" >
+
+        </activity>
         <!-- Add FCM service -->
         <service
             android:name=".Fcm.MyFirebaseMessagingService"
@@ -55,9 +57,6 @@
         </activity>
         <activity
             android:name=".Activity.ApplyWriteActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activity.RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".Activity.DetailActivity"

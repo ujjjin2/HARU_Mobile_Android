@@ -1,16 +1,18 @@
 package com.object.haru.Activity;
 
-import android.app.Dialog;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,12 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
+import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
+import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
@@ -35,7 +34,10 @@ import com.object.haru.Search_register;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,209 +45,276 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    Button category_btn,register_sp_time1,register_sp_time2,Register_btn_age,register_btn_pay,Register_btn_career,Register_btn_register;
-    Dialog dialogtime1,dialogtime2;
-    EditText year,month,day,addr,register_pt_age,register_pt_career,register_pt_pay,Register_pt_title;
-    TextView dialogtime_title,register_pt_storeinfo2;
-    Spinner hour,min;
-    String strhour,strmin,data,strsex,token;
-    int minpay = 9620;
-    RadioButton radioBtn,radioBtn2,radioBtn3;
+    private CalendarView calendarView;
+    private TextView date_period,startTime_set,endTime_set;
+    private EditText register_pt_age,register_pt_career,register_pt_pay, addr,register_pt_storeinfo2,Register_pt_title;
+    private String token,strsex,data, sthour,stmin,endhour, endmin,stTime,endTime,firstDate,lastDate;
     private Long kakaoId;
+    Button category_btn,Register_btn_age,register_btn_pay,Register_btn_career,Register_btn_register;
+    RadioButton radioBtn,radioBtn2,radioBtn3;
+    int minpay = 9620;
 
+    View date_view,startTime_view,EndTime_view;
+
+    ConstraintLayout EndTime_layout,starttime_layout;
+
+
+    private Spinner end_spinner_min,end_spinner_hour,start_spinner_min,start_spinner_hour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // HomeFragment_Slide 에서 받아온 Intent
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
-        
+
         Log.d("[RegisterActivity 토큰]",token);
         Log.d("[카카오Id 확인]", String.valueOf(kakaoId));
 
-        ImageButton back_btn = findViewById(R.id.imageButton_left_register);
-        back_btn.setOnClickListener(new View.OnClickListener() {
+        toolbar(); // 툴바 부분 기능*
+        calendar_view(); // 달력 관련 기능*
+        timezone();// 시간 관련된 기능
+        addressinfo(); //주소 관련 기능 *
+        extra(); // 제목,최저 시급 및 지원 요건 기능들 *
+        category(); // 카테고리 관련 기능*
+        viewClick(); //뷰 관련 처리 ( 시작시간, 종료시간, 달력)*
+        retrofit(); //등록 하는 기능
+
+    }
+
+    private void viewClick() {
+        date_view = findViewById(R.id.date_view);
+        startTime_view = findViewById(R.id.startTime_view);
+        EndTime_view = findViewById(R.id.EndTime_view);
+        EndTime_layout = findViewById(R.id.EndTime_layout);
+        starttime_layout = findViewById(R.id.starttime_layout);
+
+        //시간 쪽 클릭 -> 달력 생기거나 들어가거나
+        calendarView.setVisibility(View.GONE);
+        date_view.setOnClickListener(new View.OnClickListener() {
+            boolean isCalendarVisible = false;
             @Override
             public void onClick(View view) {
-                finish();
+                if (isCalendarVisible) {
+                    calendarView.setVisibility(View.GONE);
+                    isCalendarVisible = false;
+                } else {
+                    calendarView.setVisibility(View.VISIBLE);
+                    isCalendarVisible = true;
+                }
+
             }
         });
 
+        starttime_layout.setVisibility(View.GONE);
+        startTime_view.setOnClickListener(new View.OnClickListener() {
+            boolean isStartTime = false;
+            @Override
+            public void onClick(View view) {
+
+                if (isStartTime){
+                    starttime_layout.setVisibility(View.GONE);
+                    isStartTime = false;
+                }else {
+                    starttime_layout.setVisibility(View.VISIBLE);
+                    isStartTime = true;
+                }
+
+            }
+        });
+
+        EndTime_layout.setVisibility(View.GONE);
+        EndTime_view.setOnClickListener(new View.OnClickListener() {
+            boolean isEndTime = false;
+            @Override
+            public void onClick(View view) {
+
+                if (isEndTime){
+                    EndTime_layout.setVisibility(View.GONE);
+                    isEndTime = false;
+                }else {
+                    EndTime_layout.setVisibility(View.VISIBLE);
+                    isEndTime = true;
+                }
+
+            }
+        });
+
+    }
+
+    private void retrofit() {
+
+        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
+        Register_pt_title = findViewById(R.id.Register_pt_title);
+
+        final Geocoder geocoder = new Geocoder(this);
+        Register_btn_register = findViewById(R.id.Register_btn_register);
+        Register_btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Address> list = null;
+
+                try {
+                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (list!=null){
+                    if (list.size()==0){
+                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Address address = list.get(0);
+                        double lat = address.getLatitude();
+                        double lon = address.getLongitude();
+                        Log.d("위치 출력",lat+"//////"+lon);
+
+                        if (register_pt_pay.getText().equals("최저시급")){//최저시급이 적혀있으면 최저시급이 들어감
+                            RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                    lastDate+"/"+endTime,
+                                    lat,
+                                    lon,
+                                    minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,firstDate+"/"+stTime,
+                                    category_btn.getText().toString(),
+                                    Register_pt_title.getText().toString(),kakaoId);
+                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                            call.enqueue(new Callback<RecruitDTO>() {
+                                @Override
+                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                    RecruitDTO recruit = response.body();
+                                    Log.d("[성공]","================");
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                    Log.d("[실페]","================");
+                                }
+                            });
+                        }else{
+                            RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
+                                    lastDate+"/"+endTime,
+                                    lat,
+                                    lon,
+                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,firstDate+"/"+stTime,
+                                    category_btn.getText().toString(),
+                                    Register_pt_title.getText().toString(), kakaoId);
+                            MainFragment_rc mainFragment_rc = new MainFragment_rc();
+
+                            mainFragment_rc.arrayList.add(recruitDTO);
+
+                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                            call.enqueue(new Callback<RecruitDTO>() {
+                                @Override
+                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                    RecruitDTO recruit = response.body();
+                                    Log.d("[성공]","================");
+                                    finish();
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                    Log.d("[실패]","================");
+                                }
+                            });
+                        }
+
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void category() {
         category_btn = findViewById(R.id.register_sp_category);
         category_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog_Category();
-            }
-        });
 
+                String[] kind = getResources().getStringArray(R.array.kind);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setTitle("분야를 선택해주세요");
 
-        dialogtime1 = new Dialog(RegisterActivity.this);
-        dialogtime1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogtime1.setContentView(R.layout.dialogtime);
-        WindowManager.LayoutParams params1 = dialogtime1.getWindow().getAttributes();
-        params1.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params1.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialogtime1.getWindow().setAttributes(params1);
-
-
-        register_sp_time1 = findViewById(R.id.register_sp_time1);
-        register_sp_time1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogtime1.show();
-                year = dialogtime1.findViewById(R.id.dialogtime_year);
-                month = dialogtime1.findViewById(R.id.dialogtime_month);
-                day = dialogtime1.findViewById(R.id.dialogtime_day);
-                hour = dialogtime1.findViewById(R.id.dialogtime_hour);
-
-                min = dialogtime1.findViewById(R.id.dialogtime_minute);
-
-                ArrayAdapter hourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                        R.array.time_hour, android.R.layout.select_dialog_item);
-
-                ArrayAdapter minAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                        R.array.time_minute, android.R.layout.select_dialog_item);
-
-                minAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                min.setAdapter(minAdapter);
-
-                hourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                hour.setAdapter(hourAdapter);
-
-                Button btnok = dialogtime1.findViewById(R.id.button2);
-                btnok.setOnClickListener(new View.OnClickListener() {
+                //다이얼로그에 리스트 담기
+                builder.setItems(kind, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        String stryear = year.getText().toString();
-                        String strmonth = month.getText().toString();
-                        String strday = day.getText().toString();
-                        hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (!hour.getItemAtPosition(i).equals("0시")) {
-                                    strhour = (String) hour.getSelectedItem();
-                                } else {
-                                    strhour = "";
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (kind[i].equals("식당")){
+                            String[] kind1 = getResources().getStringArray(R.array.kind1);
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
+                            builder1.setTitle("해당되는 일을 선택해주세요");
+                            builder1.setItems(kind1, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    category_btn.setText("식당/"+kind1[i]);
                                 }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (!min.getItemAtPosition(i).equals("0분")) {
-                                    strmin = (String)min.getSelectedItem();
-                                } else {
-                                    strmin = "";
+                            });
+                            AlertDialog alertDialog1 = builder1.create();
+                            alertDialog1.show();
+                        }else if (kind[i].equals("카페")){
+                            String[] kind2 = getResources().getStringArray(R.array.kind2);
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(RegisterActivity.this);
+                            builder2.setTitle("해당되는 일을 선택해주세요");
+                            builder2.setItems(kind2, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    category_btn.setText("카페/"+kind2[i]);
                                 }
-                            }
+                            });
+                            AlertDialog alertDialog2 = builder2.create();
+                            alertDialog2.show();
+                        }else if (kind[i].equals("편의점")){
+                            String[] kind3 = getResources().getStringArray(R.array.kind3);
+                            AlertDialog.Builder builder3 = new AlertDialog.Builder(RegisterActivity.this);
+                            builder3.setTitle("해당되는 일을 선택해주세요");
+                            builder3.setItems(kind3, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    category_btn.setText("편의점/"+kind3[i]);
+                                }
+                            });
+                            AlertDialog alertDialog3 = builder3.create();
+                            alertDialog3.show();
+                        }else if (kind[i].equals("기타")){
+                            final EditText et = new EditText(RegisterActivity.this);
+                            AlertDialog.Builder builder4 = new AlertDialog.Builder(RegisterActivity.this);
+                            builder4.setTitle("해당되는 일을 선택해주세요").setMessage("일을 적어주세요");
+                            builder4.setView(et);
+                            builder4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    String value = et.getText().toString();
+                                    category_btn.setText("기타/"+value);
+                                }
+                            });
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        register_sp_time1.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
-                        dialogtime1.dismiss();
+                            AlertDialog alertDialog4 = builder4.create();
+                            alertDialog4.show();
+                        }
                     }
                 });
 
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
+    }
 
-        dialogtime2 = new Dialog(RegisterActivity.this);
-        dialogtime2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogtime2.setContentView(R.layout.dialogtime);
-        WindowManager.LayoutParams params = dialogtime2.getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialogtime2.getWindow().setAttributes(params);
+    private void extra() {
 
-
-        register_sp_time2 = findViewById(R.id.register_sp_time2);
-        register_sp_time2.setOnClickListener(new View.OnClickListener() {
+        register_btn_pay = findViewById(R.id.register_btn_pay);
+        register_pt_pay = findViewById(R.id.register_pt_pay);
+        register_btn_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogtime2.show();
-                dialogtime_title = dialogtime2.findViewById(R.id.dialogtime_title);
-                dialogtime_title.setText("종료 날짜와 시간을 적어주세요");
-                year = dialogtime2.findViewById(R.id.dialogtime_year);
-                month = dialogtime2.findViewById(R.id.dialogtime_month);
-                day = dialogtime2.findViewById(R.id.dialogtime_day);
-                hour = dialogtime2.findViewById(R.id.dialogtime_hour);
-                min = dialogtime2.findViewById(R.id.dialogtime_minute);
-
-
-
-                Button btnok = dialogtime2.findViewById(R.id.button2);
-                btnok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String stryear = year.getText().toString();
-                        String strmonth = month.getText().toString();
-                        String strday = day.getText().toString();
-                        hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (!hour.getItemAtPosition(i).equals("0시")) {
-                                    strhour = (String) hour.getSelectedItem();
-                                } else {
-                                    strhour = "";
-                                }
-
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (!min.getItemAtPosition(i).equals("0분")) {
-                                    strmin = (String)min.getSelectedItem();
-                                } else {
-                                    strmin = "";
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        register_sp_time2.setText(stryear+"-"+strmonth+"-"+strday+"/"+strhour+":"+strmin);
-                        dialogtime2.dismiss();
-                    }
-                });
-
+                register_pt_pay.setText(String.valueOf(minpay));
             }
         });
-
-        addr = findViewById(R.id.register_pt_storeinfo);
-        addr.setFocusable(false);
-        addr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //주소 검색 웹뷰 화면으로 이동
-                Log.i("주소설정페이지", "주소입력창 클릭");
-                Intent i = new Intent(getApplicationContext(), Search_register.class);
-                // 화면전환 애니메이션 없애기
-                overridePendingTransition(0, 0);
-                // 주소결과
-               getSearchResult.launch(i);
-            }
-        });
-
 
         Register_btn_age = findViewById(R.id.Register_btn_age);
         Register_btn_age.setOnClickListener(new View.OnClickListener() {
@@ -286,180 +355,179 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        System.out.println(strsex);
 
-        Register_pt_title = findViewById(R.id.Register_pt_title);
-        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
-        register_btn_pay = findViewById(R.id.register_btn_pay);
-        register_pt_pay = findViewById(R.id.register_pt_pay);
-        register_btn_pay.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void addressinfo() {
+        addr = findViewById(R.id.register_pt_storeinfo);
+        addr.setFocusable(false);
+        addr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                register_pt_pay.setText(String.valueOf(minpay));
+                //주소 검색 웹뷰 화면으로 이동
+                Log.i("주소설정페이지", "주소입력창 클릭");
+                Intent i = new Intent(getApplicationContext(), Search_register.class);
+                // 화면전환 애니메이션 없애기
+                overridePendingTransition(0, 0);
+                // 주소결과
+                getSearchResult.launch(i);
+            }
+        });
+    }
+
+    private void timezone() {
+        start_spinner_hour = findViewById(R.id.start_spinner_hour);
+        start_spinner_min = findViewById(R.id.start_spinner_min);
+
+        ArrayAdapter starthourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_hour, android.R.layout.simple_spinner_item);
+        ArrayAdapter startminAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_minute, android.R.layout.simple_spinner_item);
+
+        starthourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        start_spinner_hour.setAdapter(starthourAdapter);
+        startminAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        start_spinner_min.setAdapter(startminAdapter);
+
+
+        end_spinner_hour = findViewById(R.id.end_spinner_hour);
+        end_spinner_min = findViewById(R.id.end_spinner_min);
+
+        ArrayAdapter endthourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_hour, android.R.layout.simple_spinner_item);
+        ArrayAdapter endtminAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_minute, android.R.layout.simple_spinner_item);
+
+        endthourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        end_spinner_hour.setAdapter(endthourAdapter);
+        endtminAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        end_spinner_min.setAdapter(endtminAdapter);
+
+        startTime_set = findViewById(R.id.startTime_set);
+        startTime_set.setVisibility(View.GONE);
+        start_spinner_hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!start_spinner_hour.getItemAtPosition(i).equals("0시")) {
+                    sthour = (String) start_spinner_hour.getSelectedItem();
+                } else {
+                    sthour = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // Do nothing
             }
         });
 
-        final Geocoder geocoder = new Geocoder(this);
-        Register_btn_register = findViewById(R.id.Register_btn_register);
-        Register_btn_register.setOnClickListener(new View.OnClickListener() {
+        start_spinner_min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!start_spinner_min.getItemAtPosition(i).equals("0분")) {
+                    stmin = (String) start_spinner_min.getSelectedItem();
+                    stTime = sthour + ":" + stmin;
+                    startTime_set.setText(stTime);
+                    startTime_set.setVisibility(View.VISIBLE);
+                }else {
+                    stmin = "";
+                    startTime_set.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        endTime_set = findViewById(R.id.endTime_set);
+        endTime_set.setVisibility(View.GONE);
+
+        end_spinner_hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!end_spinner_hour.getItemAtPosition(i).equals("0시")){
+                    endhour = (String) end_spinner_hour.getSelectedItem();
+                } else {
+                    endhour = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        end_spinner_min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!end_spinner_min.getItemAtPosition(i).equals("0분")){
+                    endmin = (String) end_spinner_min.getSelectedItem();
+                    endTime = endhour+":"+endmin;
+                    endTime_set.setText(endTime);
+                    endTime_set.setVisibility(View.VISIBLE);
+                } else {
+                    endmin = "";
+                    endTime_set.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+    }
+
+    private void toolbar() {
+        ImageButton back_btn = findViewById(R.id.imageButton_left_register);
+        back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Address> list = null;
-
-                try {
-                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                if (list!=null){
-                    if (list.size()==0){
-                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
-                    }else{
-                       Address address = list.get(0);
-                       double lat = address.getLatitude();
-                       double lon = address.getLongitude();
-                       Log.d("위치 출력",lat+"//////"+lon);
-
-                       if (register_pt_pay.getText().equals("최저시급")){//최저시급이 적혀있으면 최저시급이 들어감
-                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                   register_sp_time2.getText().toString(),
-                                   lat,
-                                   lon,
-                                   minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
-                                   category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(),kakaoId);
-                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                           call.enqueue(new Callback<RecruitDTO>() {
-                               @Override
-                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                   RecruitDTO recruit = response.body();
-                                   Log.d("[성공]","================");
-                                   finish();
-                               }
-
-                               @Override
-                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                   Log.d("[실페]","================");
-                               }
-                           });
-                       }else{
-                           RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                   register_sp_time2.getText().toString(),
-                                   lat,
-                                   lon,
-                                   Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,register_sp_time1.getText().toString(),
-                                   category_btn.getText().toString(),
-                                   Register_pt_title.getText().toString(), kakaoId);
-                           MainFragment_rc mainFragment_rc = new MainFragment_rc();
-
-                           mainFragment_rc.arrayList.add(recruitDTO);
-
-                           Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                           call.enqueue(new Callback<RecruitDTO>() {
-                               @Override
-                               public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                   RecruitDTO recruit = response.body();
-                                   Log.d("[성공]","================");
-                                   finish();
-
-                               }
-
-                               @Override
-                               public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                   Log.d("[실패]","================");
-                               }
-                           });
-                       }
-
-
-                    }
-                }
-
+                finish();
             }
         });
 
     }
 
-    //카테고리 다이얼로그 드게 하는 함수 부분
-        public void showDialog_Category(){
-            String[] kind = getResources().getStringArray(R.array.kind);
-            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-            builder.setTitle("분야를 선택해주세요");
-
-            //다이얼로그에 리스트 담기
-            builder.setItems(kind, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (kind[i].equals("식당")){
-                        String[] kind1 = getResources().getStringArray(R.array.kind1);
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
-                        builder1.setTitle("해당되는 일을 선택해주세요");
-                        builder1.setItems(kind1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                category_btn.setText("식당/"+kind1[i]);
-                            }
-                        });
-                        AlertDialog alertDialog1 = builder1.create();
-                        alertDialog1.show();
-                    }else if (kind[i].equals("카페")){
-                        String[] kind2 = getResources().getStringArray(R.array.kind2);
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(RegisterActivity.this);
-                        builder2.setTitle("해당되는 일을 선택해주세요");
-                        builder2.setItems(kind2, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                category_btn.setText("카페/"+kind2[i]);
-                            }
-                        });
-                        AlertDialog alertDialog2 = builder2.create();
-                        alertDialog2.show();
-                    }else if (kind[i].equals("편의점")){
-                        String[] kind3 = getResources().getStringArray(R.array.kind3);
-                        AlertDialog.Builder builder3 = new AlertDialog.Builder(RegisterActivity.this);
-                        builder3.setTitle("해당되는 일을 선택해주세요");
-                        builder3.setItems(kind3, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                category_btn.setText("편의점/"+kind3[i]);
-                            }
-                        });
-                        AlertDialog alertDialog3 = builder3.create();
-                        alertDialog3.show();
-                    }else if (kind[i].equals("기타")){
-                        final EditText et = new EditText(RegisterActivity.this);
-                        AlertDialog.Builder builder4 = new AlertDialog.Builder(RegisterActivity.this);
-                        builder4.setTitle("해당되는 일을 선택해주세요").setMessage("일을 적어주세요");
-                        builder4.setView(et);
-                        builder4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String value = et.getText().toString();
-                                category_btn.setText("기타/"+value);
-                            }
-                        });
-
-                        AlertDialog alertDialog4 = builder4.create();
-                        alertDialog4.show();
+    private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                //Search_register로 부터의 결과 값을 받아 이곳으로 전달
+                if (result.getResultCode() == RESULT_OK){
+                    if (result.getData() != null){
+                        data = result.getData().getStringExtra("data");
+                        addr.setText(data);
                     }
                 }
-            });
+            }
+    );
 
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-        }
+    private void calendar_view() {
+        calendarView = findViewById(R.id.calendar_view);
+        date_period = findViewById(R.id.date_period);
 
+        calendarView.setShowDaysOfWeekTitle(false);
+        calendarView.setSelectionManager(new RangeSelectionManager(new OnDaySelectedListener() {
+            @Override
+            public void onDaySelected() {
+                List<Calendar> selectedDates = calendarView.getSelectedDates();
+                if (selectedDates.size() > 0) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    firstDate = sdf.format(selectedDates.get(0).getTime());
+                    lastDate = sdf.format(selectedDates.get(selectedDates.size() - 1).getTime());
+                    String message = firstDate + " ~ " + lastDate;
+                    date_period.setText(message);
 
-        private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    //Search_register로 부터의 결과 값을 받아 이곳으로 전달
-                    if (result.getResultCode() == RESULT_OK){
-                        if (result.getData() != null){
-                            data = result.getData().getStringExtra("data");
-                            addr.setText(data);
-                        }
-                    }
                 }
-        );
+            }
+        }));
+
+
+
+    }
 }
