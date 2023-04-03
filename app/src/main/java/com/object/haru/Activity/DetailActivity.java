@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.zzimRequestDTO;
+import com.object.haru.ModifyActivity;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
@@ -298,12 +299,59 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         heart_btn.setVisibility(View.INVISIBLE);
-        option_btn.setVisibility(View.INVISIBLE);
+        option_btn.setVisibility(View.VISIBLE);
+
+        option_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_item1){
+                            Intent intent = new Intent(DetailActivity.this, ModifyActivity.class);
+                            intent.putExtra("rId", rId);
+                            intent.putExtra("token", token);
+                            intent.putExtra("kakaoId", kakaoId);
+                            startActivity(intent);
+
+                        }else if (menuItem.getItemId() == R.id.action_item2){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
+                                    call.enqueue(new Callback<RecruitDTO>() {
+                                        @Override
+                                        public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                            RecruitDTO recruit = response.body();
+                                            finish();
+                                            Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                            Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
+                                            t.printStackTrace();
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
     }
 
     private void changeReaderStatus() {
         checkZzim();
         isApply();
+
+        heart_btn.setVisibility(View.VISIBLE);
+        option_btn.setVisibility(View.GONE);
         heart_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -351,44 +399,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        option_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
-                getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_item1){
-                            Toast.makeText(DetailActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
-                        }else if (menuItem.getItemId() == R.id.action_item2){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<RecruitDTO> call = RetrofitClientInstance.getApiService().Deleterecruit(token, rId);
-                                    call.enqueue(new Callback<RecruitDTO>() {
-                                        @Override
-                                        public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                            RecruitDTO recruit = response.body();
-                                            finish();
-                                            Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                            Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
-                                            t.printStackTrace();
-                                        }
-                                    });
-                                }
-                            }).start();
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
     }
 
     private void isApply() {

@@ -115,4 +115,11 @@ public interface RetrofitService {
     @PUT("/kakao/change")
     Call<UserDTO> updateUser(@Header("X-Auth-Token")String token, @Query("age")String age, @Query("career")String career,
                              @Query("kakaoid")Long kakaoid, @Query("name")String name, @Query("photo")String photo, @Query("sex")String sex);
+
+    //구인 수정
+    @PUT("/api/recruit/change")
+    Call<RecruitDTO> updateRecruit(@Header("X-Auth-Token")String token,@Query("addr")String addr,@Query("endTime")String endTime,
+                                   @Query("kakaoid")Long kakaoid, @Query("lat")double lat, @Query("lon")double lon,@Query("pay")int pay,@Query("rage")String rage,
+                                   @Query("rid")Long rid, @Query("rsex")String rsex,@Query("stTime")String stTime,@Query("suject") String subject,
+                                   @Query("title")String title);
 }
