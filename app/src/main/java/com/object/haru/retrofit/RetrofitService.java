@@ -120,6 +120,6 @@ public interface RetrofitService {
     @PUT("/api/recruit/change")
     Call<RecruitDTO> updateRecruit(@Header("X-Auth-Token")String token,@Query("addr")String addr,@Query("endTime")String endTime,
                                    @Query("kakaoid")Long kakaoid, @Query("lat")double lat, @Query("lon")double lon,@Query("pay")int pay,@Query("rage")String rage,
-                                   @Query("rid")Long rid, @Query("rsex")String rsex,@Query("stTime")String stTime,@Query("suject") String subject,
+                                   @Query("rid")Long rid, @Query("rsex")String rsex,@Query("stTime")String stTime,@Query("subject") String subject,
                                    @Query("title")String title);
 }
