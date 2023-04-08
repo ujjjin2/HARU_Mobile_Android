@@ -38,6 +38,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
 
+    // 리얼타임 데이터베이스 
+    implementation 'com.google.firebase:firebase-database'
+
     // retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     // Gson 변환기
