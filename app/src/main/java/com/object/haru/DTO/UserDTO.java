@@ -26,6 +26,10 @@ public class UserDTO {
     @Expose
     private Integer uid;
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
     public String getAge() {
         return age;
     }
@@ -80,6 +84,14 @@ public class UserDTO {
 
     public void setUid(Integer uid) {
         this.uid = uid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String name) {
+        this.email = email;
     }
 
 }
