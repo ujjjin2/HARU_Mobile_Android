@@ -40,6 +40,8 @@ dependencies {
 
     // 리얼타임 데이터베이스 
     implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-auth:21.2.0'
+
 
     // retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

@@ -22,6 +22,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -30,15 +33,13 @@ import com.kakao.sdk.user.model.Account;
 import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.TestDTO;
-import com.object.haru.Fcm.MyFirebaseMessagingService;
-import com.object.haru.Fragment.HomeFragment_Slide;
-import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -52,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
     private Long kakaoId,kakaoId2;
     private Button loginbtn;
     private String FcmToken,token2;
+    private String email;
+
+
 
 
     @Override
@@ -115,6 +119,48 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("로그인 클릭시 api에서 FCM Token", FcmToken);
                         Log.d("로그인 클릭시 AccessToken", Test_token);
 
+
+                        email = "testID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
+                        Log.d("[최종 email]", email);
+
+                        // 파이어베이스 인증 및 로그인
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                List<String> signInMethods = task.getResult().getSignInMethods();
+                                if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                                    // 이미 회원가입한 사용자인 경우 로그인
+                                    mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
+                                            .addOnCompleteListener(LoginActivity.this, signInTask -> {
+                                                if (signInTask.isSuccessful()) {
+                                                    // 로그인 성공
+                                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                                } else {
+                                                    // 로그인 실패
+                                                    Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
+                                                }
+                                            });
+                                } else {
+                                    // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
+                                    mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
+                                            .addOnCompleteListener(LoginActivity.this, createTask -> {
+                                                if (createTask.isSuccessful()) {
+                                                    // 회원가입 및 로그인 성공
+                                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                                } else {
+                                                    // 회원가입 실패
+                                                    Log.w(TAG, "createUserWithEmail:failure", createTask.getException());
+                                                }
+                                            });
+                                }
+                            } else {
+                                // 이메일 주소 확인 실패
+                                Log.w(TAG, "fetchSignInMethodsForEmail:failure", task.getException());
+                            }
+                        });
+
                         FCMDTO fcmdto = new FCMDTO(FcmToken,9999999999L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
                         fcmdtoCall.enqueue(new Callback<FCMDTO>() {
@@ -161,6 +207,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","===============");
+
+                            //파이어베이스 인증 및 로그인
+                            getFirebase();
 
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
@@ -222,6 +271,9 @@ public class LoginActivity extends AppCompatActivity {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]", kakao.getacccesstoken());
 
+                            //파이어베이스 인증 및 로그인
+                            getFirebase();
+
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
@@ -280,6 +332,7 @@ public class LoginActivity extends AppCompatActivity {
                             "\n회원번호: "+user.getId() +
                             "\n이메일: "+user.getKakaoAccount().getEmail());
                     kakaoId = user.getId();
+                    email = user.getKakaoAccount().getEmail();
                 }
                 Account user1 = user.getKakaoAccount();
                 System.out.println("사용자 계정" + user1);
@@ -306,6 +359,56 @@ public class LoginActivity extends AppCompatActivity {
             Log.w("getPackageInfo", "Unable to getPackageInfo");
         }
         return null;
+    }
+
+    public void getFirebase(){
+
+        if(kakaoId==null){
+            email = "nullPoint@test.com";  //시점에 따라서 kakaoid를 못 받는경우도 있음
+        }else{
+            email = ""+kakaoId.toString()+"@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
+        }
+
+        Log.d("[최종 email]", email);
+        Log.d("[최종 email]", email);
+
+        // 파이어베이스 인증 및 로그인
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> signInMethods = task.getResult().getSignInMethods();
+                if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                    // 이미 회원가입한 사용자인 경우 로그인
+                    mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
+                            .addOnCompleteListener(LoginActivity.this, signInTask -> {
+                                if (signInTask.isSuccessful()) {
+                                    // 로그인 성공
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                } else {
+                                    // 로그인 실패
+                                    Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
+                                }
+                            });
+                } else {
+                    // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
+                    mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
+                            .addOnCompleteListener(LoginActivity.this, createTask -> {
+                                if (createTask.isSuccessful()) {
+                                    // 회원가입 및 로그인 성공
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                } else {
+                                    // 회원가입 실패
+                                    Log.w(TAG, "createUserWithEmail:failure", createTask.getException());
+                                }
+                            });
+                }
+            } else {
+                // 이메일 주소 확인 실패
+                Log.w(TAG, "fetchSignInMethodsForEmail:failure", task.getException());
+            }
+        });
     }
 
 
