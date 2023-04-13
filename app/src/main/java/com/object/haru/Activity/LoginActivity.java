@@ -3,6 +3,7 @@ package com.object.haru.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,9 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
     Call<KakaoDTO> call;
-    private Long kakaoId;
+    private Long kakaoId,kakaoId2;
     private Button loginbtn;
-    private String FcmToken;
+    private String FcmToken,token2;
 
 
     @Override
@@ -72,18 +74,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
+        SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
+        token2 = auto.getString("token", null);
+        kakaoId2 = auto.getLong("kakaoId", 0);
 
 
         loginbutton = findViewById(R.id.login);
         loginbutton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
-                    login();
-                }
-                else{
-                    accountLogin();
+                if (kakaoId2 != 0 && token2 !=null){
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("token", token2);
+                    intent.putExtra("kakaoId",kakaoId2);
+                    startActivity(intent);
+
+                }else{//loginInfo가 비어있을때 로그인 창으로 넘어감
+                    if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
+                        login();
+                    }
+                    else{
+                        accountLogin();
+                    }
                 }
             }
         });
@@ -160,6 +172,12 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
 
+                                    SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
+                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
+                                    autoLoginEdit.putLong("kakaoId", kakaoId);
+                                    autoLoginEdit.putString("token", kakao.getacccesstoken());
+                                    autoLoginEdit.commit();
+
                                     startActivity(intent);
                                 }
 
@@ -198,46 +216,52 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("fcm 확인",FcmToken);
                 call = RetrofitClientInstance.getApiService().kakaoLogin("", oAuthToken.getAccessToken(),FcmToken);
                 call.enqueue(new Callback<KakaoDTO>() {
-                                 @Override
-                                 public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
-                                     if (response.isSuccessful()){
-                                         KakaoDTO kakao = response.body();
-                                         Log.d("[로그인 성공]", kakao.getacccesstoken());
+                    @Override
+                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+                        if (response.isSuccessful()){
+                            KakaoDTO kakao = response.body();
+                            Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                                         FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
-                                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
-                                         fcmdtoCall.enqueue(new Callback<FCMDTO>() {
-                                             @Override
-                                             public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                                 Log.d("[FCM-설정]","======성공=======");
-                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                 intent.putExtra("kakaoId", kakaoId);
-                                                 intent.putExtra("token", kakao.getacccesstoken());
+                            FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
+                            Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
+                            fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                                @Override
+                                public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                                    Log.d("[FCM-설정]","======성공=======");
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("kakaoId", kakaoId);
+                                    intent.putExtra("token", kakao.getacccesstoken());
 
-                                                 startActivity(intent);
-                                             }
+                                    SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
+                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
+                                    autoLoginEdit.putLong("kakaoId", kakaoId);
+                                    autoLoginEdit.putString("token", kakao.getacccesstoken());
+                                    autoLoginEdit.commit();
 
-                                             @Override
-                                             public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                                Log.d("FCM 실패","====================");
-                                                t.printStackTrace();
-                                             }
-                                         });
+                                    startActivity(intent);
+                                }
 
-                                     } else {
-                                         Log.d("[로그인 실패]","===================");
-                                         response.errorBody();
-                                     }
-                                 }
+                                @Override
+                                public void onFailure(Call<FCMDTO> call, Throwable t) {
+                                    Log.d("FCM 실패","====================");
+                                    t.printStackTrace();
+                                }
+                            });
 
-                                 @Override
-                                 public void onFailure(Call<KakaoDTO> call, Throwable t) {
-                                     Log.d("[로그인 실패]","===================");
-                                     t.printStackTrace();
-                                 }
-                             });
+                        } else {
+                            Log.d("[로그인 실패]","===================");
+                            response.errorBody();
+                        }
+                    }
 
-                        getUserInfo();
+                    @Override
+                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
+                        Log.d("[로그인 실패]","===================");
+                        t.printStackTrace();
+                    }
+                });
+
+                getUserInfo();
             }
             return null;
         });
