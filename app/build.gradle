@@ -33,13 +33,12 @@ android {
 }
 
 dependencies {
-    //fcm
+    //파이어베이스
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
-
-    // 리얼타임 데이터베이스 
-    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-database:20.1.0'
     implementation 'com.google.firebase:firebase-auth:21.2.0'
 
 

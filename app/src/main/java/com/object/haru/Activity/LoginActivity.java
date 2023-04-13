@@ -4,23 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-// import com.kakao.auth.ISessionCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (kakaoId2 != 0 && token2 !=null){
+                    kakaoId = kakaoId2;
+                    getFirebase();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("token", token2);
                     intent.putExtra("kakaoId",kakaoId2);
@@ -217,6 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
+                                    getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
