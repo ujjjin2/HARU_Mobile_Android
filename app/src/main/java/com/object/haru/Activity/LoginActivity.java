@@ -244,14 +244,20 @@ public class LoginActivity extends AppCompatActivity {
                                      if (response.isSuccessful()){
                                          KakaoDTO kakao = response.body();
                                          Log.d("[로그인 성공]", kakao.getacccesstoken());
-                                         System.out.println("email : "+ email);
-                                         email = "test@naver.com";  //임시용 이메일 나중에 이메일 받아와야됌
-                                         Log.d("[email]", email);
+                                         if(kakaoId==null){
+                                             email = "nullPoint@test.com";  //시점에 따라서 kakaoid를 못 받는경우도 있음
+                                         }else{
+                                             email = ""+kakaoId.toString()+"@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
+                                         }
+
+                                         Log.d("[최종 email]", email);
 
                                          FirebaseAuth mAuth = FirebaseAuth.getInstance();
                                          mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
                                              if (task.isSuccessful()) {
                                                  List<String> signInMethods = task.getResult().getSignInMethods();
+                                                 Log.d("signInMethods에서 kakaoId", kakaoId.toString());
+                                                 Log.d("signInMethods에서 email", email);
                                                  if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                                                      // 이미 회원가입한 사용자인 경우 로그인
                                                      mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
@@ -267,12 +273,13 @@ public class LoginActivity extends AppCompatActivity {
                                                              });
                                                  } else {
                                                      // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
+                                                     Log.d("create서 kakaoId", kakaoId.toString());
+                                                     Log.d("create서 email", email);
                                                      mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
                                                              .addOnCompleteListener(LoginActivity.this, createTask -> {
                                                                  if (createTask.isSuccessful()) {
                                                                      // 회원가입 및 로그인 성공
                                                                      FirebaseUser user = mAuth.getCurrentUser();
-
                                                                  } else {
                                                                      // 회원가입 실패
                                                                      Log.w(TAG, "createUserWithEmail:failure", createTask.getException());
