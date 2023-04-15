@@ -1,8 +1,11 @@
 package com.object.haru.Chat;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,13 +42,16 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private List<ModelChat> chatList;
+    private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
     private String hisUid, myUid;
+
+    private Long Fridkakaoid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("채팅액티비티", "채팅시작");
         setContentView(R.layout.chat);
 
 
@@ -59,14 +65,15 @@ public class ChatActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
-        
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-
-
         Intent intent = getIntent();
-        hisUid = intent.getStringExtra("userId");
+      //  hisUid = intent.getStringExtra("userId");
+        hisUid = "2EvxqRHO6IYjYN1K9ARur2RoCKh2"; //임시
+        Fridkakaoid = intent.getLongExtra("kakaoId", 0);
+
 
 
         // firebase auth
@@ -98,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("디비에러", "데이터베이스 에러");
 
             }
         });
@@ -105,6 +113,7 @@ public class ChatActivity extends AppCompatActivity {
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // get text from edit text
                 String message = message_edit.getText().toString().trim();
                 // check if text is empty or not
@@ -130,6 +139,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void readMessages() {
+        Log.d("readMessages", "readMessages시작");
         chatList = new ArrayList<>();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -137,12 +147,20 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
-                    ModelChat modelChat = ds.getValue(ModelChat.class);
-                    if (modelChat.getReceiver().equals(myUid) && modelChat.getSender().equals(hisUid) ||
-                            modelChat.getReceiver().equals(hisUid) && modelChat.getSender().equals(myUid)) {
-                        chatList.add(modelChat);
+                    ChatDTO chatDTO = ds.getValue(ChatDTO.class);
 
+                    if (chatDTO.getReceiver() != null && chatDTO.getSender() != null) {
+                        if (chatDTO.getReceiver().equals(myUid) && chatDTO.getSender().equals(hisUid) ||
+                                chatDTO.getReceiver().equals(hisUid) && chatDTO.getSender().equals(myUid)) {
+                            chatList.add(chatDTO);
+                        }else{
+                            Log.d("equals 실패", " equals 실패");
+                        }
+                    }else{
+                        Log.d("chatDTO 널", " chatDTO 널");
                     }
+
+
                     adapterChat = new AdapterChat(ChatActivity.this, chatList);
                     adapterChat.notifyDataSetChanged();
 
@@ -164,6 +182,7 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
+        Log.d("센더에서 hisuid ", hisUid);
         hashMap.put("receiver", hisUid);
         hashMap.put("message", message);
         hashMap.put("timestamp", timestamp);
@@ -208,10 +227,11 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null) {
             myUid = user.getUid();  // currently signed in user's uid
-
+            Log.d("user 인증 객체 확인", myUid);
         } else {
+            Log.d("user 인증 객체 null", "nunlnlnlnl");
            // startActivity(new Intent(this,  LobbyActivity.class));
-            finish();
+            // finish();
         }
     }
     @Override
