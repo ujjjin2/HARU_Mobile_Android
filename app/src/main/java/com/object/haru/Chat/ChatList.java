@@ -1,6 +1,8 @@
 package com.object.haru.Chat;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import com.object.haru.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chat extends Fragment {
+public class ChatList extends Fragment {
 
     private View view;
 
@@ -37,17 +39,25 @@ public class Chat extends Fragment {
     private LinearLayoutManager layoutManager;
     private String lastmessage, receiver, sender, time;
 
-    public Chat() {
+    private  String token;
+    private Long kakaoId;
+
+    public ChatList() {
 
     }
-
-
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.chatlist, container, false);
+
+        Intent intent = getActivity().getIntent();
+        token = intent.getStringExtra("token");
+        kakaoId = intent.getLongExtra("kakaoId", 0);
+
+        Log.d("[채팅 리스트에서 카카오ID 확인]", String.valueOf(kakaoId));
+        Log.d("TOKEN : ", token);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,7 +92,7 @@ public class Chat extends Fragment {
         return view;
     }
 
-    private void loadChats() {
+    private void loadChats() {  //trip/UserAccount"에 있는 사용자의 정보와 대조하여 해당 사용자가 채팅 목록에 있는지 확인합니다.
         userList = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference("trip").child("UserAccount");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -123,7 +133,7 @@ public class Chat extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 lastmessage = "default";
                 for(DataSnapshot ds: snapshot.getChildren()) {
-                    ModelChat chat = ds.getValue(ModelChat.class);
+                    ChatDTO chat = ds.getValue(ChatDTO.class);
                     if (chat==null) {
                         continue;
                     }

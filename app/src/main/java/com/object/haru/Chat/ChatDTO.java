@@ -1,13 +1,15 @@
 package com.object.haru.Chat;
 
-public class ModelChat {
+import java.io.Serializable;
+
+public class ChatDTO implements Serializable {
     String message, receiver, sender, timestamp;
 
-    public ModelChat() {
+    public ChatDTO() {
 
     }
 
-    public ModelChat(String message, String receiver, String sender, String timestamp) {
+    public ChatDTO(String message, String receiver, String sender, String timestamp) {
         this.message = message;
         this.receiver = receiver;
         this.sender = sender;

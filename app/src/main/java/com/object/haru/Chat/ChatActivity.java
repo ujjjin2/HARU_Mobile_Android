@@ -39,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private List<ModelChat> chatList;
+    private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
     private String hisUid, myUid;
 
@@ -137,10 +137,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
-                    ModelChat modelChat = ds.getValue(ModelChat.class);
-                    if (modelChat.getReceiver().equals(myUid) && modelChat.getSender().equals(hisUid) ||
-                            modelChat.getReceiver().equals(hisUid) && modelChat.getSender().equals(myUid)) {
-                        chatList.add(modelChat);
+                    ChatDTO chatDTO = ds.getValue(ChatDTO.class);
+                    if (chatDTO.getReceiver().equals(myUid) && chatDTO.getSender().equals(hisUid) ||
+                            chatDTO.getReceiver().equals(hisUid) && chatDTO.getSender().equals(myUid)) {
+                        chatList.add(chatDTO);
 
                     }
                     adapterChat = new AdapterChat(ChatActivity.this, chatList);
