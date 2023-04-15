@@ -2,6 +2,7 @@ package com.object.haru.Chat;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
         String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
 
         // set data
+
         holder.message_text.setText(message);
         holder.time_text.setText(time);
 
@@ -88,7 +90,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
             super(itemView);
 
             // init views
-            message_text = itemView.findViewById(R.id.chatList);
+            message_text = itemView.findViewById(R.id.myMessage);
             time_text = itemView.findViewById(R.id.time);
         }
     }

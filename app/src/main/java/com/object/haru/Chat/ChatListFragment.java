@@ -20,12 +20,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import com.object.haru.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatList extends Fragment {
+public class ChatListFragment extends Fragment {
 
     private View view;
 
@@ -42,10 +43,9 @@ public class ChatList extends Fragment {
     private  String token;
     private Long kakaoId;
 
-    public ChatList() {
+    public ChatListFragment() {
 
     }
-
 
     @Nullable
     @Override
@@ -67,9 +67,10 @@ public class ChatList extends Fragment {
         modelChatList = new ArrayList<>();
 
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        layoutManager.setStackFromEnd(true);
+        layoutManager.setStackFromEnd(true);  //맨 마지막에 아이템 추가
         recyclerView.setLayoutManager(layoutManager);
 
+     //   databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(String.valueOf(kakaoId));
         databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,6 +162,4 @@ public class ChatList extends Fragment {
             }
         });
     }
-
-
 }

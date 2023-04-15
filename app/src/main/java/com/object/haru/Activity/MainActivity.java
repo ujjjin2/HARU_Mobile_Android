@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import com.object.haru.Chat.ChatList;
+import com.object.haru.Chat.ChatListFragment;
 
 
 import com.object.haru.Fragment.HomeFragment_Slide;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction ft;
 
     private HomeFragment_Slide home;
-    private ChatList chatList;
+    private ChatListFragment chatListFragment;
     private MyPageFragment_Slide myPage;
     public String accessToken;
     Long kakaoId;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
          });
 
         home = new HomeFragment_Slide();
-        chatList = new ChatList();
+        chatListFragment = new ChatListFragment();
         myPage = new MyPageFragment_Slide();
         setFrag(0);
     }
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
                 break;
             case 1:
-                ft.replace(R.id.Main_frame, chatList);
+                ft.replace(R.id.Main_frame, chatListFragment);
                 ft.commit();
                 break;
             case 2:
