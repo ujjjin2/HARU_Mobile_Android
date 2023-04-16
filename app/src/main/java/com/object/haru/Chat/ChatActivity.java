@@ -71,7 +71,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
       //  hisUid = intent.getStringExtra("userId");
-        hisUid = "2EvxqRHO6IYjYN1K9ARur2RoCKh2"; //임시
+        hisUid = intent.getStringExtra("token");
+        Log.d("fireUid", hisUid);
         Fridkakaoid = intent.getLongExtra("kakaoId", 0);
 
 

@@ -163,6 +163,7 @@ public class MyPageFragment_Slide extends Fragment  {
                 String photoURL = userDTO.getPhoto();
                 Glide.with(getActivity()).load(photoURL).into(myPageFragment_profile);
 
+
             }
 
             @Override

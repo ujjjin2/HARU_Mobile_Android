@@ -1,5 +1,8 @@
 package com.object.haru.Activity;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,7 +13,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.object.haru.Chat.ChatActivity;
+import com.object.haru.Chat.UserAccountDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
@@ -19,12 +29,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplyDetailActivity extends AppCompatActivity {
-    private String token, sex, self, name, career, age;
+    private String token, sex, self, name, career, age, idToken;
     private TextView tv_name, tv_rating, tv_age, tv_career, tv_sex, tv_self;
     private Integer rating;
     private ImageButton backButton;
     private Button confirm, chatButton;
     private Long rId, kakaoid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +65,8 @@ public class ApplyDetailActivity extends AppCompatActivity {
         chatButton = findViewById(R.id.applyDetail_btn_chating);
         confirm = findViewById(R.id.applyDetail_btn_check);
 
+        //   Log.d("확인", getIdTokenFromKakaoId(String.valueOf(kakaoid)));
+           Log.d("kakaoid 확인", kakaoid.toString());
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +98,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chatStart(kakaoid);
+                chatStart(2657970907L);
             }
         });
 
@@ -107,11 +120,48 @@ public class ApplyDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void chatStart(Long kakaoid){
+    private void chatStart(Long kakaoid) {
         Intent intent = new Intent(this, ChatActivity.class);
+        String token = getIdTokenFromKakaoId(kakaoid.toString());
+        
+        System.out.println("token : "+ token);
+        System.out.println("kakaoid : "+ kakaoid);
+        Log.d("스타트 token ", token);
+        Log.d("스타트 kakaoid ", kakaoid.toString());
+        
+        intent.putExtra("token", token);
         intent.putExtra("kakaoid", kakaoid);
-        startActivity(intent);
+       // startActivity(intent);
     }
 
+    private String getIdTokenFromKakaoId(String kakaoId) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
+        Query query = databaseReference.orderByChild("kakaoid").equalTo(kakaoId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        UserAccountDTO userAccountDTO = snapshot.getValue(UserAccountDTO.class);
+                        idToken = userAccountDTO.getIdToken();
+                        Log.d("idToken : ", idToken);
+                        if(idToken ==null){
+                            System.out.println("idToken : "+ "널");
+                        }
+                        // idToken 값 사용
+                    }
+                } else {
+                    Log.d(TAG, "No matching data found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "Database Error", databaseError.toException());
+            }
+        });
+    return idToken;
+
+    }
 
 }

@@ -4,21 +4,32 @@ import com.kakao.sdk.user.model.User;
 
 public class UserAccountDTO {
 
-      private String emailId;     // 이메일 아이디
+      private String email;     // 이메일 아이디
       private String name;        // 이름
       private String idToken;     // Firebase Uid (고유 토큰 정보)
+    private String kakaoid;
+
+    public String getKakaoid() {
+        return kakaoid;
+    }
+
+    public void setKakaoid(String kakaoid) {
+        this.kakaoid = kakaoid;
+    }
+
+    // Firebase Uid (고유 토큰 정보)
 
 
     public UserAccountDTO(){
 
     }
 
-    public String getEmailId() {
-        return emailId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public void setEmail(String emailId) {
+        this.email = emailId;
     }
 
     public String getName() {
