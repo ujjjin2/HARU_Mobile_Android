@@ -7,7 +7,7 @@ public class UserAccountDTO {
       private String email;     // 이메일 아이디
       private String name;        // 이름
       private String idToken;     // Firebase Uid (고유 토큰 정보)
-    private Long kakaoid;
+      private Long kakaoid;
 
     public Long getKakaoid() {
         return kakaoid;
@@ -22,6 +22,12 @@ public class UserAccountDTO {
 
     public UserAccountDTO(){
 
+    }
+
+    public UserAccountDTO(String idToken, String email, String name) {
+        this.idToken = idToken;
+        this.email = email;
+        this.name = name;
     }
 
     public String getEmail() {

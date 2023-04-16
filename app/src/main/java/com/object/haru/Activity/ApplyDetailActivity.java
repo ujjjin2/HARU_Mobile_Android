@@ -98,7 +98,8 @@ public class ApplyDetailActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chatStart(2657970907L);
+                System.out.println("상대방 kakaoid : "+ kakaoid);
+                chatStart(kakaoid);
             }
         });
 
@@ -121,34 +122,23 @@ public class ApplyDetailActivity extends AppCompatActivity {
     }
 
     private void chatStart(Long kakaoid) {
-        Intent intent = new Intent(this, ChatActivity.class);
-        String token = getIdTokenFromKakaoId(kakaoid.toString());
-        
-        System.out.println("token : "+ token);
-        System.out.println("kakaoid : "+ kakaoid);
-        Log.d("스타트 token ", token);
-        Log.d("스타트 kakaoid ", kakaoid.toString());
-        
-        intent.putExtra("token", token);
-        intent.putExtra("kakaoid", kakaoid);
-       // startActivity(intent);
-    }
-
-    private String getIdTokenFromKakaoId(String kakaoId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-        Query query = databaseReference.orderByChild("kakaoid").equalTo(kakaoId);
-        query.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("kakaoid").equalTo(String.valueOf(kakaoid));
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserAccountDTO userAccountDTO = snapshot.getValue(UserAccountDTO.class);
-                        idToken = userAccountDTO.getIdToken();
-                        Log.d("idToken : ", idToken);
-                        if(idToken ==null){
-                            System.out.println("idToken : "+ "널");
-                        }
-                        // idToken 값 사용
+                        String idToken = userAccountDTO.getIdToken();
+
+                        System.out.println("메소드안에서 idtoken "+ idToken);
+
+                        Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
+                        intent.putExtra("token", idToken);
+                        intent.putExtra("kakaoid", kakaoid);
+                        startActivity(intent);
                     }
                 } else {
                     Log.d(TAG, "No matching data found");
@@ -160,8 +150,10 @@ public class ApplyDetailActivity extends AppCompatActivity {
                 Log.e(TAG, "Database Error", databaseError.toException());
             }
         });
-    return idToken;
-
     }
+
+
+
+
 
 }

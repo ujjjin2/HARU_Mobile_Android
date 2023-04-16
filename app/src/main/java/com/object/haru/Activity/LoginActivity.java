@@ -152,17 +152,20 @@ public class LoginActivity extends AppCompatActivity {
                                                 if (createTask.isSuccessful()) {
                                                     // 회원가입 및 로그인 성공
                                                     FirebaseUser user = mAuth.getCurrentUser();
-                                                    String email = user.getEmail();
-                                                    String uid = user.getUid();
-                                                    // UserAccountDTO 객체 생성 및 초기화
-                                                    UserAccountDTO userAccountDTO = new UserAccountDTO();
-                                                    userAccountDTO.setEmail(email);
-                                                    userAccountDTO.setIdToken(uid);
-                                                    userAccountDTO.setName("테스트ID");
-                                                    userAccountDTO.setKakaoid(123456789L);
-                                                    // 데이터베이스에 저장
-                                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                                    databaseReference.child(uid).setValue(userAccountDTO);
+
+                                                    if (user != null) {
+                                                        Log.w("테스트 user 추가", "진행");
+                                                        String email = user.getEmail();
+                                                        String uid = user.getUid();
+                                                        // UserAccountDTO 객체 생성 및 초기화
+                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "testID");
+                                                        // 데이터베이스에 저장
+                                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
+                                                        databaseReference.child(testid.toString()).setValue(userAccountDTO);
+                                                    }else{
+                                                        Log.w("테스트 user이 null임", "널");
+                                                    }
+
                                                 } else {
                                                     // 회원가입 실패
                                                     Log.w(TAG, "Firebase createUser:failure", createTask.getException());
@@ -424,16 +427,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                     if (user != null) {
                                         String email = user.getEmail();
-                                        String uid = user.getUid();
+                                        String idToken = user.getUid();
                                         // UserAccountDTO 객체 생성 및 초기화
-                                        UserAccountDTO userAccountDTO = new UserAccountDTO();
-                                        userAccountDTO.setEmail(email);
-                                        userAccountDTO.setIdToken(uid);
-                                        userAccountDTO.setName(name);
-                                        userAccountDTO.setKakaoid(kakaoId);
-                                       // 데이터베이스에 저장
+                                        UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name);
+                                        // 데이터베이스에 저장
                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                        databaseReference.child(uid).setValue(userAccountDTO);
+                                        databaseReference.child(kakaoId.toString()).setValue(userAccountDTO);
                                     }
 
                                 } else {
