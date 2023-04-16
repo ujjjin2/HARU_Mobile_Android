@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("로그인 클릭시 api에서 FCM Token", FcmToken);
                         Log.d("로그인 클릭시 AccessToken", Test_token);
 
-                        kakaoId = 9999999999L;
+                        Long testid = 123456789L;
                         email = "testID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
 
 
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                                 List<String> signInMethods = task.getResult().getSignInMethods();
                                 if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                                     // 이미 회원가입한 사용자인 경우 로그인
-                                    mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
+                                    mAuth.signInWithEmailAndPassword(email, testid.toString())
                                             .addOnCompleteListener(LoginActivity.this, signInTask -> {
                                                 if (signInTask.isSuccessful()) {
                                                     // 로그인 성공
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                                             });
                                 } else {
                                     // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
-                                    mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
+                                    mAuth.createUserWithEmailAndPassword(email, testid.toString())
                                             .addOnCompleteListener(LoginActivity.this, createTask -> {
                                                 if (createTask.isSuccessful()) {
                                                     // 회원가입 및 로그인 성공
@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     userAccountDTO.setEmail(email);
                                                     userAccountDTO.setIdToken(uid);
                                                     userAccountDTO.setName("테스트ID");
-                                                    userAccountDTO.setKakaoid("999999999");
+                                                    userAccountDTO.setKakaoid(123456789L);
                                                     // 데이터베이스에 저장
                                                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                                     databaseReference.child(uid).setValue(userAccountDTO);
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
 
-                        FCMDTO fcmdto = new FCMDTO(FcmToken,9999999999L);
+                        FCMDTO fcmdto = new FCMDTO(FcmToken,123456789L);
                         Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token,fcmdto);
                         fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                             @Override
@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("[FCM-설정]","======성공=======");
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("token", Test_token);
-                                intent.putExtra("kakaoId",9999999999L);
+                                intent.putExtra("kakaoId",123456789L);
                                 startActivity(intent);
                             }
 
@@ -415,7 +415,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                 } else {
-
                         // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
                     mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
                             .addOnCompleteListener(LoginActivity.this, createTask -> {
@@ -431,7 +430,7 @@ public class LoginActivity extends AppCompatActivity {
                                         userAccountDTO.setEmail(email);
                                         userAccountDTO.setIdToken(uid);
                                         userAccountDTO.setName(name);
-                                        userAccountDTO.setKakaoid(kakaoId.toString());
+                                        userAccountDTO.setKakaoid(kakaoId);
                                        // 데이터베이스에 저장
                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                         databaseReference.child(uid).setValue(userAccountDTO);
