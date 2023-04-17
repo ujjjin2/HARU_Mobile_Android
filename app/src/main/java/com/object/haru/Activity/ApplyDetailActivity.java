@@ -122,35 +122,31 @@ public class ApplyDetailActivity extends AppCompatActivity {
     }
 
     private void chatStart(Long kakaoid) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-        Query query = databaseReference.orderByChild("kakaoid").equalTo(String.valueOf(kakaoid));
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("userAccount");
+        reference.child(String.valueOf(kakaoid)).child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserAccountDTO userAccountDTO = snapshot.getValue(UserAccountDTO.class);
-                        String idToken = userAccountDTO.getIdToken();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String idToken = snapshot.getValue(String.class);
+                    Log.d("상대방 idToken 확인 성공", "idToken: " + idToken);
+                    Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
+                    intent.putExtra("idToken", idToken);
+                    intent.putExtra("kakaoid", kakaoid);
+                    startActivity(intent);
+                    // idToken 값을 가져와서 처리
 
-                        System.out.println("메소드안에서 idtoken "+ idToken);
-
-                        Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
-                        intent.putExtra("token", idToken);
-                        intent.putExtra("kakaoid", kakaoid);
-                        startActivity(intent);
-                    }
                 } else {
-                    Log.d(TAG, "No matching data found");
+                    Log.d("TAG", "No matching data found");
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "Database Error", databaseError.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("TAG", "Database Error", error.toException());
             }
         });
     }
+
 
 
 

@@ -95,7 +95,7 @@ public class ChatListFragment extends Fragment {
 
     private void loadChats() {  //trip/UserAccount"에 있는 사용자의 정보와 대조하여 해당 사용자가 채팅 목록에 있는지 확인합니다.
         userList = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference("trip").child("UserAccount");
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserAccount");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -112,11 +112,15 @@ public class ChatListFragment extends Fragment {
                     // adapter
                     adapterChatlist = new AdapterChatlist(getContext(), userList);
                     // setadapter
-                    recyclerView.setAdapter(adapterChatlist);
 
+                    recyclerView.setAdapter(adapterChatlist);
+                    
                     for(int i=0; i<userList.size(); i++) {
                         lastMessage(userList.get(i).getIdToken());
                     }
+
+
+
                 }
             }
 
