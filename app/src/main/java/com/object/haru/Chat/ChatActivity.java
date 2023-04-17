@@ -71,7 +71,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
       //  hisUid = intent.getStringExtra("userId");
-        hisUid = "2EvxqRHO6IYjYN1K9ARur2RoCKh2"; //임시
+        hisUid = intent.getStringExtra("idToken");
+        Log.d("fireUid", hisUid);
         Fridkakaoid = intent.getLongExtra("kakaoId", 0);
 
 
@@ -84,11 +85,12 @@ public class ChatActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         //"trip" 데이터베이스의 "UserAccount" 노드에 대한 참조를 가져옵니다.
-        databaseReference = firebaseDatabase.getReference("trip").child("UserAccount");
+        databaseReference = firebaseDatabase.getReference("userAccount");
 
         //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
         Query userQuery = databaseReference.orderByChild("idToken").equalTo(hisUid);
         // get user name
+        //fffff
         userQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,8 +98,10 @@ public class ChatActivity extends AppCompatActivity {
                 for (DataSnapshot ds: snapshot.getChildren()){
                     // get data
                     String name = ds.child("name").getValue().toString();
-
-
+                    if(name == null){
+                        Log.d("상대방 이름", "널");
+                    }
+                    Log.d("상대방 이름", name);
                     // set data
                     name_text.setText(name);
                 }
@@ -139,7 +143,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void readMessages() {
-        Log.d("readMessages", "readMessages시작");
         chatList = new ArrayList<>();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -227,7 +230,6 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null) {
             myUid = user.getUid();  // currently signed in user's uid
-            Log.d("user 인증 객체 확인", myUid);
         } else {
             Log.d("user 인증 객체 null", "nunlnlnlnl");
            // startActivity(new Intent(this,  LobbyActivity.class));

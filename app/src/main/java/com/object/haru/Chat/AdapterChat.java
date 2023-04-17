@@ -58,9 +58,9 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
         String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
 
         // set data
-
         holder.message_text.setText(message);
         holder.time_text.setText(time);
+
 
     }
 
@@ -85,12 +85,12 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
     class holder extends RecyclerView.ViewHolder{
 
         // view
-        TextView message_text, time_text;
+        TextView message_text,  time_text;
         public holder(@NonNull View itemView) {
             super(itemView);
 
             // init views
-            message_text = itemView.findViewById(R.id.myMessage);
+            message_text = itemView.findViewById(R.id.message);
             time_text = itemView.findViewById(R.id.time);
         }
     }
