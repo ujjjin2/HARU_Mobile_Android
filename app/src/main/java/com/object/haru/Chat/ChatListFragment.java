@@ -131,14 +131,11 @@ public class ChatListFragment extends Fragment {
 
                 // 데이터를 어댑터에 추가하고 갱신
                 adapterChatlist = new AdapterChatlist(getContext(), userList);
-                adapterChatlist.notifyDataSetChanged();
                 // 마지막 메시지 가져오기
                 for (int i = 0; i < userList.size(); i++) {
                     lastMessage(userList.get(i).getIdToken());
                 }
                 recyclerView.setAdapter(adapterChatlist);
-
-
             }
 
             @Override
@@ -170,8 +167,13 @@ public class ChatListFragment extends Fragment {
                     chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())){
                         lastmessage = chat.getMessage();
                         time = chat.getTimestamp();
+
                     }
                 }
+                Log.d("라스트 receiver", receiver);
+                Log.d("라스트 sender", sender);
+                Log.d("라스트 getMessage", lastmessage);
+                Log.d("라스트 getTimestamp", time);
                 adapterChatlist.setLastMessageMap(userId, lastmessage);
                 adapterChatlist.notifyDataSetChanged();
                 adapterChatlist.setLastTimeMap(userId, time);
