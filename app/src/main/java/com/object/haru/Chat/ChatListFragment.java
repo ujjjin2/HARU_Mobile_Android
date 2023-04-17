@@ -72,6 +72,8 @@ public class ChatListFragment extends Fragment {
 
      //   databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(String.valueOf(kakaoId));
         databaseReference = FirebaseDatabase.getInstance().getReference("ChatList").child(firebaseUser.getUid());
+
+        Log.d("로그인사용자 idToken :", firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -79,6 +81,9 @@ public class ChatListFragment extends Fragment {
                 for (DataSnapshot ds: snapshot.getChildren()) {
                     ModelChatlist chatlist = ds.getValue(ModelChatlist.class);
                     modelChatList.add(chatlist);
+                }
+                for (int i = 1; i < modelChatList.size(); i++) {
+                    Log.d("List에 담긴 uid ["+ i+"]", "Chat ID: " + modelChatList.get(i).getId());
                 }
                 loadChats();
             }
@@ -93,35 +98,47 @@ public class ChatListFragment extends Fragment {
         return view;
     }
 
-    private void loadChats() {  //trip/UserAccount"에 있는 사용자의 정보와 대조하여 해당 사용자가 채팅 목록에 있는지 확인합니다.
+    private void loadChats() {
         userList = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference("UserAccount");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userList.clear();
-                for(DataSnapshot ds: snapshot.getChildren()) {
-                    UserAccountDTO userAccountDTO = ds.getValue(UserAccountDTO.class);
 
-                    for (ModelChatlist chatlist: modelChatList) {
-                        if(userAccountDTO.getIdToken() != null && userAccountDTO.getIdToken().equals(chatlist.getId())) {
-                            userList.add(userAccountDTO);
-                            break;
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        UserAccountDTO userAccountDTO = ds.getValue(UserAccountDTO.class);
+                        for (ModelChatlist chatlist : modelChatList) {
+                            if (userAccountDTO.getIdToken() != null && userAccountDTO.getIdToken().equals(chatlist.getId())) {
+                                userList.add(userAccountDTO);
+
+                                for (int i = 0; i < userList.size(); i++) {
+                                    Log.d("userList", " email: " + userList.get(i).getEmail());
+                                    Log.d("userList", " name: " + userList.get(i).getName());
+                                    Log.d("userList", " idToken: " + userList.get(i).getIdToken());
+                                    // 나머지 필드들도 마찬가지로 출력 가능
+                                }
+
+                                break;
+                            }
                         }
                     }
-                    // adapter
-                    adapterChatlist = new AdapterChatlist(getContext(), userList);
-                    // setadapter
 
-                    recyclerView.setAdapter(adapterChatlist);
-                    
-                    for(int i=0; i<userList.size(); i++) {
-                        lastMessage(userList.get(i).getIdToken());
-                    }
-
-
-
+                }else if(!snapshot.exists()){
+                    Log.d("loadchat 데이터없음", "No data available");
                 }
+
+                // 데이터를 어댑터에 추가하고 갱신
+                adapterChatlist = new AdapterChatlist(getContext(), userList);
+                adapterChatlist.notifyDataSetChanged();
+                // 마지막 메시지 가져오기
+                for (int i = 0; i < userList.size(); i++) {
+                    lastMessage(userList.get(i).getIdToken());
+                }
+                recyclerView.setAdapter(adapterChatlist);
+
+
             }
 
             @Override
@@ -130,6 +147,7 @@ public class ChatListFragment extends Fragment {
             }
         });
     }
+
 
     private void lastMessage(String userId) {
         databaseReference = FirebaseDatabase.getInstance().getReference("Chats");

@@ -78,7 +78,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             public void onClick(View v) {
                 // start chat activity with that user
                 Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("userId", hisUid);
+                intent.putExtra("idToken", hisUid);
                 context.startActivity(intent);
             }
         });
