@@ -90,6 +90,7 @@ public class ChatActivity extends AppCompatActivity {
         //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
         Query userQuery = databaseReference.orderByChild("idToken").equalTo(hisUid);
         // get user name
+        //fffff
         userQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
