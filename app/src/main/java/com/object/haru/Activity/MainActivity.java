@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,9 +21,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import com.object.haru.Chat.ChatListFragment;
+
+
 import com.object.haru.Fragment.HomeFragment_Slide;
-import com.object.haru.Fragment.MainFragment_rc;
+
 import com.object.haru.Fragment.MyPageFragment_Slide;
+
 import com.object.haru.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction ft;
 
     private HomeFragment_Slide home;
+    private ChatListFragment chatListFragment;
     private MyPageFragment_Slide myPage;
     public String accessToken;
     Long kakaoId;
@@ -81,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         setFrag(0);
                         break;
+                    case R.id.chatList:
+                        setFrag(1);
+                        break;
                     case R.id.mypage:
                         setFrag(2);
                         break;
@@ -90,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
              }
          });
 
-         home = new HomeFragment_Slide();
-         myPage = new MyPageFragment_Slide();
+        home = new HomeFragment_Slide();
+        chatListFragment = new ChatListFragment();
+        myPage = new MyPageFragment_Slide();
         setFrag(0);
     }
 
@@ -102,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
         switch (n) {
             case 0:
                 ft.replace(R.id.Main_frame, home);
+                ft.commit();
+                break;
+            case 1:
+                ft.replace(R.id.Main_frame, chatListFragment);
                 ft.commit();
                 break;
             case 2:

@@ -1,38 +1,49 @@
 package com.object.haru.Chat;
 
+import com.kakao.sdk.user.model.User;
+
 public class UserAccountDTO {
-    private String emailId;     // 이메일 아이디
-    private String passWord;    // 비밀번호
-    private String name;        // 이름
-    private String idToken;     // Firebase Uid (고유 토큰 정보)
-    private String year;
-    private String month;
-    private String date;
-    private String sex;
-    private String introduce;
 
-    public UserAccountDTO() {
-    }     // 파이어베이스에서는 빈 생성자를 만들어야함
+      private String email;     // 이메일 아이디
+      private String name;        // 이름
+      private String idToken;     // Firebase Uid (고유 토큰 정보)
+      private Long kakaoid;
 
-    public UserAccountDTO(String name, String myself)  {
+    public Long getKakaoid() {
+        return kakaoid;
+    }
+
+    public void setKakaoid(Long kakaoid) {
+        this.kakaoid = kakaoid;
+    }
+
+    // Firebase Uid (고유 토큰 정보)
+
+
+    public UserAccountDTO(){
+
+    }
+
+    public UserAccountDTO(String idToken, String email, String name) {
+        this.idToken = idToken;
+        this.email = email;
         this.name = name;
-        this.introduce = myself;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public String getEmail() {
+        return email;
     }
 
-    public String getEmailId() {
-        return emailId;
+    public void setEmail(String emailId) {
+        this.email = emailId;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public String getName() {
+        return name;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIdToken() {
@@ -43,51 +54,4 @@ public class UserAccountDTO {
         this.idToken = idToken;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
 }

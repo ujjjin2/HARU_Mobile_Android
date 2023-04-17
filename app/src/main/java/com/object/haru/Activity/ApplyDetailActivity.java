@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.object.haru.Chat.ChatActivity;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
@@ -22,7 +23,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
     private TextView tv_name, tv_rating, tv_age, tv_career, tv_sex, tv_self;
     private Integer rating;
     private ImageButton backButton;
-    private Button confirm;
+    private Button confirm, chatButton;
     private Long rId, kakaoid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,9 @@ public class ApplyDetailActivity extends AppCompatActivity {
         tv_sex = findViewById(R.id.applyDetail_sex2);
         tv_self = findViewById(R.id.applyDetail_myself2);
         backButton = findViewById(R.id.imageButton_left);
+        chatButton = findViewById(R.id.applyDetail_btn_chating);
         confirm = findViewById(R.id.applyDetail_btn_check);
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,14 @@ public class ApplyDetailActivity extends AppCompatActivity {
             }
         });
 
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatStart(kakaoid);
+            }
+        });
+
+
     }
 
     private void confirmUser() {
@@ -94,6 +105,12 @@ public class ApplyDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void chatStart(Long kakaoid){
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("kakaoid", kakaoid);
+        startActivity(intent);
     }
 
 

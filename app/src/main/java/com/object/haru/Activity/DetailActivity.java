@@ -59,14 +59,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private ImageButton heart_btn;
     private Long kakaoId;
-
     private double lat,lon;
 
     private Button apply_btn;
     private ImageButton back_btn, option_btn;
     private Long check;
     private ViewGroup mapViewContainer;
-
+    private RecruitDTO recruit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,8 +185,8 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
                         if (response.isSuccessful()){
-                            RecruitDTO recruit = response.body();
-
+                            recruit = response.body();
+                            Log.d("person확인손윤호", String.valueOf(recruit.getPerson()));
                             // 자신이 작성한 게시물인지 확인
                             if (recruit.getKakaoid() == kakaoId) {
                                 changeWriterStatus();
@@ -408,14 +407,22 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<Long> call, Response<Long> response) {
                 check = response.body();
                 if (check != 0) {
-                    apply_btn.setBackgroundColor(Color.rgb(246, 100, 80));
-                    apply_btn.setText("지원 취소");
-                    apply_btn.setOnClickListener(new View.OnClickListener() {
-                         @Override
-                         public void onClick(View v) {
-                             deleteCheckDialog();
-                         }
-                    });
+                    if (recruit.getPerson() == null) {
+                        apply_btn.setBackgroundColor(Color.rgb(246, 100, 80));
+                        apply_btn.setText("지원 취소");
+                        apply_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                deleteCheckDialog();
+                            }
+                        });
+                    } else if (String.valueOf(recruit.getPerson()).equals(String.valueOf(kakaoId))) {
+                        apply_btn.setBackgroundColor(Color.rgb(93, 93, 93));
+                        apply_btn.setText("지원이 마감되었습니다.");
+                        apply_btn.setEnabled(true);
+                    } else {
+                        Log.i("확정자와", "카카오아이디가 다름");
+                    }
                 } else {
                     apply_btn.setBackgroundColor(Color.rgb(41, 148, 96));
                     apply_btn.setText("지원하기");

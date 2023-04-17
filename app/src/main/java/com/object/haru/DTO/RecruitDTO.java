@@ -29,7 +29,7 @@ public class RecruitDTO {
     private Integer pay;
     @SerializedName("person")
     @Expose
-    private String person;
+    private Long person;
     @SerializedName("rage")
     @Expose
     private String rage;
@@ -117,14 +117,6 @@ public class RecruitDTO {
         this.pay = pay;
     }
 
-    public String getPerson() {
-        return person;
-    }
-
-    public void setPerson(String person) {
-        this.person = person;
-    }
-
     public String getRage() {
         return rage;
     }
@@ -147,6 +139,14 @@ public class RecruitDTO {
 
     public void setRid(long rid) {
         this.rid = rid;
+    }
+
+    public Long getPerson() {
+        return person;
+    }
+
+    public void setPerson(Long person) {
+        this.person = person;
     }
 
     public String getRsex() {
