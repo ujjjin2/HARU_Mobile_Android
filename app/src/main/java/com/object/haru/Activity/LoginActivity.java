@@ -270,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 });
-
+                getUserInfo();
             }
             return null;
         });
