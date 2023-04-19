@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".ModifyActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.RegisterActivity"
             android:exported="true" /> <!-- Add FCM service -->

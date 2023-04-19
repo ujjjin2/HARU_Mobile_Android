@@ -227,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("[로그인 성공]","===============");
                             //파이어베이스 인증 및 로그인
 
-                            getFirebase();
+
 
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
@@ -292,7 +292,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("[로그인 성공]", kakao.getacccesstoken());
 
                             //파이어베이스 인증 및 로그인
-                            getFirebase();
+
 
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
@@ -309,7 +309,7 @@ public class LoginActivity extends AppCompatActivity {
                                     autoLoginEdit.putLong("kakaoId", kakaoId);
                                     autoLoginEdit.putString("token", kakao.getacccesstoken());
                                     autoLoginEdit.commit();
-
+                                    getFirebase();
                                     startActivity(intent);
                                 }
 
@@ -388,7 +388,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(kakaoId==null){
             email = "nullPoint@test.com";  //시점에 따라서 kakaoid를 못 받는경우도 있음
-            Log.d("[최종]", "카카오아이디 넗");
+            Log.d("[최종]", "if 카카오아이디 넗");
         }else{
             email = ""+kakaoId.toString()+"@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
         }
