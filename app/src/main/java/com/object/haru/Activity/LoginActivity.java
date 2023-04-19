@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (kakaoId2 != 0 && token2 !=null){
                     kakaoId = kakaoId2;
                     getFirebase();
+                    Log.d("[onCreate 에서]",kakaoId.toString());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("token", token2);
                     intent.putExtra("kakaoId",kakaoId2);
@@ -235,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
+                                    Log.d("[login 에서]",kakaoId.toString());
                                     getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId.toString());
@@ -300,16 +302,17 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
+                                    Log.d("[accountlogin 에서]",kakaoId.toString());
+                                    getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
-
                                     SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor autoLoginEdit = auto.edit();
                                     autoLoginEdit.putLong("kakaoId", kakaoId);
                                     autoLoginEdit.putString("token", kakao.getacccesstoken());
                                     autoLoginEdit.commit();
-                                    getFirebase();
+
                                     startActivity(intent);
                                 }
 
