@@ -1,39 +1,47 @@
 package com.object.haru.Activity;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.object.haru.DTO.RecruitDTO;
-import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.R;
 import com.object.haru.Search_register;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -46,58 +54,314 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
-    private TextView date_period,startTime_set,endTime_set;
-    private EditText register_pt_age,register_pt_career,register_pt_pay, addr,register_pt_storeinfo2,Register_pt_title;
-    private String token,strsex,data, sthour,stmin,endhour, endmin,stTime,endTime,firstDate,lastDate;
+
+    private EditText registerTitle, registerCategory, registerWorkDate, registerMoney, registerAddr, registerDetailAddr, registerCareer;
+    private String token, firstDate, lastDate, result, data, gender, age;
     private Long kakaoId;
-    Button category_btn,Register_btn_age,register_btn_pay,Register_btn_career,Register_btn_register;
-    RadioButton radioBtn,radioBtn2,radioBtn3;
-    int minpay = 9620;
+    private Button submit;
+    private RadioButton radioButtonMale, radioButtonFemale;
+    private Spinner spinnerStartTime, spinnerEndTime, spinnerStartAge, spinnerEndAge;
+    private ImageView backButton;
+    private CheckBox irrelevantGender, irrelevantAge, irrelevantCareer;
 
-    View date_view,startTime_view,EndTime_view;
-
-    ConstraintLayout EndTime_layout,starttime_layout;
-
-
-    private Spinner end_spinner_min,end_spinner_hour,start_spinner_min,start_spinner_hour;
+    private TextView waveMark;
+    final private int minMoney = 9620;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // HomeFragment_Slide 에서 받아온 Intent
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
 
-        Log.d("[RegisterActivity 토큰]",token);
-        Log.d("[카카오Id 확인]", String.valueOf(kakaoId));
+        actionBackButton();
+        actionSubmitButton();
+        writeTitle();
+        selectCategory();
+        selectWorkDate();
+        selectWorkTime();
+        selectMoney();
+        selectAddress();
+        selectGender();
+        selectAge();
+        writeCareer();
+    }
 
-        toolbar(); // 툴바 부분 기능*
-        calendar_view(); // 달력 관련 기능*
-        timezone();// 시간 관련된 기능
-        addressinfo(); //주소 관련 기능 *
-        extra(); // 제목,최저 시급 및 지원 요건 기능들 *
-        category(); // 카테고리 관련 기능*
-        viewClick(); //뷰 관련 처리 ( 시작시간, 종료시간, 달력)*
-        retrofit(); //등록 하는 기능
+    private void writeTitle() {
+        registerTitle = findViewById(R.id.title);
+    }
+
+    private void writeCareer() {
+        registerCareer = findViewById(R.id.careerEdit);
+        irrelevantCareer = findViewById(R.id.careerIrrelevantCheckbox);
+
+        irrelevantCareer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (irrelevantCareer.isChecked()) {
+                    registerCareer.setText("경력무관");
+                    registerCareer.setEnabled(false);
+                } else {
+                    registerCareer.setEnabled(true);
+                    registerCareer.setText("");
+                }
+            }
+        });
+    }
+
+    private void selectAge() {
+        spinnerStartAge = findViewById(R.id.age1);
+        spinnerEndAge = findViewById(R.id.age2);
+        irrelevantAge = findViewById(R.id.ageIrrelevantCheckbox);
+        waveMark = findViewById(R.id.text2);
+
+        ArrayAdapter startAgeAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.startAge, android.R.layout.simple_spinner_item);
+        ArrayAdapter endAgeAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.endAge, android.R.layout.simple_spinner_item);
+
+        irrelevantAge.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spinnerStartAge.setEnabled(false);
+                    spinnerEndAge.setEnabled(false);
+                    waveMark.setTextColor(Color.parseColor("#D6D6D6"));
+                    age = "연령무관";
+                } else {
+                    spinnerStartAge.setEnabled(true);
+                    spinnerEndAge.setEnabled(true);
+                    waveMark.setTextColor(Color.parseColor("#000000"));
+                    age = "";
+                }
+            }
+        });
+
+        startAgeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.startAge)) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                    view.setOnClickListener(null);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+        };
+
+        endAgeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.endAge)) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                    view.setOnClickListener(null);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+        };
+
+        startAgeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStartAge.setAdapter(startAgeAdapter);
+        endAgeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEndAge.setAdapter(endAgeAdapter);
 
     }
 
-    private void viewClick() {
-        date_view = findViewById(R.id.date_view);
-        startTime_view = findViewById(R.id.startTime_view);
-        EndTime_view = findViewById(R.id.EndTime_view);
-        EndTime_layout = findViewById(R.id.EndTime_layout);
-        starttime_layout = findViewById(R.id.starttime_layout);
+    private void selectGender() {
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        radioButtonMale = findViewById(R.id.male);
+        radioButtonFemale = findViewById(R.id.female);
+        irrelevantGender = findViewById(R.id.sexIrrelevantCheckbox);
 
-        //시간 쪽 클릭 -> 달력 생기거나 들어가거나
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.male:
+                        gender = "남성우대";
+                        radioButtonMale.setTextColor(Color.parseColor("#ffffff"));
+                        radioButtonFemale.setTextColor(Color.parseColor("#07BC7D"));
+                        break;
+                    case R.id.female:
+                        gender = "여성우대";
+                        radioButtonMale.setTextColor(Color.parseColor("#07BC7D"));
+                        radioButtonFemale.setTextColor(Color.parseColor("#ffffff"));
+                        break;
+                }
+            }
+        });
+
+        irrelevantGender.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioGroup.clearCheck();
+                    radioButtonFemale.setTextColor(Color.parseColor("#d6d6d6"));
+                    radioButtonMale.setTextColor(Color.parseColor("#d6d6d6"));
+                    radioButtonFemale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_disabled));
+                    radioButtonMale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_disabled));
+                    radioButtonFemale.setEnabled(false);
+                    radioButtonMale.setEnabled(false);
+                    gender = "성별무관";
+                } else {
+                    radioButtonFemale.setEnabled(true);
+                    radioButtonMale.setEnabled(true);
+                    radioButtonMale.setTextColor(Color.parseColor("#07BC7D"));
+                    radioButtonFemale.setTextColor(Color.parseColor("#07BC7D"));
+                    radioButtonFemale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_selector));
+                    radioButtonMale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_selector));
+                }
+            }
+        });
+    }
+
+    private void selectAddress() {
+        registerAddr = findViewById(R.id.address);
+        registerDetailAddr = findViewById(R.id.detailAddress);
+        registerAddr.setFocusable(false);
+        registerAddr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Search_register.class);
+                overridePendingTransition(0, 0);
+                getSearchResult.launch(intent);
+            }
+        });
+    }
+
+    private void selectMoney() {
+        registerMoney = findViewById(R.id.money);
+        result = "";
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!TextUtils.isEmpty(s.toString()) && !s.toString().equals(result)){
+                    result = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",","")));
+                    registerMoney.setText(result);
+                    registerMoney.setSelection(result.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        registerMoney.addTextChangedListener(watcher);
+    }
+
+    private void selectWorkTime() {
+        spinnerStartTime = findViewById(R.id.start_spinner);
+        spinnerEndTime = findViewById(R.id.end_spinner);
+
+        ArrayAdapter startTimeAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.startTime, android.R.layout.simple_spinner_item);
+        ArrayAdapter endTimeAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.endTime, android.R.layout.simple_spinner_item);
+
+        startTimeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.startTime)) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                    view.setOnClickListener(null);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+        };
+
+        endTimeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.endTime)) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (position == 0) {
+                    view.setEnabled(false);
+                    view.setOnClickListener(null);
+                } else {
+                    view.setEnabled(true);
+                }
+                return view;
+            }
+        };
+
+        startTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        endTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStartTime.setAdapter(startTimeAdapter);
+        spinnerEndTime.setAdapter(endTimeAdapter);
+    }
+
+    private void selectWorkDate() {
+        calendarView = findViewById(R.id.calendar_view);
+        registerWorkDate = findViewById(R.id.workDate);
+        registerWorkDate.setFocusable(false);
+        registerWorkDate.setClickable(false);
         calendarView.setVisibility(View.GONE);
-        date_view.setOnClickListener(new View.OnClickListener() {
+
+        registerWorkDate.setOnClickListener(new View.OnClickListener() {
             boolean isCalendarVisible = false;
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if (isCalendarVisible) {
                     calendarView.setVisibility(View.GONE);
                     isCalendarVisible = false;
@@ -105,393 +369,107 @@ public class RegisterActivity extends AppCompatActivity {
                     calendarView.setVisibility(View.VISIBLE);
                     isCalendarVisible = true;
                 }
-
             }
         });
 
-        starttime_layout.setVisibility(View.GONE);
-        startTime_view.setOnClickListener(new View.OnClickListener() {
-            boolean isStartTime = false;
+        calendarView.setShowDaysOfWeekTitle(false);
+        calendarView.setSelectionManager(new RangeSelectionManager(new OnDaySelectedListener() {
             @Override
-            public void onClick(View view) {
-
-                if (isStartTime){
-                    starttime_layout.setVisibility(View.GONE);
-                    isStartTime = false;
-                }else {
-                    starttime_layout.setVisibility(View.VISIBLE);
-                    isStartTime = true;
+            public void onDaySelected() {
+                List< Calendar > selectedDates = calendarView.getSelectedDates();
+                if (selectedDates.size() > 0) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    firstDate = simpleDateFormat.format(selectedDates.get(0).getTime());
+                    lastDate = simpleDateFormat.format(selectedDates.get(selectedDates.size() - 1).getTime());
+                    String message = firstDate + " ~ " + lastDate;
+                    registerWorkDate.setText(message);
                 }
-
             }
-        });
-
-        EndTime_layout.setVisibility(View.GONE);
-        EndTime_view.setOnClickListener(new View.OnClickListener() {
-            boolean isEndTime = false;
-            @Override
-            public void onClick(View view) {
-
-                if (isEndTime){
-                    EndTime_layout.setVisibility(View.GONE);
-                    isEndTime = false;
-                }else {
-                    EndTime_layout.setVisibility(View.VISIBLE);
-                    isEndTime = true;
-                }
-
-            }
-        });
-
+        }));
     }
 
-    private void retrofit() {
+    private void selectCategory() {
+        registerCategory = findViewById(R.id.category);
+        registerCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] kind = getResources().getStringArray(R.array.kind);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setTitle("분야를 선택해주세요.");
+                builder.setItems(kind, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        registerCategory.setText(kind[which]);
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+    }
 
-        register_pt_storeinfo2 = findViewById(R.id.register_pt_storeinfo2);
-        Register_pt_title = findViewById(R.id.Register_pt_title);
+    private void actionSubmitButton() {
+        submit = findViewById(R.id.submitButton);
 
         final Geocoder geocoder = new Geocoder(this);
-        Register_btn_register = findViewById(R.id.Register_btn_register);
-        Register_btn_register.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 List<Address> list = null;
 
                 try {
-                    list = geocoder.getFromLocationName(data+register_pt_storeinfo2.getText().toString(),10);
+                    list = geocoder.getFromLocationName(data+registerDetailAddr.getText().toString(), 10);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                if (list!=null){
-                    if (list.size()==0){
-                        Toast.makeText(RegisterActivity.this, "해당 주소정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
-                    }else{
+                if (list != null) {
+                    if (list.size() == 0) {
+                        Toast.makeText(RegisterActivity.this, "해당 주수정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
                         Address address = list.get(0);
                         double lat = address.getLatitude();
                         double lon = address.getLongitude();
-                        Log.d("위치 출력",lat+"//////"+lon);
 
-                        if (register_pt_pay.getText().equals("최저시급")){//최저시급이 적혀있으면 최저시급이 들어감
-                            RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                    lastDate+"/"+endTime,
-                                    lat,
-                                    lon,
-                                    minpay,register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,firstDate+"/"+stTime,
-                                    category_btn.getText().toString(),
-                                    Register_pt_title.getText().toString(),kakaoId);
-                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                            call.enqueue(new Callback<RecruitDTO>() {
-                                @Override
-                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                    RecruitDTO recruit = response.body();
-                                    Log.d("[성공]","================");
-                                    finish();
-                                }
+                        RecruitDTO recruitDTO = new RecruitDTO(data+registerDetailAddr.getText().toString(),
+                                lastDate+"/"+spinnerEndTime.getSelectedItem(),
+                                lat,
+                                lon,
+                                Integer.parseInt(registerMoney.getText().toString().replace(",", "")),
+                                age,
+                                registerCareer.getText().toString(),
+                                gender,
+                                firstDate+"/"+spinnerStartTime.getSelectedItem(),
+                                registerCategory.getText().toString(),
+                                registerTitle.getText().toString(),
+                                kakaoId);
+                        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                        call.enqueue(new Callback<RecruitDTO>() {
+                            @Override
+                            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                RecruitDTO recruitDTO = response.body();
+                                Log.d("[성공]", "----------------------");
+                                finish();
+                            }
 
-                                @Override
-                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                    Log.d("[실페]","================");
-                                }
-                            });
-                        }else{
-                            RecruitDTO recruitDTO = new RecruitDTO(data+register_pt_storeinfo2.getText().toString(),
-                                    lastDate+"/"+endTime,
-                                    lat,
-                                    lon,
-                                    Integer.parseInt(String.valueOf(register_pt_pay.getText())),register_pt_age.getText().toString(),register_pt_career.getText().toString(),strsex,firstDate+"/"+stTime,
-                                    category_btn.getText().toString(),
-                                    Register_pt_title.getText().toString(), kakaoId);
-                            MainFragment_rc mainFragment_rc = new MainFragment_rc();
-
-                            mainFragment_rc.arrayList.add(recruitDTO);
-
-                            Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                            call.enqueue(new Callback<RecruitDTO>() {
-                                @Override
-                                public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                    RecruitDTO recruit = response.body();
-                                    Log.d("[성공]","================");
-                                    finish();
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                    Log.d("[실패]","================");
-                                }
-                            });
-                        }
-
-
+                            @Override
+                            public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                Log.d("[실페]","================");
+                            }
+                        });
                     }
                 }
             }
         });
     }
 
-    private void category() {
-        category_btn = findViewById(R.id.register_sp_category);
-        category_btn.setOnClickListener(new View.OnClickListener() {
+    private void actionBackButton() {
+        backButton = findViewById(R.id.back_btn);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                String[] kind = getResources().getStringArray(R.array.kind);
-                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                builder.setTitle("분야를 선택해주세요");
-
-                //다이얼로그에 리스트 담기
-                builder.setItems(kind, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (kind[i].equals("식당")){
-                            String[] kind1 = getResources().getStringArray(R.array.kind1);
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
-                            builder1.setTitle("해당되는 일을 선택해주세요");
-                            builder1.setItems(kind1, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    category_btn.setText("식당/"+kind1[i]);
-                                }
-                            });
-                            AlertDialog alertDialog1 = builder1.create();
-                            alertDialog1.show();
-                        }else if (kind[i].equals("카페")){
-                            String[] kind2 = getResources().getStringArray(R.array.kind2);
-                            AlertDialog.Builder builder2 = new AlertDialog.Builder(RegisterActivity.this);
-                            builder2.setTitle("해당되는 일을 선택해주세요");
-                            builder2.setItems(kind2, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    category_btn.setText("카페/"+kind2[i]);
-                                }
-                            });
-                            AlertDialog alertDialog2 = builder2.create();
-                            alertDialog2.show();
-                        }else if (kind[i].equals("편의점")){
-                            String[] kind3 = getResources().getStringArray(R.array.kind3);
-                            AlertDialog.Builder builder3 = new AlertDialog.Builder(RegisterActivity.this);
-                            builder3.setTitle("해당되는 일을 선택해주세요");
-                            builder3.setItems(kind3, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    category_btn.setText("편의점/"+kind3[i]);
-                                }
-                            });
-                            AlertDialog alertDialog3 = builder3.create();
-                            alertDialog3.show();
-                        }else if (kind[i].equals("기타")){
-                            final EditText et = new EditText(RegisterActivity.this);
-                            AlertDialog.Builder builder4 = new AlertDialog.Builder(RegisterActivity.this);
-                            builder4.setTitle("해당되는 일을 선택해주세요").setMessage("일을 적어주세요");
-                            builder4.setView(et);
-                            builder4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    String value = et.getText().toString();
-                                    category_btn.setText("기타/"+value);
-                                }
-                            });
-
-                            AlertDialog alertDialog4 = builder4.create();
-                            alertDialog4.show();
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-            }
-        });
-    }
-
-    private void extra() {
-
-        register_btn_pay = findViewById(R.id.register_btn_pay);
-        register_pt_pay = findViewById(R.id.register_pt_pay);
-        register_btn_pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                register_pt_pay.setText(String.valueOf(minpay));
-            }
-        });
-
-        Register_btn_age = findViewById(R.id.Register_btn_age);
-        Register_btn_age.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                register_pt_age = findViewById(R.id.register_pt_age);
-                register_pt_age.setText("연령무관");
-            }
-        });
-
-        Register_btn_career = findViewById(R.id.Register_btn_career);
-        Register_btn_career.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                register_pt_career = findViewById(R.id.register_pt_career);
-                register_pt_career.setText("경력무관");
-            }
-        });
-
-        radioBtn = findViewById(R.id.radioButton);
-        radioBtn2 = findViewById(R.id.radioButton2);
-        radioBtn3 = findViewById(R.id.radioButton3);
-
-        RadioGroup radioGroup= findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
-                    case R.id.radioButton:
-                        strsex = "성별 무관";
-                        break;
-                    case R.id.radioButton2:
-                        strsex = "남성 우대";
-                        break;
-                    case R.id.radioButton3:
-                        strsex = "여성 우대";
-                        break;
-                }
-            }
-        });
-
-    }
-
-    private void addressinfo() {
-        addr = findViewById(R.id.register_pt_storeinfo);
-        addr.setFocusable(false);
-        addr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //주소 검색 웹뷰 화면으로 이동
-                Log.i("주소설정페이지", "주소입력창 클릭");
-                Intent i = new Intent(getApplicationContext(), Search_register.class);
-                // 화면전환 애니메이션 없애기
-                overridePendingTransition(0, 0);
-                // 주소결과
-                getSearchResult.launch(i);
-            }
-        });
-    }
-
-    private void timezone() {
-        start_spinner_hour = findViewById(R.id.start_spinner_hour);
-        start_spinner_min = findViewById(R.id.start_spinner_min);
-
-        ArrayAdapter starthourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                R.array.time_hour, android.R.layout.simple_spinner_item);
-        ArrayAdapter startminAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                R.array.time_minute, android.R.layout.simple_spinner_item);
-
-        starthourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        start_spinner_hour.setAdapter(starthourAdapter);
-        startminAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        start_spinner_min.setAdapter(startminAdapter);
-
-
-        end_spinner_hour = findViewById(R.id.end_spinner_hour);
-        end_spinner_min = findViewById(R.id.end_spinner_min);
-
-        ArrayAdapter endthourAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                R.array.time_hour, android.R.layout.simple_spinner_item);
-        ArrayAdapter endtminAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                R.array.time_minute, android.R.layout.simple_spinner_item);
-
-        endthourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        end_spinner_hour.setAdapter(endthourAdapter);
-        endtminAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        end_spinner_min.setAdapter(endtminAdapter);
-
-        startTime_set = findViewById(R.id.startTime_set);
-        startTime_set.setVisibility(View.GONE);
-        start_spinner_hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!start_spinner_hour.getItemAtPosition(i).equals("0시")) {
-                    sthour = (String) start_spinner_hour.getSelectedItem();
-                } else {
-                    sthour = "";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // Do nothing
-            }
-        });
-
-        start_spinner_min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!start_spinner_min.getItemAtPosition(i).equals("0분")) {
-                    stmin = (String) start_spinner_min.getSelectedItem();
-                    stTime = sthour + ":" + stmin;
-                    startTime_set.setText(stTime);
-                    startTime_set.setVisibility(View.VISIBLE);
-                }else {
-                    stmin = "";
-                    startTime_set.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        endTime_set = findViewById(R.id.endTime_set);
-        endTime_set.setVisibility(View.GONE);
-
-        end_spinner_hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!end_spinner_hour.getItemAtPosition(i).equals("0시")){
-                    endhour = (String) end_spinner_hour.getSelectedItem();
-                } else {
-                    endhour = "";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        end_spinner_min.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!end_spinner_min.getItemAtPosition(i).equals("0분")){
-                    endmin = (String) end_spinner_min.getSelectedItem();
-                    endTime = endhour+":"+endmin;
-                    endTime_set.setText(endTime);
-                    endTime_set.setVisibility(View.VISIBLE);
-                } else {
-                    endmin = "";
-                    endTime_set.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-    }
-
-    private void toolbar() {
-        ImageButton back_btn = findViewById(R.id.imageButton_left_register);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finish();
             }
         });
-
     }
 
     private final ActivityResultLauncher<Intent> getSearchResult = registerForActivityResult(
@@ -501,33 +479,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK){
                     if (result.getData() != null){
                         data = result.getData().getStringExtra("data");
-                        addr.setText(data);
+                        registerAddr.setText(data);
                     }
                 }
             }
     );
-
-    private void calendar_view() {
-        calendarView = findViewById(R.id.calendar_view);
-        date_period = findViewById(R.id.date_period);
-
-        calendarView.setShowDaysOfWeekTitle(false);
-        calendarView.setSelectionManager(new RangeSelectionManager(new OnDaySelectedListener() {
-            @Override
-            public void onDaySelected() {
-                List<Calendar> selectedDates = calendarView.getSelectedDates();
-                if (selectedDates.size() > 0) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    firstDate = sdf.format(selectedDates.get(0).getTime());
-                    lastDate = sdf.format(selectedDates.get(selectedDates.size() - 1).getTime());
-                    String message = firstDate + " ~ " + lastDate;
-                    date_period.setText(message);
-
-                }
-            }
-        }));
-
-
-
-    }
 }

@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
-import com.object.haru.Activity.RegisterActivity;
+//import com.object.haru.Activity.RegisterActivity;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.Fragment.MainFragment_rc;
 import com.object.haru.retrofit.RetrofitClientInstance;
