@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment_Slide home;
     private ChatListFragment chatListFragment;
     private MyPageFragment_Slide myPage;
-    private SettingFragment settingpage;
+    private SettingFragment settingPage;
     public String accessToken;
     Long kakaoId;
     private double longitude, latitude, altitude;
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.mypage:
                         setFrag(2);
                         break;
-
                     case R.id.setting:
                         setFrag(3);
                         break;
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         home = new HomeFragment_Slide();
         chatListFragment = new ChatListFragment();
         myPage = new MyPageFragment_Slide();
-        settingpage = new SettingFragment();
+        settingPage = new SettingFragment();
 
         setFrag(0);
     }
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
                 break;
             case 3:
-                ft.replace(R.id.Main_frame, settingpage);
+                ft.replace(R.id.Main_frame, settingPage);
                 ft.commit();
                 break;
         }

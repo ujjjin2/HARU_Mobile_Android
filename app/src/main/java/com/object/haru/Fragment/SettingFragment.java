@@ -18,10 +18,7 @@ import com.object.haru.R;
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment {
-
-
     ArrayList<String> list;
-
 
     @Nullable
     @Override
