@@ -18,9 +18,9 @@ public class NoticeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.NoticeList);
+        //RecyclerView recyclerView = view.findViewById(R.id.);
 
-        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+        //recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
 
         return view;
     }
