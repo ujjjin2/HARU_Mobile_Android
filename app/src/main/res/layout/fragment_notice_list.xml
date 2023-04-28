@@ -36,4 +36,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar">
     </ImageView>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/setting_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

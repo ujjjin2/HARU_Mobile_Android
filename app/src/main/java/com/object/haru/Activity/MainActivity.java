@@ -28,8 +28,10 @@ import com.object.haru.Chat.ChatListFragment;
 import com.object.haru.Fragment.HomeFragment_Slide;
 
 import com.object.haru.Fragment.MyPageFragment_Slide;
-
+import com.object.haru.Fragment.SettingFragment;
 import com.object.haru.R;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment_Slide home;
     private ChatListFragment chatListFragment;
     private MyPageFragment_Slide myPage;
+    private SettingFragment settingpage;
     public String accessToken;
     Long kakaoId;
     private double longitude, latitude, altitude;
@@ -92,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.mypage:
                         setFrag(2);
                         break;
+
+                    case R.id.setting:
+                        setFrag(3);
+                        break;
                 }
 
                  return true;
@@ -101,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         home = new HomeFragment_Slide();
         chatListFragment = new ChatListFragment();
         myPage = new MyPageFragment_Slide();
+        settingpage = new SettingFragment();
+
         setFrag(0);
     }
 
@@ -119,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 ft.replace(R.id.Main_frame, myPage);
+                ft.commit();
+                break;
+            case 3:
+                ft.replace(R.id.Main_frame, settingpage);
                 ft.commit();
                 break;
         }
