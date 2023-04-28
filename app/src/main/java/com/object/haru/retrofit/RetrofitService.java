@@ -4,6 +4,7 @@ import com.kakao.sdk.user.model.User;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
+import com.object.haru.DTO.NoticeDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.TestDTO;
 import com.object.haru.DTO.UserDTO;
@@ -122,4 +123,9 @@ public interface RetrofitService {
                                    @Query("kakaoid")Long kakaoid, @Query("lat")double lat, @Query("lon")double lon,@Query("pay")int pay,@Query("rage")String rage,
                                    @Query("rid")Long rid, @Query("rsex")String rsex,@Query("stTime")String stTime,@Query("subject") String subject,
                                    @Query("title")String title);
+
+    //공지 받아오기
+    @GET("/api/notice/select")
+    Call<NoticeDTO> selectNotice(@Header("X-Auth-Token")String token, @Query("nid")Long nid, @Query("ncontents")String ncontents);
+
 }
