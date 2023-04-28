@@ -1,5 +1,6 @@
 package com.object.haru.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,23 +19,50 @@ import com.object.haru.R;
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment {
-    ArrayList<String> list;
+
+    private View notice, user_modify, user_logout, user_exit;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
 
-        list = new ArrayList<>();
-        list.add("공지사항");
-        list.add("정보");
-        list.add("개발자들");
+        notice = view.findViewById(R.id.notice);
+        user_modify = view.findViewById(R.id.user_modify);
+        user_logout = view.findViewById(R.id.user_logout);
+        user_exit = view.findViewById(R.id.user_exit);
 
-        SettingAdapter settingAdapter = new SettingAdapter(list);
-        RecyclerView recyclerView = view.findViewById(R.id.setting_recycler);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(settingAdapter);
-        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+        notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(this, NewActivity.class);
+//                startActivity(intent);
+            }
+        });
+
+        user_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(this, NewActivity.class);
+//                startActivity(intent);
+            }
+        });
+
+        user_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(this, NewActivity.class);
+//                startActivity(intent);
+            }
+        });
+
+        user_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(this, NewActivity.class);
+//                startActivity(intent);
+            }
+        });
 
         return view;
     }
