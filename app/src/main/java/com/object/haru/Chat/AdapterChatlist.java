@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +65,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             // if문 안에 넣어줘야 실행 됨...아니면 numberformatException...
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(Long.parseLong(timestamp));
-            String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
+           // String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd a h:mm ", Locale.getDefault());
+            String time = dateFormat.format(calendar.getTime());
 
             holder.message_text.setVisibility(View.VISIBLE);
             holder.message_text.setText(message);
