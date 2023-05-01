@@ -44,6 +44,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         Log.v("FCM 토큰", token);
+        String getToken = FirebaseMessaging.getInstance().getToken().getResult();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("token", getToken);
+        editor.apply();
     }
 
     @Override

@@ -51,22 +51,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginbtn;
     private String FcmToken,token2;
     private String email;
-
     private String name;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.d("KeyHash", getKeyHash());
-
-
-
-
-
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
@@ -91,11 +82,29 @@ public class LoginActivity extends AppCompatActivity {
                 if (kakaoId2 != 0 && token2 !=null){
                     kakaoId = kakaoId2;
                     getFirebase();
-                    Log.d("[onCreate 에서]",kakaoId.toString());
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("token", token2);
-                    intent.putExtra("kakaoId",kakaoId2);
-                    startActivity(intent);
+                    Log.d("[자동시작 에서 FcmToken ]",FcmToken);
+                    Log.d("[자동시작 에서 token ]",token2);
+
+                    FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId2);
+                    Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(token2,fcmdto);
+                    fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                        @Override
+                        public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("token", token2);
+                            intent.putExtra("FcmToken", FcmToken);
+                            intent.putExtra("kakaoId",kakaoId2);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<FCMDTO> call, Throwable t) {
+                            Log.d("FCM 실패","====================");
+                            t.printStackTrace();
+                        }
+                    });
+
+
 
                 }else{//loginInfo가 비어있을때 로그인 창으로 넘어감
                     if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
@@ -114,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("onClick에 저장된 FCM Token", FcmToken);
+                Log.d("테스트onClick FCM Token", FcmToken);
                 Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
                 testDTOCall.enqueue(new Callback<TestDTO>() {
                     @Override
@@ -122,8 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                         TestDTO testDTO = response.body();
                         String Test_token = testDTO.getAcccesstoken();
 
-                        Log.d("로그인 클릭시 api에서 FCM Token", FcmToken);
-                        Log.d("로그인 클릭시 AccessToken", Test_token);
+                        Log.d("테스트에서 FCM Token", FcmToken);
+                        Log.d("테스트 AccessToken", Test_token);
 
                         Long testid = 123456789L;
                         email = "testID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
@@ -236,7 +245,6 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
-                                    Log.d("[login 에서]",kakaoId.toString());
                                     getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId.toString());

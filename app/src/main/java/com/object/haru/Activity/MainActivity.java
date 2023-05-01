@@ -25,11 +25,13 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.object.haru.Chat.ChatListFragment;
 
 
+import com.object.haru.DTO.FCMDTO;
 import com.object.haru.Fragment.HomeFragment_Slide;
 
 import com.object.haru.Fragment.MyPageFragment_Slide;
 import com.object.haru.Fragment.SettingFragment;
 import com.object.haru.R;
+import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.util.Set;
 
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom);
-
         bottomNavigationView = findViewById(R.id.Main_bottomNavi);
 
         Intent intent = getIntent();
