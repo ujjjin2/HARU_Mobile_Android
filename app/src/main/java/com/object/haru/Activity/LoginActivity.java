@@ -414,6 +414,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (signInTask.isSuccessful()) {
                                     // 로그인 성공
                                     FirebaseUser user = mAuth.getCurrentUser();
+                                    //로그인을 했는데 리얼타임에 값이 없는 경우 리얼타임에 account 넣는 기능 넣기 "메모1"
 
                                 } else {
                                     // 로그인 실패
