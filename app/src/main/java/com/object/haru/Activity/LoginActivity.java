@@ -237,8 +237,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("[로그인 성공]","===============");
                             //파이어베이스 인증 및 로그인
 
-
-
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
@@ -255,11 +253,8 @@ public class LoginActivity extends AppCompatActivity {
                                     autoLoginEdit.putLong("kakaoId", kakaoId);
                                     autoLoginEdit.putString("token", kakao.getacccesstoken());
                                     autoLoginEdit.commit();
-
-
                                     startActivity(intent);
                                 }
-
                                 @Override
                                 public void onFailure(Call<FCMDTO> call, Throwable t) {
                                     Log.d("FCM 실패","====================");
@@ -269,14 +264,11 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Log.d("[로그인 실패]","===================");
                         }
-
                     }
-
                     @Override
                     public void onFailure(Call<KakaoDTO> call, Throwable t) {
                         t.printStackTrace();
                     }
-
                 });
                 getUserInfo();
             }
@@ -434,22 +426,23 @@ public class LoginActivity extends AppCompatActivity {
                     mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
                             .addOnCompleteListener(LoginActivity.this, createTask -> {
                                 if (createTask.isSuccessful()) {
-                                    // 회원가입 및 로그인 성공
                                     FirebaseUser user = mAuth.getCurrentUser();
-
                                     if (user != null) {
                                         String email = user.getEmail();
                                         String idToken = user.getUid();
-                                        // UserAccountDTO 객체 생성 및 초기화
                                         UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name);
-                                        // 데이터베이스에 저장
                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                        databaseReference.child(kakaoId.toString()).setValue(userAccountDTO);
+                                        databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
+                                                .addOnCompleteListener(databaseTask -> {
+                                                    if (databaseTask.isSuccessful()) { //비동기 처리
+                                                        Log.d(TAG, "Data successfully written to database.");
+                                                    } else {
+                                                        Log.w(TAG, "Error writing data to database.", databaseTask.getException());
+                                                    }
+                                                });
                                     }
-
                                 } else {
-                                    // 회원가입 실패
-                                    Log.w(TAG, "createUserWithEmail:failure", createTask.getException());
+                                    Log.w(TAG, "createUserWithEmailAndPassword:failure", createTask.getException());
                                 }
                             });
                 }

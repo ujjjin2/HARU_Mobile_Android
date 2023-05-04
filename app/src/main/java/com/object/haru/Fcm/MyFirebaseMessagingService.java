@@ -17,6 +17,8 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.object.haru.Activity.ApplyDetailActivity;
+import com.object.haru.Activity.LoginActivity;
 import com.object.haru.Activity.MainActivity;
 import com.object.haru.R;
 
@@ -53,33 +55,88 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // notification 객체가 null일 경우 예외처리
-        if (remoteMessage.getNotification() == null) {
-            return;
+        // 주제 확인
+        Log.i("---","---");
+        Log.d("//===========//","================================================");
+        Log.i("","\n"+"[>> onMessageReceived() :: [전체] 파이어베이스 푸시 알림 수신 확인]");
+        Log.i("","\n"+"--------------------------------");
+        Log.i("","\n"+"[getFrom() :: "+String.valueOf(remoteMessage.getFrom())+"]");
+        Log.i("","\n"+"--------------------------------");
+        Log.i("","\n"+"[getData() :: "+String.valueOf(remoteMessage.getData())+"]");
+        Log.i("","\n"+"--------------------------------");
+        Log.i("","\n"+"[getNotification() :: "+String.valueOf(remoteMessage.getNotification())+"]");
+        Log.d("//===========//","================================================");
+        Log.i("---","---");
+
+        if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("newApply")) {
+            // newApply 주제에 대한 처리
+            Intent intent = new Intent(this, ApplyDetailActivity.class);
+          //  intent.putExtra("notification_data", remoteMessage.getData()); // 알림 데이터 전달
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVibrate(new long[]{1, 1000});
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify(0, mBuilder.build());
+
+        } else if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("newReview")) {
+            // newApply 주제에 대한 처리
+            Intent intent = new Intent(this, LoginActivity.class);
+            //  intent.putExtra("notification_data", remoteMessage.getData()); // 알림 데이터 전달
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVibrate(new long[]{1, 1000});
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify(0, mBuilder.build());
+
+        } else if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("comfirmator")) {
+            // newApply 주제에 대한 처리
+            Intent intent = new Intent(this, LoginActivity.class);
+            //  intent.putExtra("notification_data", remoteMessage.getData()); // 알림 데이터 전달
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVibrate(new long[]{1, 1000});
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify(0, mBuilder.build());
+
+        }else if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("chat")) {
+            // newApply 주제에 대한 처리
+            Intent intent = new Intent(this, LoginActivity.class);
+            //  intent.putExtra("notification_data", remoteMessage.getData()); // 알림 데이터 전달
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVibrate(new long[]{1, 1000});
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify(0, mBuilder.build());
         }
-
-        title = remoteMessage.getNotification().getTitle();
-        msg = remoteMessage.getNotification().getBody();
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(msg)
-                .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setVibrate(new long[]{1, 1000});
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        mBuilder.setContentIntent(pendingIntent);
-
-        notificationManager.notify(0, mBuilder.build());
     }
-
 }
+
+
