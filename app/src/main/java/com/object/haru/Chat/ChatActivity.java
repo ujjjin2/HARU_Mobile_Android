@@ -26,11 +26,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.object.haru.DTO.FcmSendDTO;
 import com.object.haru.R;
+import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -45,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
     private String hisUid, myUid;
+    private String myName, token, uid;
 
     private Long Fridkakaoid;
 
@@ -70,16 +77,25 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         Intent intent = getIntent();
-      //  hisUid = intent.getStringExtra("userId");
+
         hisUid = intent.getStringExtra("idToken");
-        Log.d("fireUid", hisUid);
-        Fridkakaoid = intent.getLongExtra("kakaoId", 0);
+        Log.d("hisUid", hisUid);
+        Fridkakaoid = intent.getLongExtra("kakaoid", 0);
+        token = intent.getStringExtra("token");
 
 
 
         // firebase auth
         //Firebase Authentication 인스턴스를 가져옵니다. 이 인스턴스를 사용하여 현재 로그인된 사용자의 정보를 가져옴
         firebaseAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        uid = currentUser.getUid();
+
+        Log.d("uid", uid);
+        Log.d("token", token);
+
+
 
         //Firebase 데이터베이스에서 데이터를 읽고 쓸 수 있는 실시간 데이터베이스 인스턴스를 가져옴
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -89,8 +105,10 @@ public class ChatActivity extends AppCompatActivity {
 
         //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
         Query userQuery = databaseReference.orderByChild("idToken").equalTo(hisUid);
-        // get user name
-        //fffff
+
+        Query myQuery = databaseReference.orderByChild("idToken").equalTo(uid);
+
+
         userQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -114,6 +132,28 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        myQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("myQuery 이름", "시작");
+                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    // get data
+                     myName = ds.child("name").getValue().toString();
+                     Log.d("내 이름", myName);
+                    if(myName == null){
+                        myName = "새로운 메세지";
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("디비에러", "데이터베이스 에러");
+
+            }
+        });
+
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,9 +165,26 @@ public class ChatActivity extends AppCompatActivity {
                     // text empty
                     Toast.makeText(ChatActivity.this,"메시지를 입력해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    // text not empty
-                    sendMessage(message);
-                    recyclerView.scrollToPosition(chatList.size()-1);
+                    FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat");
+                    Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token,fcmSendDTO);
+                    fcmSend.enqueue(new Callback<FcmSendDTO>() {
+                        @Override
+                        public void onResponse(Call<FcmSendDTO> call, Response<FcmSendDTO> response) {
+                            Log.d("메세지 전송 알림 성공 : " ,"[성공]");
+                            sendMessage(message);
+                            recyclerView.scrollToPosition(chatList.size()-3);
+                            Log.d("메세지 타이틀 : " , myName);
+                            Log.d("상대방 kakaoid : " , Fridkakaoid.toString());
+                            Log.d("메세지 내용 : " , message );
+                        }
+
+                        @Override
+                        public void onFailure(Call<FcmSendDTO> call, Throwable t) {
+                            sendMessage(message);
+                            recyclerView.scrollToPosition(chatList.size()-1);
+                            Log.d("메세지 전송 알림 실패 : " ,"[실패]");
+                        }
+                    });
                 }
             }
         });

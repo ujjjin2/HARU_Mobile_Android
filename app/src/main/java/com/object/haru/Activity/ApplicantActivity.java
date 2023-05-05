@@ -41,10 +41,9 @@ public class ApplicantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_applicant);
 
         Intent intent = getIntent();
-        token = intent.getStringExtra("token");
-        kakaoId = intent.getLongExtra("kakaoId", 0);
+        token = intent.getStringExtra("token"); // 자신의 토큰
+        kakaoId = intent.getLongExtra("kakaoId", 0); //자신의 kakaoId
         rid = intent.getLongExtra("rid", 0);
-
         recyclerView = findViewById(R.id.recyclerView_applicant);
         backButton = findViewById(R.id.backButton);
 

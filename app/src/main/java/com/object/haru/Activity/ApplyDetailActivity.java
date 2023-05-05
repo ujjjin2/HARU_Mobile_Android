@@ -129,9 +129,11 @@ public class ApplyDetailActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     String idToken = snapshot.getValue(String.class);
                     Log.d("상대방 idToken 확인 성공", "idToken: " + idToken);
+
                     Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
-                    intent.putExtra("idToken", idToken);
-                    intent.putExtra("kakaoid", kakaoid);
+                    intent.putExtra("idToken", idToken);  //idToken = 파베  전용 uid
+                    intent.putExtra("kakaoid", kakaoid); //상대방 kakaoid
+                    intent.putExtra("token", token); // 내 token
                     startActivity(intent);
                     // idToken 값을 가져와서 처리
 

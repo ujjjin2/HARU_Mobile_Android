@@ -2,6 +2,7 @@ package com.object.haru.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,6 +109,8 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
                     intent.putExtra("rating", applyDTO.getAvgRating());
                     intent.putExtra("rId", applyDTO.getRid());
                     intent.putExtra("kakaoId", applyDTO.getUid());
+                    Log.d("[입력 성공]", "=============");
+
                     context.startActivity(intent);
                 }
             });
