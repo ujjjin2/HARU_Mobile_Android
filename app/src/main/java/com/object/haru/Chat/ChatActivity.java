@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -78,7 +80,7 @@ public class ChatActivity extends AppCompatActivity {
 
         hisUid = intent.getStringExtra("idToken");
         Log.d("hisUid", hisUid);
-        Fridkakaoid = intent.getLongExtra("kakaoId", 0);
+        Fridkakaoid = intent.getLongExtra("kakaoid", 0);
         token = intent.getStringExtra("token");
 
 
@@ -140,7 +142,6 @@ public class ChatActivity extends AppCompatActivity {
                      myName = ds.child("name").getValue().toString();
                      Log.d("내 이름", myName);
                     if(myName == null){
-                        Log.d("내 이름", "못받아왔다!");
                         myName = "새로운 메세지";
                     }
                 }
@@ -166,13 +167,24 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat");
                     Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token,fcmSendDTO);
-                    Log.d("상대방 kakao id : " , Fridkakaoid.toString());
-                    Log.d("myName : " , myName);
-                    Log.d("message : " ,message);
-                    Log.d("token : " ,token);
+                    fcmSend.enqueue(new Callback<FcmSendDTO>() {
+                        @Override
+                        public void onResponse(Call<FcmSendDTO> call, Response<FcmSendDTO> response) {
+                            Log.d("메세지 전송 알림 성공 : " ,"[성공]");
+                            sendMessage(message);
+                            recyclerView.scrollToPosition(chatList.size()-3);
+                            Log.d("메세지 타이틀 : " , myName);
+                            Log.d("상대방 kakaoid : " , Fridkakaoid.toString());
+                            Log.d("메세지 내용 : " , message );
+                        }
 
-                    sendMessage(message);
-                    recyclerView.scrollToPosition(chatList.size()-1);
+                        @Override
+                        public void onFailure(Call<FcmSendDTO> call, Throwable t) {
+                            sendMessage(message);
+                            recyclerView.scrollToPosition(chatList.size()-1);
+                            Log.d("메세지 전송 알림 실패 : " ,"[실패]");
+                        }
+                    });
                 }
             }
         });

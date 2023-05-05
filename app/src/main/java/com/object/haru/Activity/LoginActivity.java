@@ -73,8 +73,8 @@ public class LoginActivity extends AppCompatActivity {
                     token2 = auto.getString("token", null);
                     kakaoId2 = auto.getLong("kakaoId", 0);
 
-                    if (kakaoId2 != 0 && token2 == null) {  // !=로 수정
-                    /*    kakaoId = kakaoId2;
+                    if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)
+                        kakaoId = kakaoId2;
                         getFirebase();
                         Log.d("[자동시작 에서 FcmToken ]", FcmToken);
                         Log.d("[자동시작 에서 token ]", token2);
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("FCM 실패", "====================");
                                 t.printStackTrace();
                             }
-                        });*/
+                        });
                     } else {  // ================   자동 로그인이 아닌 경우
                         loginbutton = findViewById(R.id.login);
                         loginbutton.setOnClickListener(new View.OnClickListener() {

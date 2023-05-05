@@ -114,7 +114,7 @@ public interface RetrofitService {
     Call<FCMDTO> fcm_save(@Header("X-Auth-Token")String token,@Body FCMDTO fcmdto);
 
     //fcm 알림 send
-    @POST("/fcm/save")
+    @POST("/fcm/send")
     Call<FcmSendDTO> fcm_send(@Header("X-Auth-Token")String token, @Body FcmSendDTO fcmSendDTO);
 
     // 회원정보 수정

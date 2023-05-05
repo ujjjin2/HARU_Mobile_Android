@@ -12,7 +12,7 @@ public class FcmSendDTO {
         this.topic = topic;
     }
 
-    @SerializedName("acccesstoken")
+    @SerializedName("kakaoid")
     @Expose
     private Long kakaoid;
 
