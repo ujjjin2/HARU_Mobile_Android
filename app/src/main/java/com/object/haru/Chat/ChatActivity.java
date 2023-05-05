@@ -26,11 +26,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.object.haru.DTO.FcmSendDTO;
 import com.object.haru.R;
+import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -45,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
     private String hisUid, myUid;
+    private String myName, token, uid;
 
     private Long Fridkakaoid;
 
@@ -70,16 +75,25 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         Intent intent = getIntent();
-      //  hisUid = intent.getStringExtra("userId");
+
         hisUid = intent.getStringExtra("idToken");
-        Log.d("fireUid", hisUid);
+        Log.d("hisUid", hisUid);
         Fridkakaoid = intent.getLongExtra("kakaoId", 0);
+        token = intent.getStringExtra("token");
 
 
 
         // firebase auth
         //Firebase Authentication 인스턴스를 가져옵니다. 이 인스턴스를 사용하여 현재 로그인된 사용자의 정보를 가져옴
         firebaseAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        uid = currentUser.getUid();
+
+        Log.d("uid", uid);
+        Log.d("token", token);
+
+
 
         //Firebase 데이터베이스에서 데이터를 읽고 쓸 수 있는 실시간 데이터베이스 인스턴스를 가져옴
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -89,8 +103,10 @@ public class ChatActivity extends AppCompatActivity {
 
         //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
         Query userQuery = databaseReference.orderByChild("idToken").equalTo(hisUid);
-        // get user name
-        //fffff
+
+        Query myQuery = databaseReference.orderByChild("idToken").equalTo(uid);
+
+
         userQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -114,6 +130,29 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        myQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("myQuery 이름", "시작");
+                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    // get data
+                     myName = ds.child("name").getValue().toString();
+                     Log.d("내 이름", myName);
+                    if(myName == null){
+                        Log.d("내 이름", "못받아왔다!");
+                        myName = "새로운 메세지";
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("디비에러", "데이터베이스 에러");
+
+            }
+        });
+
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +164,13 @@ public class ChatActivity extends AppCompatActivity {
                     // text empty
                     Toast.makeText(ChatActivity.this,"메시지를 입력해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    // text not empty
+                    FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat");
+                    Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token,fcmSendDTO);
+                    Log.d("상대방 kakao id : " , Fridkakaoid.toString());
+                    Log.d("myName : " , myName);
+                    Log.d("message : " ,message);
+                    Log.d("token : " ,token);
+
                     sendMessage(message);
                     recyclerView.scrollToPosition(chatList.size()-1);
                 }

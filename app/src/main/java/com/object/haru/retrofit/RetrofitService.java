@@ -3,6 +3,7 @@ package com.object.haru.retrofit;
 import com.kakao.sdk.user.model.User;
 import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.FCMDTO;
+import com.object.haru.DTO.FcmSendDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.NoticeDTO;
 import com.object.haru.DTO.RecruitDTO;
@@ -111,6 +112,10 @@ public interface RetrofitService {
     //fcm save
     @POST("/fcm/save")
     Call<FCMDTO> fcm_save(@Header("X-Auth-Token")String token,@Body FCMDTO fcmdto);
+
+    //fcm 알림 send
+    @POST("/fcm/save")
+    Call<FcmSendDTO> fcm_send(@Header("X-Auth-Token")String token, @Body FcmSendDTO fcmSendDTO);
 
     // 회원정보 수정
     @PUT("/kakao/change")

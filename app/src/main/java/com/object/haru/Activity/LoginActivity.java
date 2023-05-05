@@ -294,11 +294,10 @@ public class LoginActivity extends AppCompatActivity {
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                    Log.d("[FCM-설정]","======성공=======");
-                                    Log.d("[accountlogin 에서]",kakaoId.toString());
-
                                     //파이어베이스 인증 및 로그인
                                     getFirebase();
+                                    Log.d("[FCM-설정]","======성공=======");
+                                    Log.d("[accountlogin 에서]",kakaoId.toString());
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
@@ -409,13 +408,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        if(email == null){
-            Log.d("fire email null","=======");
-            email = ""+kakaoId.toString()+"@test.com";
-        }
-
-        Log.d("[최종 email]", email);
-        Log.d("[최종 kakaoId]", kakaoId.toString());
 
         // 파이어베이스 인증 및 로그인
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
