@@ -109,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
                 }else{//loginInfo가 비어있을때 로그인 창으로 넘어감
                     if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
                         login();
-
                     }
                     else{
                         accountLogin();
@@ -135,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("테스트 AccessToken", Test_token);
 
                         Long testid = 123456789L;
-                        email = "testID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
+                       String email = "TestID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
 
 
                         // 파이어베이스 인증 및 로그인
@@ -162,13 +161,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 if (createTask.isSuccessful()) {
                                                     // 회원가입 및 로그인 성공
                                                     FirebaseUser user = mAuth.getCurrentUser();
-
                                                     if (user != null) {
                                                         Log.w("테스트 user 추가", "진행");
-                                                        String email = user.getEmail();
                                                         String uid = user.getUid();
                                                         // UserAccountDTO 객체 생성 및 초기화
-                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "testID");
+                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "TestID");
                                                         // 데이터베이스에 저장
                                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                                         databaseReference.child(testid.toString()).setValue(userAccountDTO);
@@ -217,17 +214,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    //-------------------------------------------로그인 기능 ---------------------------------------------------//
     public void login(){
-        Log.d("로그인()에 저장된 FCM Token", FcmToken);
+        Log.d("login() FCM Token", FcmToken);
         String TAG = "login()";
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this,(oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
-
             } else if (oAuthToken != null) {
-
                 String code = oAuthToken.getAccessToken();
-
                 call =  RetrofitClientInstance.getApiService().kakaoLogin("", code,FcmToken);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
@@ -235,14 +231,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]","===============");
-                            //파이어베이스 인증 및 로그인
-
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
+                                    //파이어베이스 인증 및 로그인
                                     getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId.toString());
@@ -270,20 +265,21 @@ public class LoginActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
-                getUserInfo();
+              //  getUserInfo();
             }
             return null;
         });
     }
 
+    //-------------------------------------------account 로그인 기능 ---------------------------------------------------//
     public void accountLogin(){
+        Log.d("ALogin() FCM Token", FcmToken);
         String TAG = "accountLogin()";
         UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this,(oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
                 System.out.println("토큰"+oAuthToken.getAccessToken());
-
                 Log.d("fcm 확인",FcmToken);
                 call = RetrofitClientInstance.getApiService().kakaoLogin("", oAuthToken.getAccessToken(),FcmToken);
                 call.enqueue(new Callback<KakaoDTO>() {
@@ -293,9 +289,6 @@ public class LoginActivity extends AppCompatActivity {
                             KakaoDTO kakao = response.body();
                             Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                            //파이어베이스 인증 및 로그인
-
-
                             FCMDTO fcmdto = new FCMDTO(FcmToken,kakaoId);
                             Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(),fcmdto);
                             fcmdtoCall.enqueue(new Callback<FCMDTO>() {
@@ -303,7 +296,10 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]","======성공=======");
                                     Log.d("[accountlogin 에서]",kakaoId.toString());
+
+                                    //파이어베이스 인증 및 로그인
                                     getFirebase();
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
@@ -328,15 +324,13 @@ public class LoginActivity extends AppCompatActivity {
                             response.errorBody();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<KakaoDTO> call, Throwable t) {
                         Log.d("[로그인 실패]","===================");
                         t.printStackTrace();
                     }
                 });
-
-                getUserInfo();
+              //  getUserInfo();
             }
             return null;
         });
@@ -358,6 +352,8 @@ public class LoginActivity extends AppCompatActivity {
                     email = user.getKakaoAccount().getEmail();
                     name = user.getKakaoAccount().getProfile().getNickname();
                     Log.d("getUserInfo name", "getUserInf 실행 ");
+                    Log.d(" getUserInfo name : ",  name);
+                    Log.d(" getUserInfo email : ",  email);
 
                 }
             }
@@ -389,13 +385,32 @@ public class LoginActivity extends AppCompatActivity {
 
     public void getFirebase(){
 
-        if(kakaoId==null){
-            email = "nullPoint@test.com";  //시점에 따라서 kakaoid를 못 받는경우도 있음
-            Log.d("[최종]", "if 카카오아이디 넗");
-        }else{
-            email = ""+kakaoId.toString()+"@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
-        }
+        String TAG = "getUserInfo()";
+        UserApiClient.getInstance().me((user, meError) -> {
+            if (meError != null) {
+                Log.e(TAG, "사용자 정보 요청 실패", meError);
+            } else {
+                System.out.println("로그인 완료");
+                Log.i(TAG, user.toString());
+                {
+                    Log.i(TAG, "사용자 정보 요청 성공" +
+                            "\n회원번호: "+user.getId() +
+                            "\n이메일: "+user.getKakaoAccount().getEmail());
+                    kakaoId = user.getId();
+                    email = user.getKakaoAccount().getEmail();
+                    name = user.getKakaoAccount().getProfile().getNickname();
+                    Log.d("getUserInfo name", "getUserInf 실행 ");
+                    Log.d(" getUserInfo name : ",  name);
+                    Log.d(" getUserInfo email : ",  email);
+
+                }
+            }
+            return null;
+        });
+
+
         if(email == null){
+            Log.d("fire email null","=======");
             email = ""+kakaoId.toString()+"@test.com";
         }
 
@@ -430,6 +445,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (user != null) {
                                         String email = user.getEmail();
                                         String idToken = user.getUid();
+                                       // String name = user.get
                                         UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name);
                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                         databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
