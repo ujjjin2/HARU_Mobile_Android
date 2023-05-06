@@ -5,6 +5,10 @@ import com.kakao.sdk.user.model.User;
 public class UserAccountDTO {
 
       private String email;     // 이메일 아이디
+
+
+
+    private String token;
       private String name;        // 이름
       private String idToken;     // Firebase Uid (고유 토큰 정보)
       private Long kakaoid;
@@ -49,6 +53,8 @@ public class UserAccountDTO {
     public String getIdToken() {
         return idToken;
     }
+
+    public String getToken() { return token;    }
 
     public void setIdToken(String idToken) {
         this.idToken = idToken;

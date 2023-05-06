@@ -26,6 +26,8 @@ import java.util.List;
 public class Chat extends Fragment {
 
     private View view;
+    private String token = "ABC";
+    private Long kakao = 1234L;
 
     private FirebaseAuth firebaseAuth;
     private RecyclerView recyclerView;
@@ -99,7 +101,7 @@ public class Chat extends Fragment {
                         }
                     }
                     // adapter
-                    adapterChatlist = new AdapterChatlist(getContext(), userList);
+                    adapterChatlist = new AdapterChatlist(getContext(), userList, token,kakao);
                     // setadapter
                     recyclerView.setAdapter(adapterChatlist);
 

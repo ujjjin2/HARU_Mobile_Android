@@ -130,7 +130,7 @@ public class ChatListFragment extends Fragment {
                 }
 
                 // 데이터를 어댑터에 추가하고 갱신
-                adapterChatlist = new AdapterChatlist(getContext(), userList);
+                adapterChatlist = new AdapterChatlist(getContext(), userList, token, kakaoId);
                 // 마지막 메시지 가져오기
                 for (int i = 0; i < userList.size(); i++) {
                     lastMessage(userList.get(i).getIdToken());
@@ -175,6 +175,7 @@ public class ChatListFragment extends Fragment {
                 Log.d("라스트 getMessage", lastmessage);
                 Log.d("라스트 getTimestamp", time);
                 adapterChatlist.setLastMessageMap(userId, lastmessage);
+
                 adapterChatlist.notifyDataSetChanged();
                 adapterChatlist.setLastTimeMap(userId, time);
                 adapterChatlist.notifyDataSetChanged();
