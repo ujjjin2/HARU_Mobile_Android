@@ -3,6 +3,7 @@ package com.object.haru.Chat;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.Locale;
 public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder>{
 
     private Context context;
+    private String token;
+    private Long kakaoid;
     private List<UserAccountDTO> userList; // 채팅 목록에 표시할 유저 정보를 저장하는 리스트
     private HashMap<String, String> messageMap; //채팅 목록에서 각 유저의 마지막 메시지를 저장하는 맵
     private HashMap<String, String> timeMap; //채팅 목록에서 각 유저의 마지막 메시지 시간을 저장하는 맵
@@ -29,11 +32,20 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
 
     //생성자 context와 userList를 받아 초기화한다.
-    public AdapterChatlist(Context context, List<UserAccountDTO> userList) {
+/*    public AdapterChatlist(Context context, List<UserAccountDTO> userList) {
         this.context = context;
         this.userList = userList;
         messageMap = new HashMap<>();
         timeMap = new HashMap<>();
+    }*/
+
+    public AdapterChatlist(Context context, List<UserAccountDTO> userList, String token, Long kakaoid) {
+        this.context = context;
+        this.userList = userList;
+        messageMap = new HashMap<>();
+        timeMap = new HashMap<>();
+        this.token = token;
+        this.kakaoid = kakaoid;
     }
 
     @NonNull
@@ -79,9 +91,13 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              //  Log.d("kakaoid : ", kakaoid.toString());
+                Log.d("token : ", token);
                 // start chat activity with that user
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("idToken", hisUid);
+                intent.putExtra("kakaoid", kakaoid); //상대방 kakaoid
+                intent.putExtra("token", token); // 전달받은 token 값 전달
                 context.startActivity(intent);
             }
         });
@@ -91,6 +107,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
     public void setLastMessageMap(String userId, String message) {
         messageMap.put(userId, message);
     }
+
 
     // timeMap에 userId와 time을 저장하는 메소드
     public void setLastTimeMap(String userId, String time){
