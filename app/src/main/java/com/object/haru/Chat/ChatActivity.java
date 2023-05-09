@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -75,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+
 
         Intent intent = getIntent();
 
@@ -172,7 +174,7 @@ public class ChatActivity extends AppCompatActivity {
                         public void onResponse(Call<FcmSendDTO> call, Response<FcmSendDTO> response) {
                             Log.d("메세지 전송 알림 성공 : " ,"[성공]");
                             sendMessage(message);
-                            recyclerView.scrollToPosition(chatList.size()-3);
+                           // recyclerView.scrollToPosition(chatList.size()-1);
                             Log.d("메세지 타이틀 : " , myName);
                             Log.d("상대방 kakaoid : " , Fridkakaoid.toString());
                             Log.d("메세지 내용 : " , message );
@@ -180,8 +182,6 @@ public class ChatActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<FcmSendDTO> call, Throwable t) {
-                            sendMessage(message);
-                            recyclerView.scrollToPosition(chatList.size()-1);
                             Log.d("메세지 전송 알림 실패 : " ,"[실패]");
                         }
                     });
@@ -197,6 +197,30 @@ public class ChatActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        ViewTreeObserver viewTreeObserver =recyclerView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = recyclerView.getRootView().getHeight() - recyclerView.getHeight();
+                if (heightDiff > 500) {
+                    // Keyboard is shown
+                    recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                } else {
+                    // Keyboard is hidden
+                    recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                }
+            }
+        });
+
+    }
+
+    private void onKeyboardShown() {
+        // TODO: 키보드가 올라올 때 실행할 동작 구현
+    }
+
+    private void onKeyboardHidden() {
+        // TODO: 키보드가 내려갈 때 실행할 동작 구현
     }
 
     private void readMessages() {
@@ -226,6 +250,16 @@ public class ChatActivity extends AppCompatActivity {
 
                     //set adapter to recyclerview
                     recyclerView.setAdapter(adapterChat);
+
+                    recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+
+                        }
+                    });
+
+
                 }
             }
             @Override
