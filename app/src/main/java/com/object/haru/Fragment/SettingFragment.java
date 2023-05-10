@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.object.haru.Adapter.SettingAdapter;
+import com.object.haru.Activity.NoticeActivity;
 import com.object.haru.R;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class SettingFragment extends Fragment {
         notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(this, NewActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), NoticeActivity.class);
+                startActivity(intent);
             }
         });
 

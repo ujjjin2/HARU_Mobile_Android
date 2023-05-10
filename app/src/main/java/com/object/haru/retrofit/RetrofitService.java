@@ -130,7 +130,7 @@ public interface RetrofitService {
                                    @Query("title")String title);
 
     //공지 받아오기
-    @GET("/api/notice/select")
-    Call<NoticeDTO> selectNotice(@Header("X-Auth-Token")String token, @Query("nid")Long nid, @Query("ncontents")String ncontents);
+    @GET("/admin/notice/select")
+    Call<List<NoticeDTO>> selectNotice(@Header("X-Auth-Token")String token);
 
 }

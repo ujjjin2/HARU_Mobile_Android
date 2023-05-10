@@ -8,6 +8,7 @@
         android:id="@+id/nid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="아이디"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -15,6 +16,7 @@
         android:id="@+id/ncontents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="내용입니다"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>
