@@ -205,10 +205,18 @@ public class ChatActivity extends AppCompatActivity {
                 int heightDiff = recyclerView.getRootView().getHeight() - recyclerView.getHeight();
                 if (heightDiff > 500) {
                     // Keyboard is shown
-                    recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                    if (adapterChat != null && adapterChat.getItemCount() > 0) {
+                        recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                    } else {
+                        recyclerView.scrollToPosition(0);
+                    }
                 } else {
                     // Keyboard is hidden
-                    recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                    if (adapterChat != null && adapterChat.getItemCount() > 0) {
+                        recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                    } else {
+                        recyclerView.scrollToPosition(0);
+                    }
                 }
             }
         });
