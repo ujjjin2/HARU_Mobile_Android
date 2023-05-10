@@ -43,21 +43,21 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.CustomVi
             this.applicant_nid = itemView.findViewById(R.id.nid);
             this.applicant_ncontents = itemView.findViewById(R.id.ncontents);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAbsoluteAdapterPosition();
-                    noticeDTO = list.get(position);
-
-                    Intent intent = new Intent(context, ApplyDetailActivity.class);
-                    intent.putExtra("token", token);
-                    intent.putExtra("nid", noticeDTO.getNid());
-                    intent.putExtra("ncontents", noticeDTO.getNcontents());
-                    Log.d("[입력 성공]", "=============");
-
-                    context.startActivity(intent);
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAbsoluteAdapterPosition();
+//                    noticeDTO = list.get(position);
+//
+//                    Intent intent = new Intent(context, ApplyDetailActivity.class);
+//                    intent.putExtra("token", token);
+//                    intent.putExtra("nid", noticeDTO.getNid());
+//                    intent.putExtra("ncontents", noticeDTO.getNcontents());
+//                    Log.d("[입력 성공]", "=============");
+//
+//                    context.startActivity(intent);
+//                }
+//            });
         }
 
     }
