@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.Activity.DetailActivity;
+import com.object.haru.Activity.TestActivity;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
@@ -84,7 +85,10 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
                     recruitDTO = arrayList.get(position);
 
-                    Intent intent = new Intent(context, DetailActivity.class);
+                    Intent intent = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        intent = new Intent(context, TestActivity.class);
+                    }
                     intent.putExtra("rId", recruitDTO.getRid());
                     intent.putExtra("token", token);
                     intent.putExtra("kakaoId", kakaoId);

@@ -53,11 +53,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.ApplyWriteActivity"
@@ -131,6 +126,11 @@
         <activity
             android:name=".Activity.NoticeActivity"
             android:exported="true" />
+
+        <activity android:name=".Activity.TestActivity"
+            android:exported="true" >
+
+        </activity>
     </application>
 
 </manifest>

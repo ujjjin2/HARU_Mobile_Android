@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton radioButtonMale, radioButtonFemale;
     private Spinner spinnerStartTime, spinnerEndTime, spinnerStartAge, spinnerEndAge;
     private ImageView backButton;
-    private CheckBox irrelevantGender, irrelevantAge, irrelevantCareer;
+    private CheckBox irrelevantGender, irrelevantAge, irrelevantCareer, irrelevantMoney;
 
     private TextView waveMark;
     final private int minMoney = 9620;
@@ -193,7 +193,6 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerStartAge.setAdapter(startAgeAdapter);
         endAgeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEndAge.setAdapter(endAgeAdapter);
-
     }
 
     private void selectGender() {
@@ -260,6 +259,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void selectMoney() {
         registerMoney = findViewById(R.id.money);
+        irrelevantMoney = findViewById(R.id.moneyMinCheckbox);
+
         result = "";
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
@@ -284,6 +285,19 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         registerMoney.addTextChangedListener(watcher);
+
+        irrelevantMoney.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    registerMoney.setEnabled(false);
+                    registerMoney.setText("9,620");
+                } else {
+                    registerMoney.setEnabled(true);
+                    registerMoney.setText("");
+                }
+            }
+        });
     }
 
     private void selectWorkTime() {

@@ -95,11 +95,10 @@ public class MainFragment_rc extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetch(0);
+                update(0);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
 
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -211,35 +210,14 @@ public class MainFragment_rc extends Fragment {
         });
     }
 
-
-
-
     @Override
     public void onResume() {
         super.onResume();
 
-        layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
+//        update(0);
 
-        recyclerView.setAdapter(recruitAdapter);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                update(0);
-                page = 0;
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                    page++;
-                    fetch(page);
-                }
-            }
-        });
+        if (recruitAdapter != null) {
+            recruitAdapter.notifyDataSetChanged();
+        }
     }
 }
