@@ -223,6 +223,7 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d("login() FCM Token", FcmToken);
         String TAG = "login()";
+        getFirebase();
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
@@ -242,7 +243,6 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]", "======성공=======");
                                     //파이어베이스 인증 및 로그인
-                                    getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId.toString());
                                     intent.putExtra("token", kakao.getacccesstoken());
