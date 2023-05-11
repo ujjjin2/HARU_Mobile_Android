@@ -133,7 +133,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
                     intent.putExtra("idToken", idToken);  //idToken = 파베  전용 uid
-                    intent.putExtra("Fridkakaoid", Fridkakaoid); //상대방 kakaoid
+                    intent.putExtra("Fridkakaoid", Fridkakaoid.toString()); //상대방 kakaoid
                     intent.putExtra("kakaoid", kakaoid); //내 자신 kakaoid
                     Log.d("intet Fridkakaoid", Fridkakaoid.toString());
                     Log.d("intetn kakaoid", kakaoid);
