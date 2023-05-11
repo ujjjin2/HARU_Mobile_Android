@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private long st;
+
     final LocationListener gpsLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
