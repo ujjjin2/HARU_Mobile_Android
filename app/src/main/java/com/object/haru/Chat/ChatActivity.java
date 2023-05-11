@@ -51,10 +51,10 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
-    private String hisUid, myUid;
+    private String hisUid, myUid, kakao;
     private String myName, token, uid;
 
-    private Long Fridkakaoid;
+    private Long Fridkakaoid,kakaoid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +81,14 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         hisUid = intent.getStringExtra("idToken");
-        Log.d("hisUid", hisUid);
-        Fridkakaoid = intent.getLongExtra("kakaoid", 0);
+
+        Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0); //상대방 kakaoid
+        kakaoid = Long.parseLong(intent.getStringExtra("kakaoid")); //나의 kakaoid
+
+        Log.d("채팅시작 kakaoid", kakaoid.toString());  //확인완료
+        Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료
+
+
         token = intent.getStringExtra("token");
 
 
