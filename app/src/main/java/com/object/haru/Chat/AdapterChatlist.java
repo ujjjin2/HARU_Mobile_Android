@@ -24,7 +24,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
     private Context context;
     private String token;
-    private Long kakaoid;
+    private Long kakaoid,Fridkakaoid;
     private List<UserAccountDTO> userList; // 채팅 목록에 표시할 유저 정보를 저장하는 리스트
     private HashMap<String, String> messageMap; //채팅 목록에서 각 유저의 마지막 메시지를 저장하는 맵
     private HashMap<String, String> timeMap; //채팅 목록에서 각 유저의 마지막 메시지 시간을 저장하는 맵
@@ -32,13 +32,14 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
 
 
-    public AdapterChatlist(Context context, List<UserAccountDTO> userList, String token, Long kakaoid) {
+    public AdapterChatlist(Context context, List<UserAccountDTO> userList, String token, Long kakaoid, Long Fridkakaoid) {
         this.context = context;
         this.userList = userList;
         messageMap = new HashMap<>();
         timeMap = new HashMap<>();
         this.token = token;
         this.kakaoid = kakaoid;
+        this.Fridkakaoid =Fridkakaoid;
     }
 
     @NonNull
@@ -89,6 +90,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("idToken", hisUid);
                 intent.putExtra("kakaoid", kakaoid.toString()); //상대방 kakaoid
+                intent.putExtra("Fridkakaoid", Fridkakaoid.toString()); //상대방 kakaoid
                 Log.d("어댑터챗리스트 kakaoid : ", kakaoid.toString());
                 intent.putExtra("token", token); // 전달받은 token 값 전달
                 context.startActivity(intent);

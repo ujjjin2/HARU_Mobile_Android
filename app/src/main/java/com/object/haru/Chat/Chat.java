@@ -101,7 +101,7 @@ public class Chat extends Fragment {
                         }
                     }
                     // adapter
-                    adapterChatlist = new AdapterChatlist(getContext(), userList, token,kakao);
+                    adapterChatlist = new AdapterChatlist(getContext(), userList, token,kakao,1234L);
                     // setadapter
                     recyclerView.setAdapter(adapterChatlist);
 

@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                         Log.w("테스트 user 추가", "진행");
                                                                         String uid = user.getUid();
                                                                         // UserAccountDTO 객체 생성 및 초기화
-                                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "TestID");
+                                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "TestID",123456789L);
                                                                         // 데이터베이스에 저장
                                                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                                                         databaseReference.child(testid.toString()).setValue(userAccountDTO);
@@ -222,7 +222,9 @@ public class LoginActivity extends AppCompatActivity {
     //-------------------------------------------로그인 기능 ---------------------------------------------------//
     public void login() {
         Log.d("login() FCM Token", FcmToken);
+        getFirebase();
         String TAG = "login()";
+        getFirebase();
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
@@ -242,7 +244,6 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]", "======성공=======");
                                     //파이어베이스 인증 및 로그인
-                                    getFirebase();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId.toString());
                                     intent.putExtra("token", kakao.getacccesstoken());
@@ -419,7 +420,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         // "kakaoId"가 존재하지 않는 경우
                                                         String email = fuser.getEmail();
                                                         String idToken = fuser.getUid();
-                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name);
+                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name,kakaoId);
                                                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                                         databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
                                                                 .addOnCompleteListener(databaseTask -> {
@@ -450,7 +451,7 @@ public class LoginActivity extends AppCompatActivity {
                                             if (fuser != null) {
                                                 String email = fuser.getEmail();
                                                 String idToken = fuser.getUid();
-                                                UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name);
+                                                UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name,kakaoId);
                                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
                                                 databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
                                                         .addOnCompleteListener(databaseTask -> {

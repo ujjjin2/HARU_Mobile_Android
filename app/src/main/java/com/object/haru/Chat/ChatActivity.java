@@ -82,8 +82,8 @@ public class ChatActivity extends AppCompatActivity {
 
         hisUid = intent.getStringExtra("idToken");
 
-        Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0); //상대방 kakaoid
         kakaoid = Long.parseLong(intent.getStringExtra("kakaoid")); //나의 kakaoid
+        Fridkakaoid = Long.parseLong(intent.getStringExtra("Fridkakaoid")); //상대방 kakaoid
 
         Log.d("채팅시작 kakaoid", kakaoid.toString());  //확인완료 --> chat에서 넘겨주는거랑 맞추기 0511 0239
         Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료 --> chat에서 넘겨주는거 확인하기

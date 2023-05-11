@@ -28,10 +28,11 @@ public class UserAccountDTO {
 
     }
 
-    public UserAccountDTO(String idToken, String email, String name) {
+    public UserAccountDTO(String idToken, String email, String name, Long kakaoid) {
         this.idToken = idToken;
         this.email = email;
         this.name = name;
+        this.kakaoid = kakaoid;
     }
 
     public String getEmail() {

@@ -41,7 +41,7 @@ public class ChatListFragment extends Fragment {
     private String lastmessage, receiver, sender, time;
 
     private  String token;
-    private Long kakaoid;
+    private Long kakaoid,Fridkakaoid;
 
     public ChatListFragment() {
 
@@ -117,6 +117,7 @@ public class ChatListFragment extends Fragment {
                                     Log.d("userList", " email: " + userList.get(i).getEmail());
                                     Log.d("userList", " name: " + userList.get(i).getName());
                                     Log.d("userList", " idToken: " + userList.get(i).getIdToken());
+                                    Fridkakaoid = userList.get(i).getKakaoid();
                                     // 나머지 필드들도 마찬가지로 출력 가능
                                 }
 
@@ -130,7 +131,7 @@ public class ChatListFragment extends Fragment {
                 }
 
                 // 데이터를 어댑터에 추가하고 갱신
-                adapterChatlist = new AdapterChatlist(getContext(), userList, token, kakaoid);
+                adapterChatlist = new AdapterChatlist(getContext(), userList, token, kakaoid,Fridkakaoid);
                 // 마지막 메시지 가져오기
                 for (int i = 0; i < userList.size(); i++) {
                     lastMessage(userList.get(i).getIdToken());
