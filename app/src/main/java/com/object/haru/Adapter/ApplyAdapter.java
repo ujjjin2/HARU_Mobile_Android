@@ -27,12 +27,14 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
     private ArrayList<ApplyDTO> arrayList;
     private Context context;
     private String token;
+    private Long kakaoid;
 
     private ApplyDTO applyDTO;
 
-    public ApplyAdapter(ArrayList<ApplyDTO> arrayList, String token) {
+    public ApplyAdapter(ArrayList<ApplyDTO> arrayList, String token, Long kakaoid) {
         this.arrayList = arrayList;
         this.token = token;
+        this.kakaoid =kakaoid;
     }
 
     @NonNull
@@ -108,7 +110,10 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
                     intent.putExtra("name", applyDTO.getUserName());
                     intent.putExtra("rating", applyDTO.getAvgRating());
                     intent.putExtra("rId", applyDTO.getRid());
-                    intent.putExtra("kakaoId", applyDTO.getUid());
+                    intent.putExtra("Fridkakaoid", applyDTO.getUid()); //상대방거
+                    intent.putExtra("kakaoid", kakaoid.toString());
+                    Log.d("[어댑터 kakao]", kakaoid.toString());
+                    Log.d("[어댑터 Fridkakaoid]",  applyDTO.getUid().toString());
                     Log.d("[입력 성공]", "=============");
 
                     context.startActivity(intent);

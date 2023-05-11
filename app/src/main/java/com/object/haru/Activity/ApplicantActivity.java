@@ -73,7 +73,7 @@ public class ApplicantActivity extends AppCompatActivity {
 
                     List<ApplyDTO> apply = response.body();
                     arrayList.addAll(apply);
-                    applyAdapter = new ApplyAdapter(arrayList, token);
+                    applyAdapter = new ApplyAdapter(arrayList, token,kakaoId);
                     recyclerView.setAdapter(applyAdapter);
                     Log.d("[입력 성공]", "=============");
                 }

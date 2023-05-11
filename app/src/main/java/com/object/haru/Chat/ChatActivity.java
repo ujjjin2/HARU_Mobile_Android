@@ -51,10 +51,10 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
-    private String hisUid, myUid;
+    private String hisUid, myUid, kakao;
     private String myName, token, uid;
 
-    private Long Fridkakaoid;
+    private Long Fridkakaoid,kakaoid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +81,14 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         hisUid = intent.getStringExtra("idToken");
-        Log.d("hisUid", hisUid);
-        Fridkakaoid = intent.getLongExtra("kakaoid", 0);
+
+        Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0); //상대방 kakaoid
+        kakaoid = Long.parseLong(intent.getStringExtra("kakaoid")); //나의 kakaoid
+
+        Log.d("채팅시작 kakaoid", kakaoid.toString());  //확인완료 --> chat에서 넘겨주는거랑 맞추기 0511 0239
+        Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료 --> chat에서 넘겨주는거 확인하기
+
+
         token = intent.getStringExtra("token");
 
 
@@ -175,9 +181,6 @@ public class ChatActivity extends AppCompatActivity {
                             Log.d("메세지 전송 알림 성공 : " ,"[성공]");
                             sendMessage(message);
                            // recyclerView.scrollToPosition(chatList.size()-1);
-                            Log.d("메세지 타이틀 : " , myName);
-                            Log.d("상대방 kakaoid : " , Fridkakaoid.toString());
-                            Log.d("메세지 내용 : " , message );
                         }
 
                         @Override
@@ -262,7 +265,11 @@ public class ChatActivity extends AppCompatActivity {
                     recyclerView.post(new Runnable() {
                         @Override
                         public void run() {
-                            recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                            if (adapterChat != null && adapterChat.getItemCount() > 0) {
+                                recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                            } else {
+                                recyclerView.scrollToPosition(0);
+                            }
 
                         }
                     });

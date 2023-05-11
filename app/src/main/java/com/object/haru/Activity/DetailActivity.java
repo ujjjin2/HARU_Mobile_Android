@@ -76,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
         Log.d("[rid확인]", String.valueOf(rId));
-        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+        Log.d("[Detail카카오ID 확인]", String.valueOf(kakaoId));
 //        Log.d("[token확인]", token);
 
         Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);

@@ -31,13 +31,6 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
     // constructor
 
 
-    //생성자 context와 userList를 받아 초기화한다.
-/*    public AdapterChatlist(Context context, List<UserAccountDTO> userList) {
-        this.context = context;
-        this.userList = userList;
-        messageMap = new HashMap<>();
-        timeMap = new HashMap<>();
-    }*/
 
     public AdapterChatlist(Context context, List<UserAccountDTO> userList, String token, Long kakaoid) {
         this.context = context;
@@ -91,12 +84,12 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Log.d("kakaoid : ", kakaoid.toString());
                 Log.d("token : ", token);
                 // start chat activity with that user
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("idToken", hisUid);
-                intent.putExtra("kakaoid", kakaoid); //상대방 kakaoid
+                intent.putExtra("kakaoid", kakaoid.toString()); //상대방 kakaoid
+                Log.d("어댑터챗리스트 kakaoid : ", kakaoid.toString());
                 intent.putExtra("token", token); // 전달받은 token 값 전달
                 context.startActivity(intent);
             }

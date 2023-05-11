@@ -29,12 +29,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplyDetailActivity extends AppCompatActivity {
-    private String token, sex, self, name, career, age, idToken;
+    private String token, sex, self, name, career, age, idToken,kakaoid;
     private TextView tv_name, tv_rating, tv_age, tv_career, tv_sex, tv_self;
     private Integer rating;
     private ImageButton backButton;
     private Button confirm, chatButton;
-    private Long rId, kakaoid;
+    private Long rId, Fridkakaoid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +50,10 @@ public class ApplyDetailActivity extends AppCompatActivity {
         age = intent.getStringExtra("age");
         rating = intent.getIntExtra("rating", 0);
         rId = intent.getLongExtra("rId", 0);
-        kakaoid = intent.getLongExtra("kakaoId", 0);
+        Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0);
+        kakaoid = intent.getStringExtra("kakaoid");
 
-
+        Log.d("레이팅 kakaoid", kakaoid);
         Log.d("레이팅 확인", String.valueOf(rating));
 
         tv_name = findViewById(R.id.applyDetail_Name);
@@ -66,7 +67,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
         confirm = findViewById(R.id.applyDetail_btn_check);
 
         //   Log.d("확인", getIdTokenFromKakaoId(String.valueOf(kakaoid)));
-           Log.d("kakaoid 확인", kakaoid.toString());
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,8 +99,8 @@ public class ApplyDetailActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("상대방 kakaoid : "+ kakaoid);
-                chatStart(kakaoid);
+                System.out.println("상대방 kakaoid : "+ Fridkakaoid);
+                chatStart(Fridkakaoid);
             }
         });
 
@@ -107,7 +108,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
     }
 
     private void confirmUser() {
-        Call<Void> call = RetrofitClientInstance.getApiService().confirmUser(token, kakaoid, rId);
+        Call<Void> call = RetrofitClientInstance.getApiService().confirmUser(token, Fridkakaoid, rId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -121,9 +122,9 @@ public class ApplyDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void chatStart(Long kakaoid) {
+    private void chatStart(Long Fridkakaoid) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("userAccount");
-        reference.child(String.valueOf(kakaoid)).child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(String.valueOf(Fridkakaoid)).child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -132,7 +133,10 @@ public class ApplyDetailActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
                     intent.putExtra("idToken", idToken);  //idToken = 파베  전용 uid
-                    intent.putExtra("kakaoid", kakaoid); //상대방 kakaoid
+                    intent.putExtra("Fridkakaoid", Fridkakaoid); //상대방 kakaoid
+                    intent.putExtra("kakaoid", kakaoid); //내 자신 kakaoid
+                    Log.d("intet Fridkakaoid", Fridkakaoid.toString());
+                    Log.d("intetn kakaoid", kakaoid);
                     intent.putExtra("token", token); // 내 token
                     startActivity(intent);
                     // idToken 값을 가져와서 처리
