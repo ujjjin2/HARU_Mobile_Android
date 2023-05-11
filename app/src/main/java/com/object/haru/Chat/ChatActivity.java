@@ -225,14 +225,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-
-    private void onKeyboardShown() {
-        // TODO: 키보드가 올라올 때 실행할 동작 구현
-    }
-
-    private void onKeyboardHidden() {
-        // TODO: 키보드가 내려갈 때 실행할 동작 구현
-    }
+    
 
     private void readMessages() {
         chatList = new ArrayList<>();
@@ -250,6 +243,9 @@ public class ChatActivity extends AppCompatActivity {
                             chatList.add(chatDTO);
                         }else{
                             Log.d("equals 실패", " equals 실패");
+                            Log.d("his uid : ", hisUid);
+                            Log.d("my uid : ",  myUid);
+
                         }
                     }else{
                         Log.d("chatDTO 널", " chatDTO 널");

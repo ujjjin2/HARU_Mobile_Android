@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
-import com.object.haru.Chat.Chat;
+
 import com.object.haru.Chat.ChatActivity;
 import com.object.haru.Chat.ChatListFragment;
 import com.object.haru.Chat.UserAccountDTO;
@@ -78,8 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent;
                     if (getIntent().getStringExtra("chat") != null) {
                         intent = new Intent(LoginActivity.this, MainActivity.class);
-                             intent.putExtra("token", token2);
-                             intent.putExtra("kakaoId", kakaoId2);
+                        intent.putExtra("token", token2);
+                        intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
                     }
 

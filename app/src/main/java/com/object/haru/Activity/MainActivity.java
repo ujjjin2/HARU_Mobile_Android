@@ -113,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
         settingPage = new SettingFragment();
 
         setFrag(0);
-
+// 채팅 알림받은 경우 시작
         String chatValue = intent.getStringExtra("chat");
         if(chatValue == null || chatValue.equals("")) {
             setFrag(1);
         }
+// 채팅 알림받은 경우 끝
+
     }
 
     private void setFrag(int n) {
@@ -143,9 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
-    private long st;
-
+    
     final LocationListener gpsLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
