@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.Main_bottomNavi);
 
         Intent intent = getIntent();
+
+
         accessToken = intent.getStringExtra("token");
 //        kakaoId = intent.getLongExtra("kakaoId",0);
         kakaoId = intent.getExtras().getLong("kakaoId");
@@ -111,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
         settingPage = new SettingFragment();
 
         setFrag(0);
+
+        String chatValue = intent.getStringExtra("chat");
+        if(chatValue == null || chatValue.equals("")) {
+            setFrag(1);
+        }
     }
 
     private void setFrag(int n) {

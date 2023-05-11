@@ -29,6 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
+import com.object.haru.Chat.Chat;
+import com.object.haru.Chat.ChatActivity;
+import com.object.haru.Chat.ChatListFragment;
 import com.object.haru.Chat.UserAccountDTO;
 import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
@@ -51,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     private View loginbutton;
     Call<KakaoDTO> call;
     private Long kakaoId, kakaoId2;
-    private Button loginbtn;
+    private Button Testloginbtn;
     private String FcmToken, token2;
     private String email;
     private String name;
@@ -68,10 +71,17 @@ public class LoginActivity extends AppCompatActivity {
                     FcmToken = task.getResult(); // 받은 FCM 토큰을 전역변수에 저장
                     Log.d("FCM Token", FcmToken);
 
-
                     SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
                     token2 = auto.getString("token", null);
                     kakaoId2 = auto.getLong("kakaoId", 0);
+
+                    Intent intent;
+                    if (getIntent().getStringExtra("chat") != null) {
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                             intent.putExtra("token", token2);
+                             intent.putExtra("kakaoId", kakaoId2);
+                        startActivity(intent);
+                    }
 
                     if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)
                         kakaoId = kakaoId2;
@@ -112,8 +122,8 @@ public class LoginActivity extends AppCompatActivity {
                         });
 
                         // ================ 테스트 로그인
-                        loginbtn = findViewById(R.id.loginbtn);
-                        loginbtn.setOnClickListener(new View.OnClickListener() {
+                        Testloginbtn = findViewById(R.id.loginbtn);
+                        Testloginbtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Log.d("테스트onClick FCM Token", FcmToken);
