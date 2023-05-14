@@ -77,11 +77,14 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent;
                     if (getIntent().getStringExtra("chat") != null) {
+                        Log.d("[메세지 알림 실행] ", getIntent().getStringExtra("chat"));
                         intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("token", token2);
+                        intent.putExtra("chat", "chat");
                         intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
                     }
+
 
                     if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)
                         kakaoId = kakaoId2;

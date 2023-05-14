@@ -114,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
         setFrag(0);
 // 채팅 알림받은 경우 시작
-        String chatValue = intent.getStringExtra("chat");
-        if(chatValue == null || chatValue.equals("")) {
+        if(intent.getStringExtra("chat") != null) {
+            Log.d("[메인에서 chatValue]",intent.getStringExtra("chat"));
+            getIntent().getStringExtra("chat");
             setFrag(1);
         }
 // 채팅 알림받은 경우 끝

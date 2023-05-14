@@ -51,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
-    private String hisUid, myUid, kakao;
+    private String hisUid, myUid, kakao, Fridname;
     private String myName, token, uid;
 
     private Long Fridkakaoid,kakaoid;
@@ -81,6 +81,8 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         hisUid = intent.getStringExtra("idToken");
+        Fridname = intent.getStringExtra("Fridname");
+        name_text.setText(Fridname);
         kakaoid = Long.parseLong(intent.getStringExtra("kakaoid")); //나의 kakaoid
         Fridkakaoid = Long.parseLong(intent.getStringExtra("Fridkakaoid")); //상대방 kakaoid
         token = intent.getStringExtra("token");
@@ -89,78 +91,6 @@ public class ChatActivity extends AppCompatActivity {
         Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료 --> chat에서 넘겨주는거 확인하기
 
 
-
-
-
-
-        // firebase auth
-        //Firebase Authentication 인스턴스를 가져옵니다. 이 인스턴스를 사용하여 현재 로그인된 사용자의 정보를 가져옴
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        uid = currentUser.getUid();
-
-        Log.d("uid", uid);
-        Log.d("token", token);
-
-
-
-        //Firebase 데이터베이스에서 데이터를 읽고 쓸 수 있는 실시간 데이터베이스 인스턴스를 가져옴
-        firebaseDatabase = FirebaseDatabase.getInstance();
-
-        //"trip" 데이터베이스의 "UserAccount" 노드에 대한 참조를 가져옵니다.
-        databaseReference = firebaseDatabase.getReference("userAccount");
-
-        //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
-        Query userQuery = databaseReference.orderByChild("idToken").equalTo(hisUid);
-
-        Query myQuery = databaseReference.orderByChild("idToken").equalTo(uid);
-
-
-        userQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
-                for (DataSnapshot ds: snapshot.getChildren()){
-                    // get data
-                    String name = ds.child("name").getValue().toString();
-                    if(name == null){
-                        Log.d("상대방 이름", "널");
-                    }
-                    Log.d("상대방 이름", name);
-                    // set data
-                    name_text.setText(name);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("디비에러", "데이터베이스 에러");
-
-            }
-        });
-
-        myQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("myQuery 이름", "시작");
-                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
-                for (DataSnapshot ds: snapshot.getChildren()){
-                    // get data
-                     myName = ds.child("name").getValue().toString();
-                     Log.d("내 이름", myName);
-                    if(myName == null){
-                        myName = "새로운 메세지";
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("디비에러", "데이터베이스 에러");
-
-            }
-        });
 
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,23 +171,14 @@ public class ChatActivity extends AppCompatActivity {
                         if (chatDTO.getReceiver().equals(myUid) && chatDTO.getSender().equals(hisUid) ||
                                 chatDTO.getReceiver().equals(hisUid) && chatDTO.getSender().equals(myUid)) {
                             chatList.add(chatDTO);
-                        }else{
-                            Log.d("equals 실패", " equals 실패");
-                            Log.d("his uid : ", hisUid);
-                            Log.d("my uid : ",  myUid);
-
                         }
                     }else{
                         Log.d("chatDTO 널", " chatDTO 널");
                     }
-
-
                     adapterChat = new AdapterChat(ChatActivity.this, chatList);
                     adapterChat.notifyDataSetChanged();
-
                     //set adapter to recyclerview
                     recyclerView.setAdapter(adapterChat);
-
                     recyclerView.post(new Runnable() {
                         @Override
                         public void run() {
@@ -269,7 +190,6 @@ public class ChatActivity extends AppCompatActivity {
 
                         }
                     });
-
 
                 }
             }
@@ -328,19 +248,61 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUserStatus() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user!=null) {
-            myUid = user.getUid();  // currently signed in user's uid
-        } else {
-            Log.d("user 인증 객체 null", "nunlnlnlnl");
-           // startActivity(new Intent(this,  LobbyActivity.class));
-            // finish();
-        }
-    }
     @Override
     protected void onStart() {
-        checkUserStatus();;
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        myUid = user.getUid();
+
+        //Firebase 데이터베이스에서 데이터를 읽고 쓸 수 있는 실시간 데이터베이스 인스턴스를 가져옴
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        //"trip" 데이터베이스의 "UserAccount" 노드에 대한 참조를 가져옵니다.
+        databaseReference = firebaseDatabase.getReference("userAccount");
+
+        //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
+        Query userQuery = databaseReference.orderByChild("name").equalTo(Fridname);
+
+        Query myQuery = databaseReference.orderByChild("idToken").equalTo(uid);
+
+
+        userQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    // get data
+                    hisUid = ds.child("idToken").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("디비에러", "데이터베이스 에러");
+
+            }
+        });
+
+        myQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("myQuery 이름", "시작");
+                // 쿼리가 실행되면 현재 자식 노드에서 "name" 필드 값을 가져와서 저장하는 로직
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    // get data
+                    myName = ds.child("name").getValue().toString();
+                    Log.d("내 이름", myName);
+                    if(myName == null){
+                        myName = "새로운 메세지";
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("디비에러", "데이터베이스 에러");
+            }
+        });
         super.onStart();
     }
+
 }
