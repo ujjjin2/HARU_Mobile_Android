@@ -29,9 +29,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplyDetailActivity extends AppCompatActivity {
-    private String token, sex, self, name, career, age, idToken,kakaoid;
+    private String token, sex, self, name, career, age,kakaoid;
     private TextView tv_name, tv_rating, tv_age, tv_career, tv_sex, tv_self;
-    private Integer rating;
+    private Double rating;
     private ImageButton backButton;
     private Button confirm, chatButton;
     private Long rId, Fridkakaoid;
@@ -40,6 +40,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_detail);
+        Log.d("[[ ApplyDetailAct ]]", "Start");
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
@@ -48,13 +49,21 @@ public class ApplyDetailActivity extends AppCompatActivity {
         name = intent.getStringExtra("name");
         career = intent.getStringExtra("career");
         age = intent.getStringExtra("age");
-        rating = intent.getIntExtra("rating", 0);
+        rating = intent.getDoubleExtra("rating", 0);
         rId = intent.getLongExtra("rId", 0);
         Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0);
         kakaoid = intent.getStringExtra("kakaoid");
 
-        Log.d("레이팅 kakaoid", kakaoid);
-        Log.d("레이팅 확인", String.valueOf(rating));
+        Log.d("디테일 kakaoid", kakaoid.toString());
+        Log.d("디테일 sex", sex);
+        Log.d("디테일 self", self);
+        Log.d("디테일 name", name);
+        Log.d("디테일 career", career);
+        Log.d("디테일 age", age);
+        Log.d("디테일 rating", rating.toString());
+        Log.d("디테일 rId", rId.toString());
+        Log.d("디테일 Fridkakaoid", Fridkakaoid.toString());
+        Log.d("디테일 kakaoid", kakaoid);
 
         tv_name = findViewById(R.id.applyDetail_Name);
         tv_rating = findViewById(R.id.applyDetail_rating_tv);
@@ -79,7 +88,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
         if (rating == 0) {
             tv_rating.setText("0.0");
         } else {
-            tv_rating.setText(rating);
+            tv_rating.setText(rating.toString());
         }
 
         // 여기서부터

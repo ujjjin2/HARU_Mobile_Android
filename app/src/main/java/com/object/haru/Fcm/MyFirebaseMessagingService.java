@@ -70,7 +70,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("newApply")) {
             // newApply 주제에 대한 처리
-            Intent intent = new Intent(this, ApplyDetailActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
+            Log.d("알림 aid :",remoteMessage.getData().get("id"));
+            intent.putExtra("id", remoteMessage.getData().get("id")); // 알림 데이터 전달
           //  intent.putExtra("notification_data", remoteMessage.getData()); // 알림 데이터 전달
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

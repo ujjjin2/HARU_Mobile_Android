@@ -85,6 +85,14 @@ public interface RetrofitService {
     @GET("/apply/v1/select/kakaoid")
     Call<List<RecruitDTO>> getApplyList(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
 
+    //지원 상세 내역
+    @GET("/apply/v1/select/detail/aid") // 0514 새로 추가
+    Call<ApplyDTO> getApplyDetail(@Header("X-Auth-Token")String token, @Query("aid")Long aid);
+
+    //사용자 평균 평점 조회 0514 추가
+    @GET("/rreview/rrating/{rreceiverkakaoid}") // 0514 새로 추가
+    Call<Long> getRating(@Header("X-Auth-Token")String token, @Query("rreceiverkakaoid")Long kakaoid);
+
     // 해당 구인글에 지원 여부
     @GET("/apply/v1/count/{rid}/{uid}")
     Call<Long> isApply(@Header("X-Auth-Token")String token, @Query("rid")Long rid, @Query("kakaoid")Long kakaoid);

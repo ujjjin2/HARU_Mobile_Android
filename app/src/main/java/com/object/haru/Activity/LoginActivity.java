@@ -33,6 +33,7 @@ import com.kakao.sdk.user.model.Account;
 import com.object.haru.Chat.ChatActivity;
 import com.object.haru.Chat.ChatListFragment;
 import com.object.haru.Chat.UserAccountDTO;
+import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.FCMDTO;
 import com.object.haru.DTO.KakaoDTO;
 import com.object.haru.DTO.TestDTO;
@@ -77,12 +78,55 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent;
                     if (getIntent().getStringExtra("chat") != null) {
-                        Log.d("[메세지 알림 실행] ", getIntent().getStringExtra("chat"));
                         intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("token", token2);
                         intent.putExtra("chat", "chat");
                         intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
+                    }else{
+                        if(getIntent().getStringExtra("id")!=null){
+                            String idString = getIntent().getStringExtra("id");
+                            long id = Long.parseLong(idString);
+                            Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token2, id);
+                            applyDetail.enqueue(new Callback<ApplyDTO>() {
+
+                                @Override
+                                public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
+                                    Intent   intent = new Intent(LoginActivity.this, ApplyDetailActivity.class);
+
+                                    Log.d("------", "테스트 확인");
+                                    Log.d("token", token2);
+                                    Log.d("sex", response.body().getAsex());
+                                    Log.d("getMyself", response.body().getMyself());
+                                    Log.d("getUserName", response.body().getName());
+                                    Log.d("getAcareer", response.body().getAcareer());
+                                    Log.d("getAage",response.body().getAage());
+                                    Log.d("getAvgRating",response.body().getAvgRating().toString());
+                                    Log.d("getRid", response.body().getRid().toString());
+
+                                    Log.d("Fridkakaoid",response.body().getKakaoid().toString());
+                                    Log.d("kakaoid",kakaoId2.toString());
+
+                                    intent.putExtra("token", token2);
+                                    intent.putExtra("sex", response.body().getAsex());
+                                    intent.putExtra("self", response.body().getMyself());
+                                    intent.putExtra("name", response.body().getName());
+                                    intent.putExtra("career", response.body().getAcareer());
+                                    intent.putExtra("age", response.body().getAage());
+                                    intent.putExtra("rating", response.body().getAvgRating());
+                                    intent.putExtra("rId", response.body().getRid());
+                                    intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
+                                    intent.putExtra("kakaoid", kakaoId2.toString());
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailure(Call<ApplyDTO> call, Throwable t) {
+
+                                }
+                            });
+
+                        }
                     }
 
 

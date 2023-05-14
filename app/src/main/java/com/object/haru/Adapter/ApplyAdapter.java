@@ -56,7 +56,7 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
         if (arrayList.get(position).getAvgRating() == null) {
             holder.applicant_rating.setText("0.0");
         } else {
-            holder.applicant_rating.setText(arrayList.get(position).getAvgRating());
+            holder.applicant_rating.setText(arrayList.get(position).getAvgRating().toString());
         }
 
         holder.applicant_self_introduce.setText(arrayList.get(position).getMyself());

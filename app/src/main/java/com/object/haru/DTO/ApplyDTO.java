@@ -16,9 +16,21 @@ public class ApplyDTO {
     @SerializedName("myself")
     @Expose
     private String myself;
+
+    public String getName() {
+        return name;
+    }
+
+    @SerializedName("name")
+    @Expose
+    private String name;
+
     @SerializedName("rid")
     @Expose
     private Long rid;
+
+
+
     @SerializedName("kakaoid")
     @Expose
     private Long kakaoid;
@@ -27,7 +39,7 @@ public class ApplyDTO {
     private Integer aid;
     @SerializedName("avgRating")
     @Expose
-    private Integer avgRating;
+    private Double avgRating;
     @SerializedName("userName")
     @Expose
     private String userName;
@@ -37,6 +49,14 @@ public class ApplyDTO {
     @SerializedName("title")
     @Expose
     private String title;
+
+    public Long getKakaoid() {
+        return kakaoid;
+    }
+
+    public void setKakaoid(Long kakaoid) {
+        this.kakaoid = kakaoid;
+    }
 
     public String getAage() {
         return aage;
@@ -94,11 +114,11 @@ public class ApplyDTO {
         this.aid = aid;
     }
 
-    public Integer getAvgRating() {
+    public Double getAvgRating() {
         return avgRating;
     }
 
-    public void setAvgRating(Integer avgRating) {
+    public void setAvgRating(Double avgRating) {
         this.avgRating = avgRating;
     }
 
