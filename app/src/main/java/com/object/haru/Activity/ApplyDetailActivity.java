@@ -54,16 +54,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
         Fridkakaoid = intent.getLongExtra("Fridkakaoid", 0);
         kakaoid = intent.getStringExtra("kakaoid");
 
-        Log.d("디테일 kakaoid", kakaoid.toString());
-        Log.d("디테일 sex", sex);
-        Log.d("디테일 self", self);
-        Log.d("디테일 name", name);
-        Log.d("디테일 career", career);
-        Log.d("디테일 age", age);
-        Log.d("디테일 rating", rating.toString());
-        Log.d("디테일 rId", rId.toString());
-        Log.d("디테일 Fridkakaoid", Fridkakaoid.toString());
-        Log.d("디테일 kakaoid", kakaoid);
+
 
         tv_name = findViewById(R.id.applyDetail_Name);
         tv_rating = findViewById(R.id.applyDetail_rating_tv);
@@ -145,6 +136,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
                     intent.putExtra("idToken", idToken);  //idToken = 파베  전용 uid
                     intent.putExtra("Fridkakaoid", Fridkakaoid.toString()); //상대방 kakaoid
                     intent.putExtra("kakaoid", kakaoid); //내 자신 kakaoid
+                    intent.putExtra("Fridname", name); //내 자신 kakaoid
                     Log.d("intet Fridkakaoid", Fridkakaoid.toString());
                     Log.d("intetn kakaoid", kakaoid);
                     intent.putExtra("token", token); // 내 token
