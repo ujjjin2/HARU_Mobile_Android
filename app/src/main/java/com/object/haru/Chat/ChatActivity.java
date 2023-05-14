@@ -53,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
     private AdapterChat adapterChat;
     private String hisUid, myUid, kakao, Fridname;
     private String myName, token, uid;
+  //  private  Query myQuery,userQuery;
 
     private Long Fridkakaoid,kakaoid;
 
@@ -61,10 +62,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("채팅액티비티", "채팅시작");
         setContentView(R.layout.chat);
-
+        onCheck();
 
         // init views
-
         back_btn = findViewById(R.id.back_btn);
         recyclerView = findViewById(R.id.recyclerView);
         send_btn = findViewById(R.id.sendBtn);
@@ -251,6 +251,10 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
 
+        super.onStart();
+    }
+
+    public void onCheck(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         myUid = user.getUid();
 
@@ -259,13 +263,10 @@ public class ChatActivity extends AppCompatActivity {
 
         //"trip" 데이터베이스의 "UserAccount" 노드에 대한 참조를 가져옵니다.
         databaseReference = firebaseDatabase.getReference("userAccount");
-
         //"idToken" 필드가 현재 사용자의 UID와 같은 데이터를 가져오기 위한 쿼리를 생성
         Query userQuery = databaseReference.orderByChild("name").equalTo(Fridname);
 
         Query myQuery = databaseReference.orderByChild("idToken").equalTo(uid);
-
-
         userQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -302,7 +303,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d("디비에러", "데이터베이스 에러");
             }
         });
-        super.onStart();
+
     }
 
 }

@@ -51,15 +51,13 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         return h;
     }
 
-    @Override // ViewHolder 객체를 RecyclerView의 각 position에 바인딩해주는 메소드. position에 해당하는 유저의 정보를 userList에서 가져온다.
-    // 이후 해당 유저의 마지막 메시지와 시간 정보를 messageMap과 timeMap에서 가져온다. 그리고 해당 뷰 홀더에 정보를 뿌려준다.
+    @Override
     public void onBindViewHolder(@NonNull holder holder, int position) {
         // get data
-        String hisUid = userList.get(position).getIdToken();
-        String userName = userList.get(position).getName();
+        String hisUid = userList.get(holder.getAbsoluteAdapterPosition()).getIdToken();
+        String userName = userList.get(holder.getAbsoluteAdapterPosition()).getName();
         String message = messageMap.get(hisUid);
         String timestamp = timeMap.get(hisUid);
-
 
         holder.name_text.setText(userName);
 
@@ -70,7 +68,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             // if문 안에 넣어줘야 실행 됨...아니면 numberformatException...
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(Long.parseLong(timestamp));
-           // String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
+            // String time = (String) DateFormat.format("MM/dd hh:mm", calendar);
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd a h:mm ", Locale.getDefault());
             String time = dateFormat.format(calendar.getTime());
 
@@ -78,23 +76,27 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             holder.message_text.setText(message);
             holder.time_text.setVisibility(View.VISIBLE);
             holder.time_text.setText(time);
-
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // start chat activity with that user
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("idToken", hisUid);
-                intent.putExtra("kakaoid", kakaoid.toString()); //상대방 kakaoid
-                intent.putExtra("Fridkakaoid", userList.get(position).getKakaoid().toString()); //상대방 kakaoid
-                intent.putExtra("Fridname", userList.get(position).getName()); //상대방 kakaoid
-                intent.putExtra("token", token); // 전달받은 token 값 전달
-                context.startActivity(intent);
+                int adapterPosition = holder.getAbsoluteAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra("idToken", hisUid);
+                    intent.putExtra("kakaoid", kakaoid.toString()); //상대방 kakaoid
+                    intent.putExtra("Fridkakaoid", userList.get(adapterPosition).getKakaoid().toString()); //상대방 kakaoid
+                    intent.putExtra("Fridname", userList.get(adapterPosition).getName()); //상대방 kakaoid
+                    intent.putExtra("token", token); // 전달받은 token 값 전달
+                    context.startActivity(intent);
+                }
             }
         });
     }
+
+
 
     //messageMap에 userId와 message를 저장하는 메소드
     public void setLastMessageMap(String userId, String message) {
