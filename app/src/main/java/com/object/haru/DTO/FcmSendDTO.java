@@ -5,16 +5,29 @@ import com.google.gson.annotations.SerializedName;
 
 public class FcmSendDTO {
 
-    public FcmSendDTO(Long kakaoid, String title, String body, String topic) {
+    public FcmSendDTO(Long kakaoid, String title, String body, String topic, Long id) {
         this.kakaoid = kakaoid;
         this.title = title;
         this.body = body;
         this.topic = topic;
+        this.id = id;
     }
 
     @SerializedName("kakaoid")
     @Expose
     private Long kakaoid;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @SerializedName("id")
+    @Expose
+    private Long id;
 
     private String title;
 

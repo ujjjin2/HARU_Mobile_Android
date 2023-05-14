@@ -132,6 +132,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
     }
 
     private void chatStart(Long Fridkakaoid) {
+        Log.d("charStart에서 Fridkakaoid", Fridkakaoid.toString());
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("userAccount");
         reference.child(String.valueOf(Fridkakaoid)).child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

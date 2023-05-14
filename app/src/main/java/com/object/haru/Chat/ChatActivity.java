@@ -103,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
                     // text empty
                     Toast.makeText(ChatActivity.this,"메시지를 입력해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat");
+                    FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat", 1L);
                     Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token,fcmSendDTO);
                     fcmSend.enqueue(new Callback<FcmSendDTO>() {
                         @Override
