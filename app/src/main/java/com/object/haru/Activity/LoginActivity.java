@@ -296,7 +296,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("[FCM-설정]", "======성공=======");
                                     //파이어베이스 인증 및 로그인
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("kakaoId", kakaoId.toString());
+                                    intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
 
                                     SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
