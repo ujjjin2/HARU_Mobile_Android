@@ -154,11 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 //loginInfo가 비어있을때 로그인 창으로 넘어감
-                                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                                    login();
-                                } else {
-                                    accountLogin();
-                                }
+                                performLogin();
                             }
 
                         });
@@ -272,127 +268,81 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //-------------------------------------------로그인 기능 ---------------------------------------------------//
-    public void login() {
-        Log.d("login() FCM Token", FcmToken);
-        String TAG = "login()";
-        UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                getFirebase();
-                String code = oAuthToken.getAccessToken();
-                call = RetrofitClientInstance.getApiService().kakaoLogin("", code, FcmToken);
-                call.enqueue(new Callback<KakaoDTO>() {
-                    @Override
-                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
-                        if (response.isSuccessful()) {
-                            KakaoDTO kakao = response.body();
-                            Log.d("[로그인 성공]", "===============");
-                            FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId);
-                            Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(), fcmdto);
-                            fcmdtoCall.enqueue(new Callback<FCMDTO>() {
-                                @Override
-                                public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                    Log.d("[FCM-설정]", "======성공=======");
-                                    //파이어베이스 인증 및 로그인
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("kakaoId", kakaoId);
-                                    intent.putExtra("token", kakao.getacccesstoken());
+    public void handleLoginSuccess(String accessToken) {
+        getFirebase();
+        System.out.println("토큰" + accessToken);
+        Log.d("fcm 확인", FcmToken);
+        call = RetrofitClientInstance.getApiService().kakaoLogin("", accessToken, FcmToken); // 1차 콜백 : 카카오톡 설치 유무로 token을 생성, 로그인 시작
+        call.enqueue(new Callback<KakaoDTO>() {
+            @Override
+            public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
+                if (response.isSuccessful()) {
+                    KakaoDTO kakao = response.body();
+                    Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                                    SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
-                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
-                                    autoLoginEdit.putLong("kakaoId", kakaoId);
-                                    autoLoginEdit.putString("token", kakao.getacccesstoken());
-                                    autoLoginEdit.commit();
-                                    startActivity(intent);
-                                }
+                    FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId);
+                                                                                      // 2차 콜백 : 로그인이 성공하면 fcm 토큰을 갱신(발급)
+                    Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(), fcmdto);
+                    fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                        @Override
+                        public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                            Log.d("[FCM-설정]", "======성공=======");
+                            Log.d("[accountlogin 에서]", kakaoId.toString());
 
-                                @Override
-                                public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                    Log.d("FCM 실패", "====================");
-                                    t.printStackTrace();
-                                }
-                            });
-                        } else {
-                            Log.d("[로그인 실패]", "===================");
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("kakaoId", kakaoId);
+                            intent.putExtra("token", kakao.getacccesstoken());
+                            SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
+                            SharedPreferences.Editor autoLoginEdit = auto.edit();
+                            autoLoginEdit.putLong("kakaoId", kakaoId);
+                            autoLoginEdit.putString("token", kakao.getacccesstoken());
+                            autoLoginEdit.commit();
+
+                            startActivity(intent);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                //  getUserInfo();
+                        @Override
+                        public void onFailure(Call<FCMDTO> call, Throwable t) {
+                            Log.d("FCM 실패", "====================");
+                            t.printStackTrace();
+                        }
+                    });
+
+                } else {
+                    Log.d("[로그인 실패]", "===================");
+                    response.errorBody();
+                }
             }
-            return null;
+
+            @Override
+            public void onFailure(Call<KakaoDTO> call, Throwable t) {
+                Log.d("[로그인 실패]", "===================");
+                t.printStackTrace();
+            }
         });
     }
 
-    //-------------------------------------------account 로그인 기능 ---------------------------------------------------//
-    public void accountLogin() {
-        Log.d("accountLogin FCMToken", FcmToken);
-        //파이어베이스 인증 및 로그인
-        String TAG = "accountLogin()";
-        UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                getFirebase();
-                System.out.println("토큰" + oAuthToken.getAccessToken());
-                Log.d("fcm 확인", FcmToken);
-                call = RetrofitClientInstance.getApiService().kakaoLogin("", oAuthToken.getAccessToken(), FcmToken);
-                call.enqueue(new Callback<KakaoDTO>() {
-                    @Override
-                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
-                        if (response.isSuccessful()) {
-                            KakaoDTO kakao = response.body();
-                            Log.d("[로그인 성공]", kakao.getacccesstoken());
 
-                            FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId);
-                            Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(), fcmdto);
-                            fcmdtoCall.enqueue(new Callback<FCMDTO>() {
-                                @Override
-                                public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                    Log.d("[FCM-설정]", "======성공=======");
-                                    Log.d("[accountlogin 에서]", kakaoId.toString());
-
-
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("kakaoId", kakaoId);
-                                    intent.putExtra("token", kakao.getacccesstoken());
-                                    SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
-                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
-                                    autoLoginEdit.putLong("kakaoId", kakaoId);
-                                    autoLoginEdit.putString("token", kakao.getacccesstoken());
-                                    autoLoginEdit.commit();
-
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                    Log.d("FCM 실패", "====================");
-                                    t.printStackTrace();
-                                }
-                            });
-
-                        } else {
-                            Log.d("[로그인 실패]", "===================");
-                            response.errorBody();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
-                        Log.d("[로그인 실패]", "===================");
-                        t.printStackTrace();
-                    }
-                });
-                //  getUserInfo();
-            }
-            return null;
-        });
+    public void performLogin() {
+        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+            UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("login() FCM Token", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        } else {
+            UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("accountLogin FCMToken", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        }
     }
 
 
