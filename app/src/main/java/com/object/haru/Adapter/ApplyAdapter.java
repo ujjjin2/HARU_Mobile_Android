@@ -112,9 +112,6 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
                     intent.putExtra("rId", applyDTO.getRid());
                     intent.putExtra("Fridkakaoid", applyDTO.getUid()); //상대방거
                     intent.putExtra("kakaoid", kakaoid.toString());
-                    Log.d("[어댑터 kakao]", kakaoid.toString());
-                    Log.d("[어댑터 Fridkakaoid]",  applyDTO.getUid().toString());
-                    Log.d("[입력 성공]", "=============");
 
                     context.startActivity(intent);
                 }

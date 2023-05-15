@@ -70,10 +70,14 @@ public class TestActivity extends AppCompatActivity implements TabLayout.OnTabSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_test);
 
+
         Intent intent = getIntent();
         rId = intent.getLongExtra("rId", 0);
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
+        Log.d("[Test rid확인]", String.valueOf(rId));
+        Log.d("[Test token]", token);
+        Log.d("[Test kakaoId]", String.valueOf(kakaoId));
 
         backButton = findViewById(R.id.back_btn);
         tabLayout = findViewById(R.id.tablayout);

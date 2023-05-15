@@ -83,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("chat", "chat");
                         intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
-                    }else{
-                        if(getIntent().getStringExtra("id")!=null){
+                    }else if(getIntent().getStringExtra("newApply")!=null){
                             String idString = getIntent().getStringExtra("id");
                             long id = Long.parseLong(idString);
                             Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token2, id);
@@ -93,20 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
                                     Intent   intent = new Intent(LoginActivity.this, ApplyDetailActivity.class);
-
-                                    Log.d("------", "테스트 확인");
-                                    Log.d("token", token2);
-                                    Log.d("sex", response.body().getAsex());
-                                    Log.d("getMyself", response.body().getMyself());
-                                    Log.d("getUserName", response.body().getName());
-                                    Log.d("getAcareer", response.body().getAcareer());
-                                    Log.d("getAage",response.body().getAage());
-                                    Log.d("getAvgRating",response.body().getAvgRating().toString());
-                                    Log.d("getRid", response.body().getRid().toString());
-
-                                    Log.d("Fridkakaoid",response.body().getKakaoid().toString());
-                                    Log.d("kakaoid",kakaoId2.toString());
-
                                     intent.putExtra("token", token2);
                                     intent.putExtra("sex", response.body().getAsex());
                                     intent.putExtra("self", response.body().getMyself());
@@ -119,15 +104,26 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("kakaoid", kakaoId2.toString());
                                     startActivity(intent);
                                 }
-
                                 @Override
                                 public void onFailure(Call<ApplyDTO> call, Throwable t) {
 
                                 }
                             });
 
+                        }else if(getIntent().getStringExtra("comfirmation") != null){ //구인 확정
+
+                        long id = Long.parseLong(getIntent().getStringExtra("id"));
+                        Intent intent2 =null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                             intent2 = new Intent(LoginActivity.this, TestActivity.class);
                         }
+                        intent2.putExtra("rId", id);
+                        intent2.putExtra("token", token2);
+                        intent2.putExtra("kakaoId", kakaoId2);
+
+                        startActivity(intent2);
                     }
+
 
 
                     if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)

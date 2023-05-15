@@ -2,6 +2,7 @@ package com.object.haru.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,7 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
                     int position = getAbsoluteAdapterPosition();
 
                     recruitDTO = arrayList.get(position);
-
+                    Log.d("[Write]","시---작");
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("rId", recruitDTO.getRid());
                     intent.putExtra("token", token);
