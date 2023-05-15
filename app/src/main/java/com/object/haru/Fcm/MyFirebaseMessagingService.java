@@ -46,12 +46,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         Log.v("FCM 토큰", token);
-        String getToken = FirebaseMessaging.getInstance().getToken().getResult();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("token", getToken);
-        editor.apply();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String getToken = task.getResult();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("token", getToken);
+                editor.apply();
+            } else {
+                // 토큰을 가져오는 데 실패한 경우에 대한 처리
+                Log.e("FCM 토큰", "토큰을 가져오는 데 실패했습니다.");
+            }
+        });
     }
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
