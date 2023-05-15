@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                         long id = Long.parseLong(getIntent().getStringExtra("id"));
                         Intent intent2 =null;
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                             intent2 = new Intent(LoginActivity.this, TestActivity.class);
+                             intent2 = new Intent(LoginActivity.this, DetailActivity.class);
                         }
                         intent2.putExtra("rId", id);
                         intent2.putExtra("token", token2);

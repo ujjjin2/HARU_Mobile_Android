@@ -2,139 +2,124 @@ package com.object.haru.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.core.widget.NestedScrollView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.zzimRequestDTO;
 import com.object.haru.ModifyActivity;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
-
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailActivity extends AppCompatActivity {
-    TextView Detail_tv_writeTime, //작성시간
-            Detail_tv_title, //제목
-            Detail_tv_name, //작성자
-            detail_three_pay2,Detail_tv_pay2, // 최저시급, 최저시급(총)
-            detail_three_date2,Detail_tv_date2, //근무일자
-            detail_three_time2, Detail_tv_time2,//근무시간
-            Detail_tv_category2, //분야
-            Detail_tv_storeinfo2, //매장정보
-            Detail_tv_age2, //우대나이
-            Detail_tv_career2, //우대경력
-            Detail_tv_sex2; //우대 성별
+@RequiresApi(api = Build.VERSION_CODES.M)
+public class DetailActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, View.OnScrollChangeListener {
 
-    private int min = 9620;
+    private TabLayout tabLayout;
+    private NestedScrollView nestedScrollView;
+    private MotionLayout motionLayout;
 
-    boolean i;
-    private Long rId;
-    private String token;
+    private View emptyView, lineView3, lineView2;
 
-    private ImageButton heart_btn;
-    private Long kakaoId;
-    private double lat,lon;
+    private TextView deposit_tv2, deposit_tv3, writer, writeTime_tv, title_tv, writer_tv, topMoney_tv, firstDayCount_tv,
+                    date_tv, secondDayCount_tv, workTime_tv, time_tv, status_tv, gender_tv, age_tv, career_tv, bottomMoney_tv,
+                    location_tv, category_tv;
 
-    private Button apply_btn;
-    private ImageButton back_btn, option_btn;
+    private ImageView starButton, backButton, optionButton;
     private Long check;
-    private ViewGroup mapViewContainer;
+
+    private Long rId, kakaoId;
+    private String token;
     private RecruitDTO recruit;
+
+    private Button applyButton;
+    private double lat, lon;
+    private boolean zzimButtonCheck;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
 
         Intent intent = getIntent();
         rId = intent.getLongExtra("rId", 0);
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
-        Log.d("[rid확인]", String.valueOf(rId));
-        Log.d("[Detail카카오ID 확인]", String.valueOf(kakaoId));
-//        Log.d("[token확인]", token);
+        Log.d("[Test rid확인]", String.valueOf(rId));
+        Log.d("[Test token]", token);
+        Log.d("[Test kakaoId]", String.valueOf(kakaoId));
 
-        Detail_tv_writeTime = findViewById(R.id.Detail_tv_writeTime);
-        Detail_tv_name = findViewById(R.id.Detail_tv_name);
-        Detail_tv_title = findViewById(R.id.Detail_tv_title);
-        detail_three_pay2 = findViewById(R.id.detail_three_pay2); Detail_tv_pay2 = findViewById(R.id.Detail_tv_pay2);
-        detail_three_date2 = findViewById(R.id.detail_three_date2); Detail_tv_date2 = findViewById(R.id.Detail_tv_date2);
-        detail_three_time2 = findViewById(R.id.detail_three_time2); Detail_tv_time2 = findViewById(R.id.Detail_tv_time2);
-        Detail_tv_category2 = findViewById(R.id.Detail_tv_category2);
-        Detail_tv_storeinfo2 = findViewById(R.id.Detail_tv_storeinfo2);
-        Detail_tv_age2 = findViewById(R.id.Detail_tv_age2);
-        Detail_tv_career2 = findViewById(R.id.Detail_tv_career2);
-        Detail_tv_sex2 = findViewById(R.id.Detail_tv_sex2);
-        apply_btn = findViewById(R.id.apply_btn);
-        heart_btn = findViewById(R.id.imageButton_heart);
-        back_btn = findViewById(R.id.imageButton_left);
-        option_btn = findViewById(R.id.imageButton_option);
-
-        buttonaction();
-    }
-
-    private void mapView() {
-        MapView mapView = new MapView(this);
-        mapViewContainer = (ViewGroup)findViewById(R.id.map_view);
-        mapViewContainer.addView(mapView);
-
-        // 중심점 변경 - 인하공전
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(lat, lon), true);
-        // 줌 레벨 변경
-        mapView.setZoomLevel(1, true);
-
-        // 줌 인
-        mapView.zoomIn(true);
-        // 줌 아웃
-        mapView.zoomOut(true);
-
-        /*마커 추가*/
-        //마커 찍기 (인하공전)
-        MapPoint MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(lat, lon);
-
-        // 마커 아이콘 추가하는 함수
-        MapPOIItem customMarker = new MapPOIItem();
-        // 클릭 했을 때 나오는 호출 값
-        customMarker.setItemName("매장 위치");
-
-        customMarker.setTag(1);
-
-        // 좌표를 입력받아 현 위치로 출력
-        customMarker.setMapPoint(MARKER_POINT1);
-
-        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
-        customMarker.setCustomImageResourceId(R.drawable.marker); // 마커 이미지.
-        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
-        customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+        backButton = findViewById(R.id.back_btn);
+        tabLayout = findViewById(R.id.tablayout);
+        nestedScrollView = findViewById(R.id.nested_scrollview);
+        motionLayout = findViewById(R.id.motionlayout);
+        lineView2 = findViewById(R.id.line_view2);
+        lineView3 = findViewById(R.id.line_view3);
+        emptyView = findViewById(R.id.emptyView);
+        deposit_tv2 = findViewById(R.id.deposit_tv2);
+        deposit_tv3 = findViewById(R.id.deposit_tv3);
+        writer = findViewById(R.id.writer_text);
+        writeTime_tv = findViewById(R.id.time_text);
+        title_tv = findViewById(R.id.title_text);
+        writer_tv = findViewById(R.id.writer_text);
+        topMoney_tv = findViewById(R.id.money_edit);
+        firstDayCount_tv = findViewById(R.id.dayCount);
+        date_tv = findViewById(R.id.work_period_data);
+        secondDayCount_tv = findViewById(R.id.day_data);
+        workTime_tv = findViewById(R.id.work_time);
+        time_tv = findViewById(R.id.time_data);
+        status_tv = findViewById(R.id.status_data);
+        gender_tv = findViewById(R.id.gender_data);
+        age_tv = findViewById(R.id.age_data);
+        career_tv = findViewById(R.id.career_data);
+        bottomMoney_tv = findViewById(R.id.money_data);
+        location_tv = findViewById(R.id.location_data);
+        applyButton = findViewById(R.id.apply_btn);
+        starButton = findViewById(R.id.imageView22);
+        optionButton = findViewById(R.id.imageButton_option);
+        category_tv = findViewById(R.id.category_data);
 
 
-        // 지도화면 위에 추가되는 아이콘을 추가하기 위한 호출(말풍선 모양)
-        mapView.addPOIItem(customMarker);
+        tabLayout.addOnTabSelectedListener(this);
+        nestedScrollView.setOnScrollChangeListener(this);
+
+        TabLayout.Tab firstTab = tabLayout.newTab().setText("지원조건");
+        TabLayout.Tab secondTab = tabLayout.newTab().setText("근무지역");
+        TabLayout.Tab thirdTab = tabLayout.newTab().setText("근무조건");
+
+        tabLayout.addTab(firstTab);
+        tabLayout.addTab(secondTab);
+        tabLayout.addTab(thirdTab);
+
+        moveUserProfile();
+        actionBackButton();
     }
 
     private void checkZzim() {
@@ -144,39 +129,40 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 Boolean check = response.body();
                 if (check == true) {
-                    heart_btn.setImageResource(R.drawable.full_heart);
-                    i = false;
+                    starButton.setImageResource(R.drawable.starcolor);
+                    zzimButtonCheck = false;
                 } else {
-                    heart_btn.setImageResource(R.drawable.detail_img);
-                    i = true;
+                    starButton.setImageResource(R.drawable.star);
+                    zzimButtonCheck = true;
                 }
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
-                t.printStackTrace();
             }
         });
     }
 
-    private void buttonaction() {
-        Detail_tv_name.setOnClickListener(new View.OnClickListener() {
+    private void moveUserProfile() {
+        writer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(intent);
             }
         });
-        back_btn.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void actionBackButton() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finish();
             }
         });
     }
 
-
-    private void fetch() {
+    private void setRecruitData() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -184,10 +170,8 @@ public class DetailActivity extends AppCompatActivity {
                 call.enqueue(new Callback<RecruitDTO>() {
                     @Override
                     public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             recruit = response.body();
-                            Log.d("person확인손윤호", String.valueOf(recruit.getPerson()));
-                            // 자신이 작성한 게시물인지 확인
                             if (recruit.getKakaoid() == kakaoId) {
                                 changeWriterStatus();
                             } else {
@@ -196,114 +180,107 @@ public class DetailActivity extends AppCompatActivity {
 
                             lat = recruit.getLat();
                             lon = recruit.getLon();
-                            Log.d("[위도, 경도]","["+lat+","+lon+"]");
 
-                            //지도 띄우기
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mapView();
-                                }
-                            });
-
-                            String writetime_date = recruit.getRtime().substring(0,10);
-                            String writetime_time = recruit.getRtime().substring(11,19);
+                            String writeDate = recruit.getRtime().substring(0, 10);
+                            String writeTime = recruit.getRtime().substring(11, 19);
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Detail_tv_writeTime.setText(writetime_date+"/"+writetime_time);
+                                    writeTime_tv.setText(writeDate + " " + writeTime);
+                                    title_tv.setText(recruit.getTitle());
+                                    writer_tv.setText(recruit.getName());
+                                    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+                                    String formattedNumber = decimalFormat.format(recruit.getPay());
+                                    topMoney_tv.setText(formattedNumber + "원");
 
-                                    Detail_tv_title.setText(recruit.getTitle()); //제목
-                                    Detail_tv_name.setText(recruit.getName()); //작성자
-                                    detail_three_pay2.setText(recruit.getPay().toString()); // 최저시급
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-                                    String stdate = recruit.getStTime().substring(0,10);
-                                    String enddate = recruit.getEndTime().substring(0,10);
-
-                                    try {
-                                        Date format1 = new SimpleDateFormat("yyyy-MM-dd").parse(stdate);
-                                        Date format2 = new SimpleDateFormat("yyyy-MM-dd").parse(enddate);
-
-                                        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-                                        long diffDays = diffSec / (24*60*60); //일자수 차이
-
-                                        detail_three_date2.setText((Math.toIntExact(diffDays)+1)+"일");//상단 근무일자
-
-                                    } catch (ParseException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    Detail_tv_date2.setText(stdate+"~"+enddate); //근무일자
+                                    String startDateString = "2023-05-10 13:00:00";
+                                    String endDateString = "2023-05-12 15:30:00";
 
                                     try {
-                                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                                        String sttime = recruit.getStTime().substring(11,16);
-                                        String endtime = recruit.getEndTime().substring(11,16);
-                                        Date date1 = sdf.parse(sttime);
-                                        Date date2 = sdf.parse(endtime);
+                                        Date startDate = format.parse(startDateString);
+                                        Date endDate = format.parse(endDateString);
+                                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                        String start = outputFormat.format(startDate);
+                                        String end = outputFormat.format(endDate);
 
-                                        //문자열 -> Date
-                                        long timeMil1 = date1.getTime();
-                                        long timeMil2 = date2.getTime();
+                                        long diff = endDate.getTime() - startDate.getTime();
+                                        long diffDays = diff / (24 * 60 * 60 * 1000);
 
-                                        //비교
-                                        long diff = timeMil2-timeMil1;
-
-                                        long diffHour = diff/(1000*60*24);
-                                        long diffMin = diff/(1000*60);
-                                        long hour = diffMin/60;
-                                        long Min = diffMin%60;
-
-                                        if (Min == 0){
-                                            detail_three_time2.setText(hour+"시간"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
-                                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour)+"원)"); // 최저시급(총)
-                                        }else{
-                                            detail_three_time2.setText(hour+"시간"+Min+"분"); Detail_tv_time2.setText(sttime+"~"+endtime);//근무시간
-                                            Detail_tv_pay2.setText(recruit.getPay().toString()+"(총 "+(recruit.getPay()*hour+recruit.getPay()/60*Min)+"원)"); // 최저시급(총)
-                                        }
+                                        Log.d("Days", "일 수: " + diffDays); // 결과 출력
+                                        firstDayCount_tv.setText(Long.toString(diffDays + 1) + "일");
+                                        date_tv.setText(start + " ~ " + end);
+                                        secondDayCount_tv.setText(Long.toString(diffDays + 1) + "일");
 
                                     } catch (ParseException e) {
-                                        throw new RuntimeException(e);
+                                        e.printStackTrace();
                                     }
+
+                                    try {
+                                        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                        Date d1 = format1.parse(startDateString);
+                                        Date d2 = format1.parse(endDateString);
+
+                                        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm");
+                                        String start = outputFormat.format(d1);
+                                        String end = outputFormat.format(d2);
+
+                                        long diff = d2.getTime() - d1.getTime();
+
+                                        long diffMinutes = diff / (60 * 1000) % 60;
+                                        long diffHours = diff / (60 * 60 * 1000) % 24;
+
+                                        workTime_tv.setText(Long.toString(diffHours) + "시간 " + Long.toString(diffMinutes) + "분");
+                                        time_tv.setText(start + " ~ " + end);
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    status_tv.setText(recruit.getStep());
+                                    gender_tv.setText(recruit.getRsex());
+                                    age_tv.setText(recruit.getRage());
+                                    career_tv.setText(recruit.getRcareer());
+                                    bottomMoney_tv.setText(recruit.getPay().toString() + "원");
+                                    location_tv.setText(recruit.getAddr());
+                                    category_tv.setText(recruit.getSubject());
                                 }
                             });
-                            Detail_tv_category2.setText(recruit.getSubject()); //분야
-                            Detail_tv_storeinfo2.setText(recruit.getAddr()); //매장정보
-                            Detail_tv_age2.setText(recruit.getRage()); //우대나이
-                            Detail_tv_career2.setText(recruit.getRcareer()); //우대경력
-                            Detail_tv_sex2.setText(recruit.getRsex());;
-//2022-02-13/10:00
+
                         }
                     }
+
                     @Override
                     public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                        Toast.makeText(DetailActivity.this, "Retrofit 받아오는거 실패", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, "레트로핏 실패", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).start();
-
     }
 
     private void changeWriterStatus() {
-        apply_btn.setText("지원자 확인하기");
-        apply_btn.setOnClickListener(new View.OnClickListener() {
+        applyButton.setText("지원자 확인하기");
+        applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailActivity.this, ApplicantActivity.class);
-                intent.putExtra("token",token);
+                intent.putExtra("token", token);
                 intent.putExtra("kakaoId", kakaoId);
                 intent.putExtra("rid", rId);
                 startActivity(intent);
             }
         });
-        heart_btn.setVisibility(View.INVISIBLE);
-        option_btn.setVisibility(View.VISIBLE);
+        starButton.setVisibility(View.INVISIBLE);
+        optionButton.setVisibility(View.VISIBLE);
 
-        option_btn.setOnClickListener(new View.OnClickListener() {
+        optionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
+            public void onClick(View v) {
+                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
                 getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -349,14 +326,14 @@ public class DetailActivity extends AppCompatActivity {
         checkZzim();
         isApply();
 
-        heart_btn.setVisibility(View.VISIBLE);
-        option_btn.setVisibility(View.GONE);
-        heart_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i == true){
-                    heart_btn.setImageResource(R.drawable.full_heart);
+        starButton.setVisibility(View.VISIBLE);
+        optionButton.setVisibility(View.GONE);
 
+        starButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (zzimButtonCheck == true) {
+                    starButton.setImageResource(R.drawable.starcolor);
                     zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
 
                     Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimSave(token, zzim);
@@ -365,39 +342,37 @@ public class DetailActivity extends AppCompatActivity {
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
                             zzimRequestDTO zzimRequestDTO = response.body();
                             Toast.makeText(DetailActivity.this, "좋아요 저장", Toast.LENGTH_SHORT).show();
-                            i = false;
+                            zzimButtonCheck = false;
                         }
 
                         @Override
                         public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
                             Toast.makeText(DetailActivity.this, "좋아요 저장 실패", Toast.LENGTH_SHORT).show();
-                            i = false;
+                            zzimButtonCheck = false;
                             t.printStackTrace();
                         }
                     });
-
-                }else {
-                    heart_btn.setImageResource(R.drawable.detail_img);
-                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token,kakaoId,rId);
+                } else {
+                    starButton.setImageResource(R.drawable.star);
+                    Call<zzimRequestDTO> call = RetrofitClientInstance.getApiService().zzimDelete(token, kakaoId, rId);
                     call.enqueue(new Callback<zzimRequestDTO>() {
                         @Override
                         public void onResponse(Call<zzimRequestDTO> call, Response<zzimRequestDTO> response) {
                             zzimRequestDTO zzimRequestDTO = response.body();
                             Toast.makeText(DetailActivity.this, "좋아요 삭제", Toast.LENGTH_SHORT).show();
-                            i = true;
+                            zzimButtonCheck = true;
                         }
 
                         @Override
                         public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
                             Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
                             t.printStackTrace();
-                            i = true;
+                            zzimButtonCheck = true;
                         }
                     });
                 }
             }
         });
-
     }
 
     private void isApply() {
@@ -408,27 +383,27 @@ public class DetailActivity extends AppCompatActivity {
                 check = response.body();
                 if (check != 0) {
                     if (recruit.getPerson() == null) {
-                        apply_btn.setBackgroundColor(Color.rgb(246, 100, 80));
-                        apply_btn.setText("지원 취소");
-                        apply_btn.setOnClickListener(new View.OnClickListener() {
+                        applyButton.setBackgroundResource(R.drawable.register_cancel_btn);
+                        applyButton.setText("지원 취소");
+                        applyButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 deleteCheckDialog();
                             }
                         });
-                    } else if (String.valueOf(recruit.getPerson()).equals(String.valueOf(kakaoId))) {
-                        apply_btn.setBackgroundColor(Color.rgb(93, 93, 93));
-                        apply_btn.setText("지원이 마감되었습니다.");
-                        apply_btn.setEnabled(true);
+                    } else if (recruit.getPerson() != null) {
+                        applyButton.setBackgroundResource(R.drawable.register_closed_btn);
+                        applyButton.setText("지원이 마감되었습니다.");
+                        applyButton.setEnabled(true);
                     } else {
-                        Log.i("확정자와", "카카오아이디가 다름");
+                        Log.i("예외 발생", "예외 발생");
                     }
                 } else {
-                    apply_btn.setBackgroundColor(Color.rgb(41, 148, 96));
-                    apply_btn.setText("지원하기");
-                    apply_btn.setOnClickListener(new View.OnClickListener() {
+                    applyButton.setBackgroundResource(R.drawable.register_btn2);
+                    applyButton.setText("지원하기");
+                    applyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View v) {
                             Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
                             intent.putExtra("rId", rId);
                             intent.putExtra("token", token);
@@ -463,7 +438,6 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 deleteApply();
                 dialog.dismiss();
-
             }
         });
         builder.show();
@@ -485,14 +459,70 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        fetch();
+    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (scrollY > 0) {
+            motionLayout.transitionToEnd();
+        }
+
+        if (scrollY == 0) {
+            tabLayout.setScrollPosition(0, 0f, true);
+        } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView2) && (scrollY < computeDistanceToView(nestedScrollView, lineView3))) {
+            tabLayout.setScrollPosition(1, 0f, true);
+        } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView3) && (scrollY < computeDistanceToView(nestedScrollView, deposit_tv2))) {
+            tabLayout.setScrollPosition(2, 0f, true);
+        }
+
+        if(!nestedScrollView.canScrollVertically(1)) tabLayout.setScrollPosition(3, 0f, true);
+    }
+
+    public static int computeDistanceToView(NestedScrollView scrollView, View view) {
+        int top = calculateRectOnScreen(scrollView).top;
+        int scrollY = scrollView.getScrollY();
+        int viewTop = calculateRectOnScreen(view).top;
+        return Math.abs(top - (scrollY + viewTop));
+    }
+
+    public static Rect calculateRectOnScreen(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        return new Rect(
+                location[0],
+                location[1],
+                location[0] + view.getMeasuredWidth(),
+                location[1] + view.getMeasuredHeight()
+        );
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mapViewContainer.removeAllViews();
+    public void onTabSelected(TabLayout.Tab tab) {
+        switch (tab.getPosition()) {
+            case 0:
+                nestedScrollView.smoothScrollTo(0, emptyView.getTop(), 1000);
+                break;
+            case 1:
+                nestedScrollView.smoothScrollTo(0, lineView2.getTop(), 1000);
+                break;
+            case 2:
+                nestedScrollView.smoothScrollTo(0, lineView3.getTop(), 1000);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        onTabSelected(tab);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecruitData();
     }
 }

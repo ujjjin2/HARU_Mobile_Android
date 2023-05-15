@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.object.haru.Activity.DetailActivity;
-import com.object.haru.Activity.ProfileActivity;
-import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
@@ -91,7 +88,10 @@ public class WritedAdapter extends RecyclerView.Adapter<WritedAdapter.CustomView
 
                     recruitDTO = arrayList.get(position);
                     Log.d("[Write]","시---작");
-                    Intent intent = new Intent(context, DetailActivity.class);
+                    Intent intent = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        intent = new Intent(context, DetailActivity.class);
+                    }
                     intent.putExtra("rId", recruitDTO.getRid());
                     intent.putExtra("token", token);
                     intent.putExtra("kakaoId", kakaoId);

@@ -27,8 +27,6 @@ import com.object.haru.DTO.UserDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
-import java.net.URL;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +40,7 @@ public class MyPageFragment_Slide extends Fragment  {
     private  String token;
     private Long kakaoId;
 
-    private CardView cardView;
+    private CardView writeCardView, registerCardView;
 
     private RecruitDTO recruitDTO;
     String[] descriptionData = {"모집중", "선발중", "모집 완료"};
@@ -62,22 +60,11 @@ public class MyPageFragment_Slide extends Fragment  {
 
         profile = view.findViewById(R.id.view1);
         zzim = view.findViewById(R.id.view2);
+        writeCardView = view.findViewById(R.id.myPageFragment_cardView1);
+        registerCardView = view.findViewById(R.id.myPageFragment_cardView2);
 
         profile_title2 = view.findViewById(R.id.profile_title2);
         profile_title1 = view.findViewById(R.id.profile_title1);
-
-        cardView = view.findViewById(R.id.myPageFragment_cardView1);
-
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("kakaoId", kakaoId);
-                intent.putExtra("token", token);
-                intent.putExtra("rId", recruitDTO.getRid());
-                startActivity(intent);
-            }
-        });
 
                 //내가 작성한 알바
         Call<RecruitDTO> call = RetrofitClientInstance.getApiService().MypageSHOW(token, kakaoId);
@@ -91,7 +78,25 @@ public class MyPageFragment_Slide extends Fragment  {
                 if (recruitDTO == null ){
                     profile_title1.setText("작성한 글이 없음");
                     stateProgressBar.setVisibility(View.GONE);
+                    writeCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
                 }else {
+                    writeCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                intent = new Intent(getActivity(), DetailActivity.class);
+                            }
+                            intent.putExtra("kakaoId", kakaoId);
+                            intent.putExtra("token", token);
+                            intent.putExtra("rId", recruitDTO.getRid());
+                            startActivity(intent);
+                        }
+                    });
                     profile_title1.setText(recruitDTO.getTitle());
 
                     String step = recruitDTO.getStep();
@@ -127,7 +132,26 @@ public class MyPageFragment_Slide extends Fragment  {
                 if (applyDTO == null){
                     profile_title2.setText("작성한 글이 없음");
                     stateProgressBar2.setVisibility(View.GONE);
-                }else{
+                    registerCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                } else {
+                    registerCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                intent = new Intent(getActivity(), DetailActivity.class);
+                            }
+                            intent.putExtra("kakaoId", kakaoId);
+                            intent.putExtra("token", token);
+                            intent.putExtra("rId", applyDTO.getRid());
+                            startActivity(intent);
+                        }
+                    });
                     profile_title2.setText(applyDTO.getTitle());
                     String step = applyDTO.getStep();
                     if (step.equals("모집중")){
