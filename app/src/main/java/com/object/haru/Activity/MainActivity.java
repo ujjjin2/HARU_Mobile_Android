@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         accessToken = intent.getStringExtra("token");
 //        kakaoId = intent.getLongExtra("kakaoId",0);
         kakaoId = intent.getExtras().getLong("kakaoId");
-        Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+        Log.d("[메인에서 카카오ID 확인]", String.valueOf(kakaoId));
 
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 

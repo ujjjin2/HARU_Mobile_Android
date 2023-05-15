@@ -1,613 +1,1182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".Activity.DetailActivity">
+    android:layout_height="match_parent" >
 
-
-    <LinearLayout
-        android:id="@+id/liner1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-<!--   툴바 대체? 커스텀 할려고 흠......     -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/imageButton_heart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="284dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="15dp"
-                android:background="@color/white"
-                android:src="@drawable/detail_img"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton_option"
-                app:layout_constraintStart_toEndOf="@+id/imageButton_left"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageButton
-                android:id="@+id/imageButton_option"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@color/white"
-                android:src="@drawable/option_img"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/imageButton_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@color/white"
-                android:src="@drawable/back_img"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <LinearLayout
-            android:id="@+id/Detail_title"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileActivity_Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_collapseMode="pin"
+            android:background="#ffffff"
+            app:layout_constraintTop_toTopOf="parent">
+        </androidx.appcompat.widget.Toolbar>
 
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/left"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar">
+        </ImageView>
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DD474747" />
+        <ImageView
+            android:id="@+id/imageView22"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:src="@drawable/star"
+            android:layout_marginRight="18dp"
+            app:layout_constraintRight_toLeftOf="@+id/imageButton_option"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/imageButton_option"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:src="@drawable/option_img"
+            android:layout_marginRight="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar"
+            app:layout_constraintRight_toRightOf="parent">
+        </ImageView>
+
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f4f4f4"
+            app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar" >
+        </View>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/motionlayout"
+        app:layoutDescription="@xml/motion_scene_tabscroll"
+        app:layout_constraintTop_toBottomOf="@id/profileActivity_Toolbar"
+        app:layout_constraintBottom_toTopOf="@id/line_view4"
+        app:layout_scrollFlags="scroll" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout222"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tablayout"
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/Detail_tv_writeTime"
+                android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:text="2023-01-15 23:59"
-                android:textColor="@color/black"
-                android:textSize="13dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="12dp"
+                android:layout_gravity="end"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                tools:text="2023-05-04 12:52:29" >
+            </TextView>
 
             <TextView
-                android:id="@+id/Detail_tv_title"
-                android:layout_width="345dp"
+                android:id="@+id/title_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:text="4시간 서빙 대타하실분"
-                android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="19sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Detail_tv_writeTime" />
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                tools:text="알바대타타이틀알바대타타이틀알바대타타이틀알바대타타이틀알바대타타이틀" >
+            </TextView>
 
             <TextView
-                android:id="@+id/Detail_tv_name"
+                android:id="@+id/writer_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:text="작성자"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Detail_tv_title" />
-
+                android:textSize="14dp"
+                tools:text="작성자" >
+            </TextView>
 
             <View
-                android:id="@+id/view2"
+                android:id="@+id/line_view123"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#DD474747" />
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="#f4f4f4" >
+            </View>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_view1234"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:layout_marginTop="20dp">
+
+                <View
+                    android:id="@+id/first_item"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/detail_info"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/second_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout_view1234"
+                    app:layout_constraintTop_toTopOf="parent">
+                </View>
+
+                <ImageView
+                    android:id="@+id/circle_view"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/test"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/first_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/first_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/first_item">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/money_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/monet"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintTop_toTopOf="@+id/first_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/first_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/first_item" >
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/money_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#6A6A6A"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/first_item"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view"
+                    android:text="시급" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/money_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    tools:text="12,000원"
+                    android:textColor="#07BC7D"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/circle_view"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view"
+                    app:layout_constraintTop_toBottomOf="@+id/money_text">
+                </TextView>
+
+                <View
+                    android:id="@+id/second_item"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/detail_info"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/first_item"
+                    app:layout_constraintRight_toLeftOf="@+id/third_item">
+                </View>
+
+                <ImageView
+                    android:id="@+id/circle_view2"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/test"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/second_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/second_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/second_item">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/calendar_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/calendar"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintTop_toTopOf="@+id/second_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/second_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/second_item" >
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/day_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#6A6A6A"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/second_item"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view2"
+                    android:text="근무일" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/dayCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view2"
+                    app:layout_constraintTop_toBottomOf="@+id/day_text"
+                    app:layout_constraintBottom_toBottomOf="@+id/circle_view2"
+                    tools:text="2일" >
+                </TextView>
+
+                <View
+                    android:id="@+id/third_item"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/detail_info"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/second_item">
+                </View>
+
+                <ImageView
+                    android:id="@+id/circle_view3"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/test"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/third_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/third_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/third_item">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/time_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/clock"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintTop_toTopOf="@+id/third_item"
+                    app:layout_constraintLeft_toLeftOf="@+id/third_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/third_item" >
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/clock_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#6A6A6A"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/third_item"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view3"
+                    android:text="근무시간" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/work_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toRightOf="@+id/circle_view3"
+                    app:layout_constraintTop_toBottomOf="@+id/clock_text"
+                    app:layout_constraintBottom_toBottomOf="@+id/circle_view3"
+                    tools:text="7시간" >
+                </TextView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/Detail_scrollView"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scrollIndicators="bottom"
+            app:tabIndicatorAnimationDuration="2"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout222"
+            app:tabMinWidth="22dp"
+            app:tabTextAppearance="@style/tab_text"
+            app:tabSelectedTextColor="@color/black"
+            app:tabIndicatorHeight="3dp"
+            app:tabTextColor="#808080"
+            app:tabRippleColor = "@null"
+            app:tabIndicatorColor="#07BC7D">
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/purple_200"-->
+<!--                android:text="지원조건" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/purple_200"-->
+<!--                android:text="근무지역" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/purple_200"-->
+<!--                android:text="테스트1" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/purple_200"-->
+<!--                android:text="테스트2" />-->
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="465dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Detail_title">
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/tablayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/autoCompleteToStart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/Detail_title">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/Detail_three"
+                <View
+                    android:id="@+id/emptyView"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent">
+                </View>
+
+                <TextView
+                    android:id="@+id/register_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지원조건"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emptyView" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="모집상태"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/register_condition" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/status_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="모집중"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/register_condition"
+                    app:layout_constraintTop_toTopOf="@+id/status" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="성별"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/status"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/gender_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="남성우대"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/register_condition"
+                    app:layout_constraintTop_toTopOf="@+id/gender" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="연령"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/gender"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/age_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="연령무관"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/register_condition"
+                    app:layout_constraintTop_toTopOf="@+id/age" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/career"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="경력"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/age"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/career_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="경력무관"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/register_condition"
+                    app:layout_constraintTop_toTopOf="@+id/career" >
+                </TextView>
+
+                <View
+                    android:id="@+id/line_view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#f4f4f4"
+                    app:layout_constraintTop_toBottomOf="@+id/career_data">
+                </View>
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="근무지역"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/line_view2" />
+
+                <TextView
+                    android:id="@+id/location_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Detail_title">
+                    tools:text="경북 구미시 수출대로 7길 50-9(공단동) LG이노텍(구미공장)"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/location"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
 
-                    <!--3개 이미지 레이아웃-->
-                    <LinearLayout
-                        android:id="@+id/three_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/detail_img1"
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:layout_marginTop="4dp"
-                                android:src="@drawable/payment"
-                                app:layout_constraintEnd_toStartOf="@+id/detail_img2"
-                                app:layout_constraintHorizontal_bias="0.255"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/detail_img2"
-                                android:layout_width="34dp"
-                                android:layout_height="30dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="92dp"
-                                android:src="@drawable/calendar"
-                                app:layout_constraintEnd_toStartOf="@+id/detail_img3"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/detail_img3"
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="72dp"
-                                android:src="@drawable/clock"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/three_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/three_1">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:id="@+id/detail_three_pay"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="시급"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/detail_three_date"
-                                app:layout_constraintHorizontal_bias="0.246"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.0" />
-
-                            <TextView
-                                android:id="@+id/detail_three_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="64dp"
-                                android:text="근무일자"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toStartOf="@+id/detail_three_time"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/detail_three_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="64dp"
-                                android:text="근무시간"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/three_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/three_1">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-
-                            android:layout_marginBottom="15dp">
-
-                            <TextView
-                                android:id="@+id/detail_three_pay2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="40dp"
-                                android:text="최저시급"
-                                android:textColor="@color/black"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/detail_three_date2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="92dp"
-                                android:text="1일"
-                                android:textColor="@color/black"
-                                app:layout_constraintStart_toEndOf="@+id/detail_three_pay2"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/detail_three_time2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="92dp"
-                                android:text="00시간00분"
-                                android:textColor="@color/black"
-                                app:layout_constraintStart_toEndOf="@+id/detail_three_date2"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/view3"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#DD474747" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/Detail_condition"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    app:cardCornerRadius="5dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginTop="25dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/location_data" >
+
+                    <ImageView
+                        android:id="@+id/map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/img_1"
+                        android:scaleType="centerCrop">
+                    </ImageView>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/location_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Detail_three">
-                    <!--지원조건-->
+                    android:text="근무지 지도 보기 >"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="@+id/cardView"
+                    app:layout_constraintLeft_toLeftOf="@+id/cardView"
+                    app:layout_constraintRight_toRightOf="@+id/cardView"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView" >
+                </TextView>
+
+                <View
+                    android:id="@+id/line_view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#f4f4f4"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView">
+                </View>
+
+                <TextView
+                    android:id="@+id/work_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="근무조건"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/line_view3" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="급여"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/work_condition"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/pay"
+                    app:layout_constraintBottom_toBottomOf="@+id/pay"
+                    app:layout_constraintLeft_toRightOf="@id/work_condition" >
+
                     <TextView
-                        android:id="@+id/Detail_tv_condition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="20dp"
-                        android:text="지원조건"
-                        android:textColor="#299460"
-                        android:textStyle="bold" />
+                        android:text="시급"
+                        android:textSize="14dp"
+                        android:textColor="#07BC7D"
+                        android:background="@drawable/test2"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp">
+                    </TextView>
+                </androidx.cardview.widget.CardView>
 
-                    <LinearLayout
-                        android:id="@+id/Detail_condition_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition1">
-                        <!--분야-->
-                        <TextView
-                            android:id="@+id/Detail_tv_category"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="분야"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/Detail_tv_category2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:text="요식업/서빙"
-                            android:textColor="@color/black" />
-
-
-                    </LinearLayout>
-
-
-
-                    <LinearLayout
-                        android:id="@+id/Detail_condition2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition">
-                        <!--근무일자-->
-                        <TextView
-                            android:id="@+id/Detail_tv_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="근무일자"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/Detail_tv_date2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="2023.01.17   ~   2023.01.17"
-                            android:textColor="@color/black" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/Detail_condition3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition2">
-                        <!--근무시간-->
-                        <TextView
-                            android:id="@+id/Detail_tv_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="근무시간"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/Detail_tv_time2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="12:00 ~ 16:00  (6시간)"
-                            android:textColor="@color/black" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/Detail_condition4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition3">
-                        <!--급여-->
-                        <TextView
-                            android:id="@+id/Detail_tv_pay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="급여"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/Detail_tv_pay2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="60dp"
-                            android:text="시급 9620원 (총 38,480원)"
-                            android:textColor="@color/black" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/Detail_condition5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_condition4">
-                        <!--매장정보-->
-                        <TextView
-                            android:id="@+id/Detail_tv_storeinfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:layout_marginBottom="25dp"
-                            android:text="매장정보"
-                            android:textColor="@color/black" />
-
-
-                        <TextView
-                            android:id="@+id/Detail_tv_storeinfo2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="35dp"
-                            android:text="인천 미추홀구 00동"
-                            android:textColor="@color/black" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:id="@+id/map_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp">
-
-
-                </LinearLayout>
-
-<!--                <com.google.android.gms.maps.MapView-->
-<!--                    android:id="@+id/mapView"-->
-<!--                    android:layout_width="340dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="35dp"-->
-<!--                    app:layout_constraintBottom_toTopOf="@+id/Detail_good"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/Detail_condition" />-->
-
-
-
-                <LinearLayout
-                    android:id="@+id/Detail_good"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/money_data"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mapView">
-                    <!-- 우대 조건      -->
-                    <TextView
-                        android:id="@+id/Detail_tv_good"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="25dp"
-                        android:text="우대조건"
-                        android:textColor="#299460"
-                        android:textStyle="bold" />
+                    tools:text="12,000원"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="5dp"
+                    app:layout_constraintLeft_toRightOf="@+id/cardView2"
+                    app:layout_constraintBottom_toBottomOf="@+id/pay"
+                    app:layout_constraintTop_toTopOf="@+id/pay" >
+                </TextView>
 
-                    <LinearLayout
-                        android:id="@+id/Detail_good_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good">
-                        <!--    나이        >-->
-                        <TextView
-                            android:id="@+id/Detail_tv_age"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="나이"
-                            android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/work_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="근무기간"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/pay"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
 
-                        <TextView
-                            android:id="@+id/Detail_tv_age2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:text="20살 이상"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
+                <TextView
+                    android:id="@+id/work_period_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2023-05-08 ~ 2023-05-09"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintTop_toTopOf="@id/work_period"
+                    app:layout_constraintBottom_toBottomOf="@+id/work_period"
+                    app:layout_constraintLeft_toRightOf="@id/work_condition">
+                </TextView>
 
-                    <LinearLayout
-                        android:id="@+id/Detail_good_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good_1">
-                        <!--  경력  -->
-                        <TextView
-                            android:id="@+id/Detail_tv_career"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="경력"
-                            android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="근무일"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/work_period"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
 
-                        <TextView
-                            android:id="@+id/Detail_tv_career2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:text="서빙 경력자 우대"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
+                <TextView
+                    android:id="@+id/day_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2일"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/work_condition"
+                    app:layout_constraintTop_toTopOf="@+id/date"
+                    app:layout_constraintBottom_toBottomOf="@+id/date" >
+                </TextView>
 
-                    <LinearLayout
-                        android:id="@+id/Detail_good_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_tv_good_2">
-                        <!--성별-->
-                        <TextView
-                            android:id="@+id/Detail_tv_sex"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:layout_marginBottom="15dp"
-                            android:text="성별"
-                            android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="근무시간"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/date"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
 
-                        <TextView
-                            android:id="@+id/Detail_tv_sex2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:text="여성 우대"
-                            android:textColor="#000000" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/time_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="07:00~19:00"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintLeft_toRightOf="@+id/work_condition"
+                    app:layout_constraintTop_toTopOf="@+id/time" >
+                </TextView>
 
-    <LinearLayout
-        android:id="@+id/liner2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/liner1">
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="업직종"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/time"
+                    app:layout_constraintLeft_toLeftOf="parent" >
+                </TextView>
 
-        <Button
+                <TextView
+                    android:id="@+id/category_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="서빙"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="40dp"
+                    app:layout_constraintLeft_toRightOf="@+id/work_condition"
+                    app:layout_constraintTop_toTopOf="@+id/category">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/deposit_tv2"
+                    android:layout_width="match_parent"
+                    android:layout_height="480dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#939393"
+                    android:paddingTop="40dp"
+                    android:text="테스트"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/category"
+                    tools:layout_editor_absoluteX="-33dp" />
+
+                <TextView
+                    android:id="@+id/deposit_tv3"
+                    android:layout_width="match_parent"
+                    android:layout_height="480dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#939393"
+                    android:paddingTop="40dp"
+                    android:text="테스트"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/deposit_tv2"
+                    tools:layout_editor_absoluteX="36dp" />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/deposit_tv4"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="480dp"-->
+<!--                    android:text="서비스"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:paddingTop="40dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:background="#3ac2c3"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/deposit_tv3"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/deposit_tv5"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="480dp"-->
+<!--                    android:text="서비스"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:paddingTop="40dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:background="#3ac2c3"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/deposit_tv4"/>-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+        <View
+            android:id="@+id/line_view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"
+            app:layout_constraintBottom_toTopOf="@+id/registerButton" >
+        </View>
+
+        <View
+            android:id="@+id/registerButton"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent">
+        </View>
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/apply_btn"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:background="#299460"
-            android:text="지원하기"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="8dp"
+            tools:text="지원"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Detail_scrollView" />
+            tools:background="@drawable/register_btn2"
+            app:layout_constraintTop_toTopOf="@+id/registerButton">
+        </androidx.appcompat.widget.AppCompatButton>
 
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools" >-->
+
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/profileActivity_Toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_collapseMode="pin"-->
+<!--        android:background="#ffffff"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/back_btn"-->
+<!--        android:layout_width="35dp"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:src="@drawable/left"-->
+<!--        android:layout_marginLeft="7dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar">-->
+<!--    </ImageView>-->
+
+<!--    <ImageView-->
+<!--        android:layout_width="23dp"-->
+<!--        android:layout_height="23dp"-->
+<!--        android:src="@drawable/star"-->
+<!--        android:layout_marginRight="18dp"-->
+<!--        app:layout_constraintRight_toLeftOf="@+id/imageButton_option"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar">-->
+<!--    </ImageView>-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageButton_option"-->
+<!--        android:layout_width="23dp"-->
+<!--        android:layout_height="23dp"-->
+<!--        android:src="@drawable/option_img"-->
+<!--        android:layout_marginRight="18dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar"-->
+<!--        app:layout_constraintRight_toRightOf="parent">-->
+<!--    </ImageView>-->
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="#f4f4f4"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar" >-->
+<!--    </View>-->
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/white"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/registerButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profileActivity_Toolbar">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical" >-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/time_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="12dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginRight="18dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                tools:text="2023-05-04 12:52:29" >-->
+<!--            </TextView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/title_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="17dp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginRight="18dp"-->
+<!--                android:layout_marginLeft="18dp"-->
+<!--                tools:text="알바대타타이틀알바대타타이틀알바대타타이틀알바대타타이틀알바대타타이틀" >-->
+<!--            </TextView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/writer_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="18dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="13dp"-->
+<!--                tools:text="작성자" >-->
+<!--            </TextView>-->
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginLeft="18dp"-->
+<!--                android:layout_marginRight="18dp"-->
+<!--                android:background="#f4f4f4" >-->
+<!--            </View>-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginTop="20dp">-->
+
+<!--                <View-->
+<!--                    android:id="@+id/first_item"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:layout_marginLeft="18dp"-->
+<!--                    android:background="@drawable/detail_info"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toLeftOf="@+id/second_item"-->
+<!--                    app:layout_constraintTop_toTopOf="parent">-->
+<!--                </View>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/circle_view"-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+<!--                    android:src="@drawable/test"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/first_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/first_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/first_item">-->
+<!--                </ImageView>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/money_icon"-->
+<!--                    android:layout_width="20dp"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:src="@drawable/monet"-->
+<!--                    android:layout_marginLeft="16dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/first_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/first_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/first_item" >-->
+<!--                </ImageView>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/money_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="11dp"-->
+<!--                    android:textColor="#6A6A6A"-->
+<!--                    android:layout_marginTop="13dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/first_item"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view"-->
+<!--                    tools:text="시급" >-->
+<!--                </TextView>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:textColor="#07BC7D"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="12dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/money_text"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/circle_view"-->
+<!--                    tools:text="12,000원" >-->
+<!--                </TextView>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/second_item"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:background="@drawable/detail_info"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:layout_marginRight="10dp"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/first_item"-->
+<!--                    app:layout_constraintRight_toLeftOf="@+id/third_item">-->
+<!--                </View>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/circle_view2"-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+<!--                    android:src="@drawable/test"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/second_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/second_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/second_item">-->
+<!--                </ImageView>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/calendar_icon"-->
+<!--                    android:layout_width="20dp"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:src="@drawable/calendar"-->
+<!--                    android:layout_marginLeft="16dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/second_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/second_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/second_item" >-->
+<!--                </ImageView>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/day_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="11dp"-->
+<!--                    android:textColor="#6A6A6A"-->
+<!--                    android:layout_marginTop="13dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/second_item"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view2"-->
+<!--                    tools:text="근무일" >-->
+<!--                </TextView>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="12dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view2"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/day_text"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/circle_view2"-->
+<!--                    tools:text="2일" >-->
+<!--                </TextView>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/third_item"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:layout_marginRight="18dp"-->
+<!--                    android:background="@drawable/detail_info"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/second_item">-->
+<!--                </View>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/circle_view3"-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+<!--                    android:src="@drawable/test"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/third_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/third_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/third_item">-->
+<!--                </ImageView>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/time_icon"-->
+<!--                    android:layout_width="20dp"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:src="@drawable/clock"-->
+<!--                    android:layout_marginLeft="16dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/third_item"-->
+<!--                    app:layout_constraintLeft_toLeftOf="@+id/third_item"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/third_item" >-->
+<!--                </ImageView>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/clock_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="11dp"-->
+<!--                    android:textColor="#6A6A6A"-->
+<!--                    android:layout_marginTop="13dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/third_item"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view3"-->
+<!--                    tools:text="근무시간" >-->
+<!--                </TextView>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="12dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/circle_view3"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/clock_text"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/circle_view3"-->
+<!--                    tools:text="7시" >-->
+<!--                </TextView>-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/deposit_tv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="480dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="#cccccc"-->
+<!--                android:paddingTop="40dp"-->
+<!--                android:text="모집조건"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="16sp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/deposit_tv2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:text="근무지"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:paddingTop="40dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="#bbbbbb" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/deposit_tv3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="480dp"-->
+<!--                android:text="근무조건"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:paddingTop="40dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="#aaaaaa" />-->
+
+<!--        </LinearLayout>-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="#eeeeee"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/registerButton" >-->
+<!--    </View>-->
+
+<!--    <View-->
+<!--        android:id="@+id/registerButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:background="@color/white"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+<!--    </View>-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginRight="7dp"-->
+<!--        android:layout_marginLeft="7dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="지원"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:background="@drawable/register_btn2"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/registerButton">-->
+<!--    </androidx.appcompat.widget.AppCompatButton>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

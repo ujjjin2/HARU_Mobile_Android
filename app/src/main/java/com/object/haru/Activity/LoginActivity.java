@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                         long id = Long.parseLong(getIntent().getStringExtra("id"));
                         Intent intent2 =null;
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                             intent2 = new Intent(LoginActivity.this, TestActivity.class);
+                             intent2 = new Intent(LoginActivity.this, DetailActivity.class);
                         }
                         intent2.putExtra("rId", id);
                         intent2.putExtra("token", token2);
@@ -125,27 +125,31 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
 
-                    if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)
+                    if (kakaoId2 != 0 && token2 == null) {
                         kakaoId = kakaoId2;
-                        getFirebase();
-                        Log.d("[자동시작 에서 FcmToken ]", FcmToken);
-                        Log.d("[자동시작 에서 token ]", token2);
-                        FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId2);
-                        Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(token2, fcmdto);
-                        fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                        getFirebase(new FirebaseCallback() {
                             @Override
-                            public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("token", token2);
-                                intent.putExtra("FcmToken", FcmToken);
-                                intent.putExtra("kakaoId", kakaoId2);
-                                startActivity(intent);
-                            }
+                            public void onFirebaseCompleted() {
+                                Log.d("[자동시작 에서 FcmToken]", FcmToken);
+                                Log.d("[자동시작 에서 token]", token2);
+                                FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId2);
+                                Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(token2, fcmdto);
+                                fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+                                    @Override
+                                    public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("token", token2);
+                                        intent.putExtra("FcmToken", FcmToken);
+                                        intent.putExtra("kakaoId", kakaoId2);
+                                        startActivity(intent);
+                                    }
 
-                            @Override
-                            public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                Log.d("FCM 실패", "====================");
-                                t.printStackTrace();
+                                    @Override
+                                    public void onFailure(Call<FCMDTO> call, Throwable t) {
+                                        Log.d("FCM 실패", "====================");
+                                        t.printStackTrace();
+                                    }
+                                });
                             }
                         });
                     } else {  // ================   자동 로그인이 아닌 경우
@@ -154,11 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 //loginInfo가 비어있을때 로그인 창으로 넘어감
-                                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                                    login();
-                                } else {
-                                    accountLogin();
-                                }
+                                performLogin();
                             }
 
                         });
@@ -272,76 +272,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //-------------------------------------------로그인 기능 ---------------------------------------------------//
-    public void login() {
-        Log.d("login() FCM Token", FcmToken);
-        String TAG = "login()";
-        UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                getFirebase();
-                String code = oAuthToken.getAccessToken();
-                call = RetrofitClientInstance.getApiService().kakaoLogin("", code, FcmToken);
-                call.enqueue(new Callback<KakaoDTO>() {
-                    @Override
-                    public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
-                        if (response.isSuccessful()) {
-                            KakaoDTO kakao = response.body();
-                            Log.d("[로그인 성공]", "===============");
-                            FCMDTO fcmdto = new FCMDTO(FcmToken, kakaoId);
-                            Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(kakao.getacccesstoken(), fcmdto);
-                            fcmdtoCall.enqueue(new Callback<FCMDTO>() {
-                                @Override
-                                public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                    Log.d("[FCM-설정]", "======성공=======");
-                                    //파이어베이스 인증 및 로그인
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("kakaoId", kakaoId);
-                                    intent.putExtra("token", kakao.getacccesstoken());
+    public void handleLoginSuccess(String accessToken) {
+        getFirebase(new FirebaseCallback() {
 
-                                    SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
-                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
-                                    autoLoginEdit.putLong("kakaoId", kakaoId);
-                                    autoLoginEdit.putString("token", kakao.getacccesstoken());
-                                    autoLoginEdit.commit();
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                    Log.d("FCM 실패", "====================");
-                                    t.printStackTrace();
-                                }
-                            });
-                        } else {
-                            Log.d("[로그인 실패]", "===================");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<KakaoDTO> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                //  getUserInfo();
-            }
-            return null;
-        });
-    }
-
-    //-------------------------------------------account 로그인 기능 ---------------------------------------------------//
-    public void accountLogin() {
-        Log.d("accountLogin FCMToken", FcmToken);
-        //파이어베이스 인증 및 로그인
-        String TAG = "accountLogin()";
-        UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                getFirebase();
-                System.out.println("토큰" + oAuthToken.getAccessToken());
+            @Override
+            public void onFirebaseCompleted() {
+                // getFirebase() 메소드가 완료된 후 실행되어야 할 코드들
+                Log.d("[273라인]", kakaoId.toString());
+                System.out.println("토큰" + accessToken);
                 Log.d("fcm 확인", FcmToken);
-                call = RetrofitClientInstance.getApiService().kakaoLogin("", oAuthToken.getAccessToken(), FcmToken);
+
+                call = RetrofitClientInstance.getApiService().kakaoLogin("", accessToken, FcmToken);
                 call.enqueue(new Callback<KakaoDTO>() {
                     @Override
                     public void onResponse(Call<KakaoDTO> call, Response<KakaoDTO> response) {
@@ -355,8 +296,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
                                     Log.d("[FCM-설정]", "======성공=======");
-                                    Log.d("[accountlogin 에서]", kakaoId.toString());
-
+                                    Log.d("[handleLoginSuccess]", kakaoId.toString());
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
@@ -376,7 +316,6 @@ public class LoginActivity extends AppCompatActivity {
                                     t.printStackTrace();
                                 }
                             });
-
                         } else {
                             Log.d("[로그인 실패]", "===================");
                             response.errorBody();
@@ -389,10 +328,33 @@ public class LoginActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
-                //  getUserInfo();
             }
-            return null;
         });
+    }
+
+
+
+
+    public void performLogin() {
+        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+            UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("login() FCM Token", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        } else {
+            UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("accountLogin FCMToken", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        }
     }
 
 
@@ -417,9 +379,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //-------------------------------------------kakaoid 가져오기, 파베 인증 및 로그인 기능 ---------------------------------------------------//
-
-    public void getFirebase() {
+    private void getFirebase(FirebaseCallback callback) {
+        // Firebase 작업 수행
+        // 작업이 완료되면 아래의 콜백 메소드 호출
         String TAG = "getUserInfo()";
+        Log.e("getFirebase 시작", "========");
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", meError);
@@ -516,10 +480,22 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+                callback.onFirebaseCompleted();
             }
             return null;
         });
+
+
     }
+
+    // Firebase 작업이 완료되었을 때 호출되는 콜백 인터페이스
+    private interface FirebaseCallback {
+        void onFirebaseCompleted();
+    }
+
+
+
+
 }
 
 
