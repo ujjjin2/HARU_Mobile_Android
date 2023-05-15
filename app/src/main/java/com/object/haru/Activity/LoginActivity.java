@@ -125,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
 
-
                     if (kakaoId2 != 0 && token2 == null) {  // [필독★]- 테스트 할 때 auto 로그인 풀려고 해논거! (정상 가동 -> ==를 !=로 수정)
                         kakaoId = kakaoId2;
                         getFirebase();
@@ -275,13 +274,12 @@ public class LoginActivity extends AppCompatActivity {
     //-------------------------------------------로그인 기능 ---------------------------------------------------//
     public void login() {
         Log.d("login() FCM Token", FcmToken);
-        getFirebase();
         String TAG = "login()";
-        getFirebase();
         UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
+                getFirebase();
                 String code = oAuthToken.getAccessToken();
                 call = RetrofitClientInstance.getApiService().kakaoLogin("", code, FcmToken);
                 call.enqueue(new Callback<KakaoDTO>() {
@@ -335,12 +333,12 @@ public class LoginActivity extends AppCompatActivity {
     public void accountLogin() {
         Log.d("accountLogin FCMToken", FcmToken);
         //파이어베이스 인증 및 로그인
-        getFirebase();
         String TAG = "accountLogin()";
         UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error);
             } else if (oAuthToken != null) {
+                getFirebase();
                 System.out.println("토큰" + oAuthToken.getAccessToken());
                 Log.d("fcm 확인", FcmToken);
                 call = RetrofitClientInstance.getApiService().kakaoLogin("", oAuthToken.getAccessToken(), FcmToken);
@@ -440,10 +438,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(" getUserInfo email : ", email);
                     Log.d(" getUserInfo kakaoId : ", kakaoId.toString());
 
-                }
-                if (email == null) {
-                    Log.d("fire email null", "=======");
-                    email = "" + kakaoId.toString() + "@test.com";
                 }
 
                 Log.d("[최종 email]", email);
