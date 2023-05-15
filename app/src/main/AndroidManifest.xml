@@ -57,9 +57,6 @@
         <activity
             android:name=".Activity.ApplyWriteActivity"
             android:exported="true" />
-        <activity
-            android:name=".Activity.DetailActivity"
-            android:exported="true" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -127,7 +124,7 @@
             android:name=".Activity.NoticeActivity"
             android:exported="true" />
 
-        <activity android:name=".Activity.TestActivity"
+        <activity android:name=".Activity.DetailActivity"
             android:exported="true" >
 
         </activity>

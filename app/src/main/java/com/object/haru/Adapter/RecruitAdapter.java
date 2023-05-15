@@ -2,7 +2,6 @@ package com.object.haru.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.Activity.DetailActivity;
-import com.object.haru.Activity.TestActivity;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
@@ -87,7 +85,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
                     Intent intent = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        intent = new Intent(context, TestActivity.class);
+                        intent = new Intent(context, DetailActivity.class);
                     }
                     intent.putExtra("rId", recruitDTO.getRid());
                     intent.putExtra("token", token);
