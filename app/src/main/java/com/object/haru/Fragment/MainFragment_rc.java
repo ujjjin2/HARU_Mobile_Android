@@ -73,6 +73,7 @@ public class MainFragment_rc extends Fragment {
 
     int page = 0;
     private Long kakaoId;
+    private LocationManager lm;
 
     @Nullable
     @Override
@@ -100,7 +101,7 @@ public class MainFragment_rc extends Fragment {
             }
         });
 
-        final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -141,11 +142,14 @@ public class MainFragment_rc extends Fragment {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             // 위치 리스너는 위치 정보를 전달할 때 호출 되므로 onLocationChanged() 메소드 안에 위치정보를 처리를 작업을 구현해야 합니다.
-            String provider = location.getProvider();  // 위치정보
-            double longitude = location.getLongitude(); // 위도
-            double latitude = location.getLatitude(); // 경도
-            double altitude = location.getAltitude(); // 고도
-
+            if (location != null) {
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+                altitude = location.getAltitude();
+                if (recruitAdapter == null) {
+                    fetch(page);
+                }
+            }
         } public void onStatusChanged(String provider, int status, Bundle extras) {
 
         } public void onProviderEnabled(String provider) {
@@ -158,6 +162,7 @@ public class MainFragment_rc extends Fragment {
     private void fetch(int page) {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
+        recruitAdapter = new RecruitAdapter(arrayList, getActivity(),token, kakaoId);
         call = RetrofitClientInstance.getApiService().getAll(token,
                 30,latitude,longitude, page);
         call.enqueue(new Callback<List<RecruitDTO>>() {
@@ -184,6 +189,7 @@ public class MainFragment_rc extends Fragment {
                 Log.d("[입력 실패]", "=============");
             }
         });
+        recyclerView.setAdapter(recruitAdapter);
     }
 
     private void update(int page) {
@@ -213,11 +219,51 @@ public class MainFragment_rc extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            // 권한이 있을 경우 위치 업데이트
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsLocationListener2);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1, gpsLocationListener2);
+        } else {
+            // 권한이 없을 경우 권한 요청
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        }
 
-//        update(0);
+        if (latitude != null && longitude != null) {
+            update(0);
+        }
 
         if (recruitAdapter != null) {
             recruitAdapter.notifyDataSetChanged();
         }
     }
+
+    private static final int REQUEST_LOCATION_PERMISSION = 100;
+    private final LocationListener gpsLocationListener2 = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            // 위치 정보가 업데이트될 때마다 호출됩니다.
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+            altitude = location.getAltitude();
+            if (latitude != null && longitude != null) {
+                // 위치 정보가 업데이트되면 데이터를 로드합니다.
+                update(0);
+                if (recruitAdapter != null) {
+                    recruitAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+    };
+
 }
