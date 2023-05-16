@@ -76,19 +76,21 @@ public class LoginActivity extends AppCompatActivity {
                     token2 = auto.getString("token", null);
                     kakaoId2 = auto.getLong("kakaoId", 0);
 
+                    // ======================================= 알림 클릭으로 시작한 경우 ========================================
                     Intent intent;
+                    // 채팅 알림
                     if (getIntent().getStringExtra("chat") != null) {
                         intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("token", token2);
                         intent.putExtra("chat", "chat");
                         intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
-                    }else if(getIntent().getStringExtra("newApply")!=null){
+                    }else // 새로운 지원서 알림
+                        if(getIntent().getStringExtra("newApply")!=null){
                         String idString = getIntent().getStringExtra("id");
                         long id = Long.parseLong(idString);
                         Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token2, id);
                         applyDetail.enqueue(new Callback<ApplyDTO>() {
-
                             @Override
                             public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
                                 Intent   intent = new Intent(LoginActivity.this, ApplyDetailActivity.class);
@@ -109,8 +111,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             }
                         });
-
-                    }else if(getIntent().getStringExtra("comfirmation") != null){ //구인 확정
+                        // 구인 확정 알림
+                    }else if(getIntent().getStringExtra("comfirmation") != null){
 
                         long id = Long.parseLong(getIntent().getStringExtra("id"));
                         Intent intent2 =null;
@@ -124,7 +126,9 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent2);
                     }
 
+                    // ======================================= 알림 클릭 끝========================================
 
+                    // 자동 로그인 부분 2개의 ==를 !=로 똑같이 맞춰주면 자동 로그인 구현
                     if (kakaoId2 != 0 && token2 == null) {
                         kakaoId = kakaoId2;
                         getFirebase(new FirebaseCallback() {
@@ -152,12 +156,13 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                             }
                         });
-                    } else {  // ================   자동 로그인이 아닌 경우
+                    } else {
+       // ===============================   자동 로그인이 아닌 경우 ============================== //
                         loginbutton = findViewById(R.id.login);
                         loginbutton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //loginInfo가 비어있을때 로그인 창으로 넘어감
+                                // 로그인 메소드
                                 performLogin();
                             }
 
@@ -258,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                             }
                         });
+ // ================================== 테스트 로그인 끝 =============================
 
                     }
                 } else {
@@ -266,12 +272,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    // ================================== onCreate 끝  =============================
 
 
-// =============  카카오 로그인 메소드 부분
+
+// ==========================  메소드 부분 ========================== //
+
+    public void performLogin() {  // 메인 메소드
+        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
+            UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("login() FCM Token", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        } else {
+            UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
+                if (error != null) {
+                    Log.e("accountLogin FCMToken", "로그인 실패", error);
+                } else if (oAuthToken != null) {
+                    handleLoginSuccess(oAuthToken.getAccessToken());
+                }
+                return null;
+            });
+        }
+    }
 
 
-    //-------------------------------------------로그인 기능 ---------------------------------------------------//
     public void handleLoginSuccess(String accessToken) {
         getFirebase(new FirebaseCallback() {
 
@@ -335,31 +364,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    public void performLogin() {
-        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-            UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, (oAuthToken, error) -> {
-                if (error != null) {
-                    Log.e("login() FCM Token", "로그인 실패", error);
-                } else if (oAuthToken != null) {
-                    handleLoginSuccess(oAuthToken.getAccessToken());
-                }
-                return null;
-            });
-        } else {
-            UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, (oAuthToken, error) -> {
-                if (error != null) {
-                    Log.e("accountLogin FCMToken", "로그인 실패", error);
-                } else if (oAuthToken != null) {
-                    handleLoginSuccess(oAuthToken.getAccessToken());
-                }
-                return null;
-            });
-        }
-    }
+
 
 
     //-------------------------------------------키 해시 얻기 기능 ---------------------------------------------------//
-    public String getKeyHash() {
+    public String getKeyHash() {  // -> 이 메소드 카카오api에선 필요없나 봄. 구글 로그인엔 필요할지도? 확장을 위해 냅둘까?
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
             if (packageInfo == null) return null;
@@ -378,7 +387,7 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    //-------------------------------------------kakaoid 가져오기, 파베 인증 및 로그인 기능 ---------------------------------------------------//
+    // 카카오 로그인 데이터 처리, 리얼타임 로직 처리
     private void getFirebase(FirebaseCallback callback) {
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
@@ -408,13 +417,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void signInExistingUser(Long kakaoId, String email, FirebaseCallback callback,FirebaseAuth mAuth ) {  //기존 파베 인증자 로그인
+    // [리얼타임 로직(1)] : 기존 파베 인증자 로그인
+    private void signInExistingUser(Long kakaoId, String email, FirebaseCallback callback,FirebaseAuth mAuth ) {
         mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
                 .addOnCompleteListener(LoginActivity.this, signInTask -> {
                     if (signInTask.isSuccessful()) {
                         // 로그인 성공
                         FirebaseUser fuser = mAuth.getCurrentUser();
-                        checkRealtimeDatabase(fuser.getUid(), kakaoId, callback, fuser);
+                        checkRealtimeDatabase(fuser.getUid(), kakaoId, callback, fuser); //기존 유저가 리얼타임에 유저가 있는지 확인
                     } else {
                         // 로그인 실패
                         Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
@@ -422,14 +432,15 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void signUpAndSignInNewUser(Long kakaoId, String email, String name, FirebaseCallback callback,FirebaseAuth mAuth) { //신규 파베 인증자 로그인
+    // [리얼타임 로직(2)] : 신규 파베 인증자 로그인
+    private void signUpAndSignInNewUser(Long kakaoId, String email, String name, FirebaseCallback callback,FirebaseAuth mAuth) {
         mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
                 .addOnCompleteListener(LoginActivity.this, createTask -> {
                     if (createTask.isSuccessful()) {
                         // 회원가입 성공
                         FirebaseUser fuser = mAuth.getCurrentUser();
                         if (fuser != null) {
-                            addToRealtimeDatabase(fuser.getUid(), email, name, kakaoId, callback);
+                            addToRealtimeDatabase(fuser.getUid(), email, name, kakaoId, callback); // 신규 유저 리얼타임에 추가
                         }
                     } else {
                         Log.w(TAG, "createUserWithEmailAndPassword:failure", createTask.getException());
@@ -437,6 +448,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // [리얼타임 로직(3)] : 유저 데이터 체크
     private void checkRealtimeDatabase(String userId, Long kakaoId, FirebaseCallback callback,   FirebaseUser fuser   ) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("userAccount");
         ref.child(userId).child(kakaoId.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -448,7 +460,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "기존 유저 - 리얼타임 데이터 미존재");
                     // 해당 유저 정보가 리얼타임 데이터베이스에 없는 경우 처리
-                    addToRealtimeDatabase(userId, fuser.getEmail(), name, kakaoId, callback);
+                    addToRealtimeDatabase(userId, fuser.getEmail(), name, kakaoId, callback); // 기존 유저가 리얼타임에 값이 없으면 추가
                 }
             }
 
@@ -459,6 +471,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // [리얼타임 로직(4)] : 유저 데이터 추가
     private void addToRealtimeDatabase(String userId, String email, String name, Long kakaoId, FirebaseCallback callback) {
         UserAccountDTO userAccountDTO = new UserAccountDTO(userId, email, name, kakaoId);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
@@ -478,6 +491,8 @@ public class LoginActivity extends AppCompatActivity {
     private interface FirebaseCallback {
         void onFirebaseCompleted();
     }
+
+    //-------------------------------------------kakaoid 가져오기, 파베 인증 및 로그인 기능 끝 ---------------------------------------------------//
 
 
 
