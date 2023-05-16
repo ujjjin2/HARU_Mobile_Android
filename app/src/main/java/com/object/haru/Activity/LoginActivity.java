@@ -84,38 +84,38 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("kakaoId", kakaoId2);
                         startActivity(intent);
                     }else if(getIntent().getStringExtra("newApply")!=null){
-                            String idString = getIntent().getStringExtra("id");
-                            long id = Long.parseLong(idString);
-                            Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token2, id);
-                            applyDetail.enqueue(new Callback<ApplyDTO>() {
+                        String idString = getIntent().getStringExtra("id");
+                        long id = Long.parseLong(idString);
+                        Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token2, id);
+                        applyDetail.enqueue(new Callback<ApplyDTO>() {
 
-                                @Override
-                                public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
-                                    Intent   intent = new Intent(LoginActivity.this, ApplyDetailActivity.class);
-                                    intent.putExtra("token", token2);
-                                    intent.putExtra("sex", response.body().getAsex());
-                                    intent.putExtra("self", response.body().getMyself());
-                                    intent.putExtra("name", response.body().getName());
-                                    intent.putExtra("career", response.body().getAcareer());
-                                    intent.putExtra("age", response.body().getAage());
-                                    intent.putExtra("rating", response.body().getAvgRating());
-                                    intent.putExtra("rId", response.body().getRid());
-                                    intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
-                                    intent.putExtra("kakaoid", kakaoId2.toString());
-                                    startActivity(intent);
-                                }
-                                @Override
-                                public void onFailure(Call<ApplyDTO> call, Throwable t) {
+                            @Override
+                            public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
+                                Intent   intent = new Intent(LoginActivity.this, ApplyDetailActivity.class);
+                                intent.putExtra("token", token2);
+                                intent.putExtra("sex", response.body().getAsex());
+                                intent.putExtra("self", response.body().getMyself());
+                                intent.putExtra("name", response.body().getName());
+                                intent.putExtra("career", response.body().getAcareer());
+                                intent.putExtra("age", response.body().getAage());
+                                intent.putExtra("rating", response.body().getAvgRating());
+                                intent.putExtra("rId", response.body().getRid());
+                                intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
+                                intent.putExtra("kakaoid", kakaoId2.toString());
+                                startActivity(intent);
+                            }
+                            @Override
+                            public void onFailure(Call<ApplyDTO> call, Throwable t) {
 
-                                }
-                            });
+                            }
+                        });
 
-                        }else if(getIntent().getStringExtra("comfirmation") != null){ //구인 확정
+                    }else if(getIntent().getStringExtra("comfirmation") != null){ //구인 확정
 
                         long id = Long.parseLong(getIntent().getStringExtra("id"));
                         Intent intent2 =null;
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                             intent2 = new Intent(LoginActivity.this, DetailActivity.class);
+                            intent2 = new Intent(LoginActivity.this, DetailActivity.class);
                         }
                         intent2.putExtra("rId", id);
                         intent2.putExtra("token", token2);
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         });
 
-                        // ================ 테스트 로그인
+// ================================== 테스트 로그인 ==============================
                         Testloginbtn = findViewById(R.id.loginbtn);
                         Testloginbtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -380,113 +380,99 @@ public class LoginActivity extends AppCompatActivity {
 
     //-------------------------------------------kakaoid 가져오기, 파베 인증 및 로그인 기능 ---------------------------------------------------//
     private void getFirebase(FirebaseCallback callback) {
-        // Firebase 작업 수행
-        // 작업이 완료되면 아래의 콜백 메소드 호출
-        String TAG = "getUserInfo()";
-        Log.e("getFirebase 시작", "========");
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", meError);
-            } else {
-                System.out.println("로그인 완료");
-                Log.i(TAG, user.toString());
-                {
-                    Log.i(TAG, "사용자 정보 요청 성공" +
-                            "\n회원번호: " + user.getId() +
-                            "\n이메일: " + user.getKakaoAccount().getEmail());
-                    kakaoId = user.getId();
-                    email = user.getKakaoAccount().getEmail();
-                    name = user.getKakaoAccount().getProfile().getNickname();
-                    Log.d("getUserInfo name", "getUserInf 실행 ");
-                    Log.d(" getUserInfo name : ", name);
-                    Log.d(" getUserInfo email : ", email);
-                    Log.d(" getUserInfo kakaoId : ", kakaoId.toString());
-
-                }
-
-                Log.d("[최종 email]", email);
-                Log.d("[최종 kakaoId]", kakaoId.toString());
-
-                // 파이어베이스 인증 및 로그인
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<String> signInMethods = task.getResult().getSignInMethods();
-                        if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
-                            // 이미 회원가입한 사용자인 경우 로그인
-                            mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
-                                    .addOnCompleteListener(LoginActivity.this, signInTask -> {
-                                        if (signInTask.isSuccessful()) {
-                                            // 로그인 성공
-                                            FirebaseUser fuser = mAuth.getCurrentUser();
-                                            //리얼타임에 값이 없는 경우
-                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("userAccount");
-                                            ref.child(fuser.getUid()).child(kakaoId.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        Log.d("[realTime 체크 완료]","[성공]");
-                                                        // kakaoId 변수에 해당 데이터의 값을 가져와 할당합니다.
-                                                    } else {
-                                                        // "kakaoId"가 존재하지 않는 경우
-                                                        String email = fuser.getEmail();
-                                                        String idToken = fuser.getUid();
-                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name,kakaoId);
-                                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                                        databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
-                                                                .addOnCompleteListener(databaseTask -> {
-                                                                    if (databaseTask.isSuccessful()) { //비동기 처리
-                                                                        Log.d("[realTime]", "Data successfully written to database.");
-                                                                    } else {
-                                                                        Log.w("[realTime]", "Error writing data to database.", databaseTask.getException());
-                                                                    }
-                                                                });
-                                                    }
-                                                }
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    // 데이터베이스 에러 발생 시 처리하는 코드
-                                                }
-                                            });
-                                        } else {
-                                            // 로그인 실패
-                                            Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
-                                        }
-                                    });
-                        } else {
-                            // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
-                            mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
-                                    .addOnCompleteListener(LoginActivity.this, createTask -> {
-                                        if (createTask.isSuccessful()) {
-                                            FirebaseUser fuser = mAuth.getCurrentUser();
-                                            if (fuser != null) {
-                                                String email = fuser.getEmail();
-                                                String idToken = fuser.getUid();
-                                                UserAccountDTO userAccountDTO = new UserAccountDTO(idToken, email, name,kakaoId);
-                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                                databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
-                                                        .addOnCompleteListener(databaseTask -> {
-                                                            if (databaseTask.isSuccessful()) { //비동기 처리
-                                                                Log.d(TAG, "Data successfully written to database.");
-                                                            } else {
-                                                                Log.w(TAG, "Error writing data to database.", databaseTask.getException());
-                                                            }
-                                                        });
-                                            }
-                                        } else {
-                                            Log.w(TAG, "createUserWithEmailAndPassword:failure", createTask.getException());
-                                        }
-                                    });
-                        }
-                    }
-                });
-                callback.onFirebaseCompleted();
+                return null;
             }
+
+            kakaoId = user.getId();
+            email = user.getKakaoAccount().getEmail();
+            name = user.getKakaoAccount().getProfile().getNickname();
+
+            // 파이어베이스 인증 및 로그인
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<String> signInMethods = task.getResult().getSignInMethods();
+                    if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                        // 기존 유저 - 로그인 시도
+                        signInExistingUser(kakaoId, email, callback,mAuth);
+                    } else {
+                        // 신규 유저 - 회원가입 후 로그인
+                        signUpAndSignInNewUser(kakaoId, email, name, callback,mAuth);
+                    }
+                }
+            });
             return null;
         });
-
-
     }
+
+    private void signInExistingUser(Long kakaoId, String email, FirebaseCallback callback,FirebaseAuth mAuth ) {  //기존 파베 인증자 로그인
+        mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
+                .addOnCompleteListener(LoginActivity.this, signInTask -> {
+                    if (signInTask.isSuccessful()) {
+                        // 로그인 성공
+                        FirebaseUser fuser = mAuth.getCurrentUser();
+                        checkRealtimeDatabase(fuser.getUid(), kakaoId, callback, fuser);
+                    } else {
+                        // 로그인 실패
+                        Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
+                    }
+                });
+    }
+
+    private void signUpAndSignInNewUser(Long kakaoId, String email, String name, FirebaseCallback callback,FirebaseAuth mAuth) { //신규 파베 인증자 로그인
+        mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
+                .addOnCompleteListener(LoginActivity.this, createTask -> {
+                    if (createTask.isSuccessful()) {
+                        // 회원가입 성공
+                        FirebaseUser fuser = mAuth.getCurrentUser();
+                        if (fuser != null) {
+                            addToRealtimeDatabase(fuser.getUid(), email, name, kakaoId, callback);
+                        }
+                    } else {
+                        Log.w(TAG, "createUserWithEmailAndPassword:failure", createTask.getException());
+                    }
+                });
+    }
+
+    private void checkRealtimeDatabase(String userId, Long kakaoId, FirebaseCallback callback,   FirebaseUser fuser   ) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("userAccount");
+        ref.child(userId).child(kakaoId.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Log.d(TAG, "기존 유저 - 리얼타임 데이터 존재");
+                    // 해당 유저 정보가 리얼타임 데이터베이스에 존재하는 경우 처리
+                } else {
+                    Log.d(TAG, "기존 유저 - 리얼타임 데이터 미존재");
+                    // 해당 유저 정보가 리얼타임 데이터베이스에 없는 경우 처리
+                    addToRealtimeDatabase(userId, fuser.getEmail(), name, kakaoId, callback);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 데이터베이스 에러 발생 시 처리하는 코드
+            }
+        });
+    }
+
+    private void addToRealtimeDatabase(String userId, String email, String name, Long kakaoId, FirebaseCallback callback) {
+        UserAccountDTO userAccountDTO = new UserAccountDTO(userId, email, name, kakaoId);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
+        databaseReference.child(kakaoId.toString()).setValue(userAccountDTO)
+                .addOnCompleteListener(databaseTask -> {
+                    if (databaseTask.isSuccessful()) {
+                        Log.d(TAG, "리얼타임 데이터베이스에 데이터 추가 완료");
+                        callback.onFirebaseCompleted();
+                    } else {
+                        Log.w(TAG, "리얼타임 데이터베이스에 데이터 추가 실패", databaseTask.getException());
+                    }
+                });
+    }
+
 
     // Firebase 작업이 완료되었을 때 호출되는 콜백 인터페이스
     private interface FirebaseCallback {
