@@ -86,9 +86,14 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
             timeAgo = "";     // SDK 버전이 낮은 경우 처리
         }
 
+        String stTime = arrayList.get(position).getStTime();
+        String endTime = arrayList.get(position).getEndTime();
+        String formattedStTime = stTime.substring(0, stTime.length() - 3); // ":00" 제거
+        String formattedEndTime = endTime.substring(0, endTime.length() - 3); // ":00" 제거
+
         holder.title.setText(arrayList.get(position).getTitle());
         holder.category.setText(arrayList.get(position).getSubject());
-        holder.time.setText(arrayList.get(position).getStTime() + "~" + arrayList.get(position).getEndTime());
+        holder.time.setText(formattedStTime + " ~ " + formattedEndTime);
         holder.money.setText(arrayList.get(position).getPay().toString() + "원");
         holder.location.setText(arrayList.get(position).getAddr());
 

@@ -196,8 +196,9 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
 
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-                                    String startDateString = "2023-05-10 13:00:00";
-                                    String endDateString = "2023-05-12 15:30:00";
+                                    String startDateString = recruit.getStTime();
+//                                    Toast.makeText(getApplicationContext(), startDateString, Toast.LENGTH_SHORT).show();
+                                    String endDateString = recruit.getEndTime();
 
                                     try {
                                         Date startDate = format.parse(startDateString);
@@ -233,7 +234,15 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
                                         long diffMinutes = diff / (60 * 1000) % 60;
                                         long diffHours = diff / (60 * 60 * 1000) % 24;
 
-                                        workTime_tv.setText(Long.toString(diffHours) + "시간 " + Long.toString(diffMinutes) + "분");
+                                        if (diffHours > 0) {
+                                            if (diffMinutes > 0) {
+                                                workTime_tv.setText(Long.toString(diffHours) + "시간 " + Long.toString(diffMinutes) + "분");
+                                            } else {
+                                                workTime_tv.setText(Long.toString(diffHours) + "시간");
+                                            }
+                                        } else {
+                                            workTime_tv.setText(Long.toString(diffMinutes) + "분");
+                                        }
                                         time_tv.setText(start + " ~ " + end);
 
                                     } catch (ParseException e) {
@@ -264,6 +273,7 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
 
     private void changeWriterStatus() {
         applyButton.setText("지원자 확인하기");
+        applyButton.setBackgroundResource(R.drawable.register_btn2);
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

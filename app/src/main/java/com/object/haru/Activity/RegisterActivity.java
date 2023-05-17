@@ -445,14 +445,14 @@ public class RegisterActivity extends AppCompatActivity {
                         double lon = address.getLongitude();
 
                         RecruitDTO recruitDTO = new RecruitDTO(data+registerDetailAddr.getText().toString(),
-                                lastDate+"/"+spinnerEndTime.getSelectedItem(),
+                                lastDate+" "+spinnerEndTime.getSelectedItem()+":00",
                                 lat,
                                 lon,
                                 Integer.parseInt(registerMoney.getText().toString().replace(",", "")),
                                 age,
                                 registerCareer.getText().toString(),
                                 gender,
-                                firstDate+"/"+spinnerStartTime.getSelectedItem(),
+                                firstDate+" "+spinnerStartTime.getSelectedItem()+":00",
                                 registerCategory.getText().toString(),
                                 registerTitle.getText().toString(),
                                 kakaoId);
