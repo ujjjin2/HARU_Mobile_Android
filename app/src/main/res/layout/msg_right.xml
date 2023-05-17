@@ -29,9 +29,9 @@
         </View>
 
         <TextView
-            android:id="@+id/msg_writer_tv"
-            android:layout_width="248dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/messageAA"
+            android:layout_width="235dp"
+            android:layout_height="17dp"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="7dp"
             android:text="ㅎㅎ 안녕하세요"
@@ -42,6 +42,19 @@
             app:layout_constraintStart_toStartOf="@+id/view"
             app:layout_constraintTop_toTopOf="@+id/view"
             app:layout_constraintVertical_bias="0.4" />
+
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11/17 03:18"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view"
+            app:layout_constraintHorizontal_bias="0.363"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,8 @@ package com.object.haru.DTO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.time.temporal.Temporal;
+
 
 public class RecruitDTO {
 
@@ -160,6 +162,9 @@ public class RecruitDTO {
     public String getRtime() {
         return rtime;
     }
+
+
+
 
     public void setRtime(String rtime) {
         this.rtime = rtime;

@@ -48,9 +48,10 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/rTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2시간전"
+                        android:text=""
                         android:textSize="12dp"
                         android:layout_marginTop="3dp">
                     </TextView>

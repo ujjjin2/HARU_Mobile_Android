@@ -2,6 +2,7 @@ package com.object.haru.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +29,8 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
     private List<RecruitDTO> arrayList;
     private RecruitDTO recruitDTO;
     private Context context;
+
+    private LocalDate rTime;
 
     private String token;
 
@@ -49,14 +56,40 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(@NonNull RecruitAdapter.CustomViewHolder holder, int position) {
-//      Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
+        // Glide.with(holder.itemView).load(arrayList.get(position).getImgURl()).into(holder.iv_img);
+
+        String timeAgo;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String rTime = arrayList.get(position).getRtime();
+            Log.d("rtime", rTime);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+            LocalDateTime rDateTime = LocalDateTime.parse(rTime, formatter);
+
+
+            Duration duration = Duration.between(rDateTime, LocalDateTime.now());
+            long hoursDiff = duration.toHours();
+
+            if (hoursDiff < 1) {
+                timeAgo = "방금 전";
+            } else if (hoursDiff == 1) {
+                timeAgo = "1시간 전";
+            } else {
+                timeAgo = hoursDiff + "시간 전";
+            }
+        } else {
+            timeAgo = "";     // SDK 버전이 낮은 경우 처리
+        }
 
         holder.title.setText(arrayList.get(position).getTitle());
         holder.category.setText(arrayList.get(position).getSubject());
         holder.time.setText(arrayList.get(position).getStTime() + "~" + arrayList.get(position).getEndTime());
         holder.money.setText(arrayList.get(position).getPay().toString() + "원");
         holder.location.setText(arrayList.get(position).getAddr());
+
+        holder.rTime.setText(timeAgo);
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -65,7 +98,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
     public class CustomViewHolder extends RecyclerView.ViewHolder{
 
-        protected TextView title, category, time, money, location;
+        protected TextView title, category, time, money, location, rTime;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +108,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
             this.time = itemView.findViewById(R.id.text_time);
             this.money = itemView.findViewById(R.id.text_money);
             this.location = itemView.findViewById(R.id.text_location);
+            this.rTime = itemView.findViewById(R.id.rTime);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
