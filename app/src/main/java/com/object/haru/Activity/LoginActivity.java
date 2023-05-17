@@ -362,11 +362,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     //-------------------------------------------키 해시 얻기 기능 ---------------------------------------------------//
     public String getKeyHash() {  // -> 이 메소드 카카오api에선 필요없나 봄. 구글 로그인엔 필요할지도? 확장을 위해 냅둘까?
         try {
@@ -406,10 +401,10 @@ public class LoginActivity extends AppCompatActivity {
                     List<String> signInMethods = task.getResult().getSignInMethods();
                     if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                         // 기존 유저 - 로그인 시도
-                        signInExistingUser(kakaoId, email, callback,mAuth);
+                        signInExistingUser(kakaoId, email, callback, mAuth);
                     } else {
                         // 신규 유저 - 회원가입 후 로그인
-                        signUpAndSignInNewUser(kakaoId, email, name, callback,mAuth);
+                        signUpAndSignInNewUser(kakaoId, email, name, callback, mAuth);
                     }
                 }
             });
@@ -418,7 +413,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // [리얼타임 로직(1)] : 기존 파베 인증자 로그인
-    private void signInExistingUser(Long kakaoId, String email, FirebaseCallback callback,FirebaseAuth mAuth ) {
+    private void signInExistingUser(Long kakaoId, String email, FirebaseCallback callback, FirebaseAuth mAuth ) {
         mAuth.signInWithEmailAndPassword(email, kakaoId.toString())
                 .addOnCompleteListener(LoginActivity.this, signInTask -> {
                     if (signInTask.isSuccessful()) {
@@ -433,7 +428,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // [리얼타임 로직(2)] : 신규 파베 인증자 로그인
-    private void signUpAndSignInNewUser(Long kakaoId, String email, String name, FirebaseCallback callback,FirebaseAuth mAuth) {
+    private void signUpAndSignInNewUser(Long kakaoId, String email, String name, FirebaseCallback callback, FirebaseAuth mAuth) {
         mAuth.createUserWithEmailAndPassword(email, kakaoId.toString())
                 .addOnCompleteListener(LoginActivity.this, createTask -> {
                     if (createTask.isSuccessful()) {
@@ -449,7 +444,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // [리얼타임 로직(3)] : 유저 데이터 체크
-    private void checkRealtimeDatabase(String userId, Long kakaoId, FirebaseCallback callback,   FirebaseUser fuser   ) {
+    private void checkRealtimeDatabase(String userId, Long kakaoId, FirebaseCallback callback, FirebaseUser fuser ) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("userAccount");
         ref.child(userId).child(kakaoId.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -493,9 +488,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //-------------------------------------------kakaoid 가져오기, 파베 인증 및 로그인 기능 끝 ---------------------------------------------------//
-
-
-
 
 }
 

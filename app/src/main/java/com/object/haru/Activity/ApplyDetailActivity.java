@@ -84,7 +84,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
 
         // 여기서부터
         tv_name.setText(name);
-        tv_age.setText(age);
+        tv_age.setText(age+"세");
         tv_career.setText(career);
         tv_self.setText(self);
         tv_sex.setText(sex);
