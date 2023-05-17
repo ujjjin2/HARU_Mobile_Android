@@ -70,7 +70,12 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
             long hoursDiff = duration.toHours();
 
             if (hoursDiff < 1) {
-                timeAgo = "방금 전";
+                long minutesDiff = duration.toMinutes();  // 시간 차이를 분 단위로 계산
+                if (minutesDiff < 1) {
+                    timeAgo = "방금 전";
+                } else {
+                    timeAgo = minutesDiff + "분 전";
+                }
             } else if (hoursDiff < 24) {
                 timeAgo = hoursDiff + "시간 전";
             } else {
@@ -81,6 +86,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
                     timeAgo = daysDiff + "일 전";
                 }
             }
+
 
         } else {
             timeAgo = "";     // SDK 버전이 낮은 경우 처리
