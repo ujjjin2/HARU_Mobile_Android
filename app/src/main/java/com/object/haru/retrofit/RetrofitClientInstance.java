@@ -29,10 +29,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 * */
 public class RetrofitClientInstance {
 //    private static final String BASE_URL = "http://10.0.2.2:8080/";
-      private static final String BASE_URL = "http://192.168.0.6:8080/";
+  //    private static final String BASE_URL = "http://192.168.0.6:8080/";
 
 
- //   private static final String BASE_URL = "http://114.71.137.141:8080/"; // 로컬에서 개인 폰 돌릴 때 개인 ip4v 주소써야됌
+    private static final String BASE_URL = "http://114.71.137.141:8080/"; // 로컬에서 개인 폰 돌릴 때 개인 ip4v 주소써야됌
     // 10.0.2.2
 
 

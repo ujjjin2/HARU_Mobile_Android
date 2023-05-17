@@ -71,11 +71,17 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
 
             if (hoursDiff < 1) {
                 timeAgo = "방금 전";
-            } else if (hoursDiff == 1) {
-                timeAgo = "1시간 전";
-            } else {
+            } else if (hoursDiff < 24) {
                 timeAgo = hoursDiff + "시간 전";
+            } else {
+                long daysDiff = hoursDiff / 24;
+                if (daysDiff == 1) {
+                    timeAgo = "1일 전";
+                } else {
+                    timeAgo = daysDiff + "일 전";
+                }
             }
+
         } else {
             timeAgo = "";     // SDK 버전이 낮은 경우 처리
         }
