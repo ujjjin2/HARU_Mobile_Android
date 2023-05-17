@@ -241,8 +241,6 @@ public class MyPageFragment_Slide extends Fragment  {
             }
         });
 
-
-
         return view;
     }
 
