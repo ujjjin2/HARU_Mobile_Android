@@ -141,4 +141,7 @@ public interface RetrofitService {
     @GET("/admin/notice/select")
     Call<List<NoticeDTO>> selectNotice(@Header("X-Auth-Token")String token);
 
+    @GET("/kakao/delete")
+    Call<Void> deleteUser(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
+
 }
