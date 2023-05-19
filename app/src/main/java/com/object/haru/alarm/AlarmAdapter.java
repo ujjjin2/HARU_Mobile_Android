@@ -11,15 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.object.haru.Activity.ApplyDetailActivity;
 import com.object.haru.Activity.LoginActivity;
 
+import com.object.haru.DTO.ApplyDTO;
 import com.object.haru.R;
+import com.object.haru.retrofit.RetrofitClientInstance;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHolder> {
     private List<AlarmDTO> alarmList;
@@ -107,8 +114,35 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
                         intent = new Intent(context, LoginActivity.class);
                     }
                     if(alarmDTO.getTitle().equals("새로운 지원서가 도착했습니다!")){
-                        intent.putExtra("newApply", "newApply");
-                        intent.putExtra("id", String.valueOf(alarmDTO.getAid()));
+
+
+                        long id = alarmDTO.getAid();
+                        Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token, id);
+                        applyDetail.enqueue(new Callback<ApplyDTO>() {
+                            @Override
+                            public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
+                                Intent   intent = new Intent(context, ApplyDetailActivity.class);
+                                intent.putExtra("newApply", "newApply");
+                                intent.putExtra("id", String.valueOf(alarmDTO.getAid()));
+                                intent.putExtra("token", token);
+                                intent.putExtra("sex", response.body().getAsex());
+                                intent.putExtra("self", response.body().getMyself());
+                                intent.putExtra("name", response.body().getName());
+                                intent.putExtra("career", response.body().getAcareer());
+                                intent.putExtra("age", response.body().getAage());
+                                intent.putExtra("rating", response.body().getAvgRating());
+                                intent.putExtra("rId", response.body().getRid());
+                                intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
+                                intent.putExtra("kakaoid", kakaoid.toString());
+                                context.startActivity(intent);
+                            }
+                            @Override
+                            public void onFailure(Call<ApplyDTO> call, Throwable t) {
+
+                            }
+                        });
+
+
                     }else if(alarmDTO.getTitle().equals("지원하신 알바가 확정되었습니다!")){
                         intent.putExtra("comfirmation", "comfirmation");
                         intent.putExtra("id", String.valueOf(alarmDTO.getRid()));

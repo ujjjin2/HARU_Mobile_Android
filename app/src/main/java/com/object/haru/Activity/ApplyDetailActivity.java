@@ -130,15 +130,12 @@ public class ApplyDetailActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String idToken = snapshot.getValue(String.class);
-                    Log.d("상대방 idToken 확인 성공", "idToken: " + idToken);
 
                     Intent intent = new Intent(ApplyDetailActivity.this, ChatActivity.class);
                     intent.putExtra("idToken", idToken);  //idToken = 파베  전용 uid
                     intent.putExtra("Fridkakaoid", Fridkakaoid.toString()); //상대방 kakaoid
                     intent.putExtra("kakaoid", kakaoid); //내 자신 kakaoid
                     intent.putExtra("Fridname", name); //내 자신 kakaoid
-                    Log.d("intet Fridkakaoid", Fridkakaoid.toString());
-                    Log.d("intetn kakaoid", kakaoid);
                     intent.putExtra("token", token); // 내 token
                     startActivity(intent);
                     // idToken 값을 가져와서 처리
