@@ -10,6 +10,7 @@ import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.TestDTO;
 import com.object.haru.DTO.UserDTO;
 import com.object.haru.DTO.zzimRequestDTO;
+import com.object.haru.alarm.AlarmDTO;
 
 import java.util.List;
 
@@ -143,5 +144,12 @@ public interface RetrofitService {
 
     @GET("/kakao/delete")
     Call<Void> deleteUser(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
+
+
+    @GET("/alarm/select/kakaoid")
+    Call<List<AlarmDTO>> getAlarmList(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
+
+
+
 
 }

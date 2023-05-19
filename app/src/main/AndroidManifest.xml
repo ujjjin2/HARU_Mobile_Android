@@ -125,6 +125,9 @@
             android:exported="true" />
 
         <activity android:name=".Activity.DetailActivity"
+            android:exported="true" />
+
+        <activity  android:name="com.object.haru.alarm.AlarmActivity"
             android:exported="true" >
 
         </activity>

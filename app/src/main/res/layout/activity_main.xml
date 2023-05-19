@@ -117,6 +117,15 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/HomeFragment_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:src="@drawable/notification"
+        android:backgroundTint="#07BC7D"
+        android:layout_margin="16dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/HomeFragment_FAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,6 +133,6 @@
         android:src="@drawable/writing"
         android:backgroundTint="#07BC7D"
         android:layout_margin="16dp" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
