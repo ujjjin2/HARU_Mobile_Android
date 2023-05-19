@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,6 +56,11 @@ public class ChatListFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
         kakaoid = intent.getLongExtra("kakaoId", 0);
+
+
+
+
+
 
         Log.d("[채팅 리스트에서 카카오ID 확인]", String.valueOf(kakaoid)); //자신의 kid
 
@@ -123,6 +129,16 @@ public class ChatListFragment extends Fragment {
 
                 // 데이터를 어댑터에 추가하고 갱신
                 adapterChatlist = new AdapterChatlist(getContext(), userList, token, kakaoid);
+
+                if (userList.isEmpty()) {
+                    TextView noChat = view.findViewById(R.id.noChat);
+                    noChat.setText("진행중인 채팅이 없습니다.");
+                    noChat.setVisibility(View.VISIBLE);
+                } else {
+                    TextView noChat = view.findViewById(R.id.noChat);
+                    noChat.setVisibility(View.GONE);
+                }
+
                 // 마지막 메시지 가져오기
                 for (int i = 0; i < userList.size(); i++) {
                     lastMessage(userList.get(i).getIdToken());

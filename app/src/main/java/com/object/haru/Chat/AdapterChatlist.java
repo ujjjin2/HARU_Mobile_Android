@@ -24,6 +24,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
     private Context context;
     private String token;
+    private TextView noChat;
     private Long kakaoid,Fridkakaoid;
     private List<UserAccountDTO> userList; // 채팅 목록에 표시할 유저 정보를 저장하는 리스트
     private HashMap<String, String> messageMap; //채팅 목록에서 각 유저의 마지막 메시지를 저장하는 맵
