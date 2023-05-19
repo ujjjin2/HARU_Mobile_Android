@@ -32,7 +32,7 @@
         android:text="등록"
         android:textColor="@color/white"
         android:background="@drawable/register_btn2"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/profileActivity_Toolbar" >
@@ -54,9 +54,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="제목"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
             </EditText>
 
             <EditText
@@ -64,9 +64,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="카테고리"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp" >
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp" >
             </EditText>
 
             <EditText
@@ -74,9 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="근무날짜"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp" >
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp" >
             </EditText>
 
             <com.applikeysolutions.cosmocalendar.view.CalendarView
@@ -103,13 +103,14 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="20dp">
 
                 <Spinner
                     android:id="@+id/start_spinner"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:focusableInTouchMode="true"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/end_spinner">
@@ -131,7 +132,8 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="20dp"
+                    android:focusableInTouchMode="true"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/start_spinner">
@@ -144,9 +146,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="주소"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp" >
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp" >
             </EditText>
 
             <EditText
@@ -154,15 +156,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="상세주소"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp" >
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp" >
             </EditText>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -171,7 +173,7 @@
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent">
@@ -195,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="최저시급"
-                    android:layout_marginRight="17dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
@@ -217,7 +219,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -226,7 +229,7 @@
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent">
@@ -250,7 +253,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="성별무관"
-                    android:layout_marginRight="17dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
@@ -297,7 +300,7 @@
                         android:textStyle="bold"
                         android:textColor="#07BC7D"
                         android:gravity="center"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp">
                     </androidx.appcompat.widget.AppCompatRadioButton>
 
@@ -312,8 +315,8 @@
                         android:textStyle="bold"
                         android:textColor="#07BC7D"
                         android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp">
                     </androidx.appcompat.widget.AppCompatRadioButton>
 
@@ -323,7 +326,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -332,7 +335,7 @@
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent">
@@ -356,7 +359,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="연령무관"
-                    android:layout_marginRight="17dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
@@ -372,10 +375,11 @@
                     android:id="@+id/age1"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/age2">
+                    app:layout_constraintRight_toLeftOf="@+id/age2"
+                    android:focusableInTouchMode="true" >
                 </Spinner>
 
                 <TextView
@@ -394,10 +398,11 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="20dp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/age1">
+                    app:layout_constraintLeft_toRightOf="@+id/age1"
+                    android:focusableInTouchMode="true" >
                 </Spinner>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -405,7 +410,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -414,7 +419,7 @@
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent">
@@ -438,7 +443,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="경력무관"
-                    android:layout_marginRight="17dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
@@ -460,16 +465,13 @@
                 android:scrollbars="vertical"
                 android:scrollHorizontally="false"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="15dp">
             </EditText>
 
         </LinearLayout>
 
     </ScrollView>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
