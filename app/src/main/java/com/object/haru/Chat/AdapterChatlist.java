@@ -2,6 +2,7 @@ package com.object.haru.Chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.object.haru.R;
@@ -24,10 +26,11 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
     private Context context;
     private String token;
-    private TextView noChat;
-    private Long kakaoid,Fridkakaoid;
+    private Long kakaoid;
     private List<UserAccountDTO> userList; // 채팅 목록에 표시할 유저 정보를 저장하는 리스트
     private HashMap<String, String> messageMap; //채팅 목록에서 각 유저의 마지막 메시지를 저장하는 맵
+    private HashMap<String, String> confirmMap; //채팅 목록에서 각 유저의 마지막 읽음체크를 저장하는 맵
+    private HashMap<String, String> senderMap; //채팅 목록에서 각 유저의 마지막 읽음체크를 저장하는 맵
     private HashMap<String, String> timeMap; //채팅 목록에서 각 유저의 마지막 메시지 시간을 저장하는 맵
     // constructor
 
@@ -38,6 +41,8 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         this.userList = userList;
         messageMap = new HashMap<>();
         timeMap = new HashMap<>();
+        senderMap = new HashMap<>();
+        confirmMap = new HashMap<>();
         this.token = token;
         this.kakaoid = kakaoid;
     }
@@ -59,6 +64,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         String userName = userList.get(holder.getAbsoluteAdapterPosition()).getName();
         String message = messageMap.get(hisUid);
         String timestamp = timeMap.get(hisUid);
+        String confirm = confirmMap.get(hisUid);
+        String sender = senderMap.get(hisUid);
+
 
         holder.name_text.setText(userName);
 
@@ -66,6 +74,20 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             holder.message_text.setVisibility(View.GONE);
             holder.time_text.setVisibility(View.GONE);
         } else {
+            if (confirm != null && confirm.equals("미확인") && sender != null && sender.equals(hisUid)) {
+                Log.d("미확인","색갈바꿈 실행");
+                Log.d("confirm",confirm);
+                Log.d("sender",sender);
+                Log.d("hisUid",hisUid);
+                holder.itemView.setBackgroundResource(R.drawable.item_border); // 알림 확인이 1인 경우 초록색 배경
+            } else {
+                // 기본 배경색
+                Log.d("미확인","색갈바꿈 미실행");
+                Log.d("confirm",confirm);
+
+                Log.d("hisUid",hisUid);
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
             // if문 안에 넣어줘야 실행 됨...아니면 numberformatException...
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(Long.parseLong(timestamp));
@@ -102,6 +124,13 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
     //messageMap에 userId와 message를 저장하는 메소드
     public void setLastMessageMap(String userId, String message) {
         messageMap.put(userId, message);
+    }
+
+    public void setLastConfirmMap(String userId, String confirm) {
+        confirmMap.put(userId, confirm);
+    }
+    public void setLastsenderMap(String userId, String sender) {
+        senderMap.put(userId, sender);
     }
 
 

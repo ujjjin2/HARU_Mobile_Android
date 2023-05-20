@@ -39,7 +39,7 @@ public class ChatListFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private AdapterChatlist adapterChatlist;
     private LinearLayoutManager layoutManager;
-    private String lastmessage, receiver, sender, time;
+    private String lastmessage, receiver, sender, time, confirm;
 
     private  String token;
     private Long kakaoid;
@@ -167,6 +167,7 @@ public class ChatListFragment extends Fragment {
                     }
                     sender = chat.getSender();
                     receiver = chat.getReceiver();
+                    confirm = chat.getConfirm();
                     if (sender == null || receiver == null) {
                         continue;
                     }
@@ -182,7 +183,10 @@ public class ChatListFragment extends Fragment {
                 Log.d("라스트 sender", sender);
                 Log.d("라스트 getMessage", lastmessage);
                 Log.d("라스트 getTimestamp", time);
+                Log.d("라스트 confirm", confirm);
                 adapterChatlist.setLastMessageMap(userId, lastmessage);
+                adapterChatlist.setLastConfirmMap(userId, confirm);
+                adapterChatlist.setLastsenderMap(userId, sender);
                 adapterChatlist.setLastTimeMap(userId, time);
                 adapterChatlist.notifyDataSetChanged();
             }
