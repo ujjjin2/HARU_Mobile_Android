@@ -41,4 +41,14 @@
         android:textSize="12dp">
     </TextView>
 
+    <TextView
+        android:id="@+id/comfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:text=""
+        android:textSize="12dp"></TextView>
+
 </LinearLayout>

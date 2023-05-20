@@ -3,17 +3,33 @@ package com.object.haru.Chat;
 import java.io.Serializable;
 
 public class ChatDTO implements Serializable {
-    String message, receiver, sender, timestamp;
+    String message;
+    String receiver;
+    String sender;
+    String timestamp;
+
+
+    public String getConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(String confirm) {
+        this.confirm = confirm;
+    }
+
+    String confirm;
+
 
     public ChatDTO() {
 
     }
 
-    public ChatDTO(String message, String receiver, String sender, String timestamp) {
+    public ChatDTO(String message, String receiver, String sender, String timestamp, String confirm) {
         this.message = message;
         this.receiver = receiver;
         this.sender = sender;
         this.timestamp = timestamp;
+        this.confirm = confirm;
     }
 
     public String getMessage() {

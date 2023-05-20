@@ -51,6 +51,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
         // get data
         String message = chatDTO.get(position).getMessage();
         String timestamp = chatDTO.get(position).getTimestamp();
+        String comfirm = chatDTO.get(position).getConfirm();
 
         // convert time stamp to MM/dd h:mm a format
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
@@ -61,6 +62,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
         // set data
         holder.message_text.setText(message);
         holder.time_text.setText(time);
+        holder.comfirm.setText(comfirm);
     }
 
 
@@ -86,13 +88,14 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.holder>{
     class holder extends RecyclerView.ViewHolder{
 
         // view
-        TextView message_text,  time_text;
+        TextView message_text,  time_text, comfirm;
         public holder(@NonNull View itemView) {
             super(itemView);
 
             // init views
             message_text = itemView.findViewById(R.id.message);
             time_text = itemView.findViewById(R.id.time);
+            comfirm = itemView.findViewById(R.id.comfirm);
         }
     }
 }

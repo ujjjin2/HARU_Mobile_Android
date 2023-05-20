@@ -155,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-    
+
 
     private void readMessages() {
         chatList = new ArrayList<>();
@@ -164,41 +164,50 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
-                for (DataSnapshot ds: snapshot.getChildren()){
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     ChatDTO chatDTO = ds.getValue(ChatDTO.class);
 
                     if (chatDTO.getReceiver() != null && chatDTO.getSender() != null) {
                         if (chatDTO.getReceiver().equals(myUid) && chatDTO.getSender().equals(hisUid) ||
                                 chatDTO.getReceiver().equals(hisUid) && chatDTO.getSender().equals(myUid)) {
                             chatList.add(chatDTO);
+
+                            // 확인 처리
+                            if (chatDTO.getConfirm().equals("미확인") && chatDTO.getReceiver().equals(myUid)) {
+                                Log.d("미확인 처리", "성공");
+                                ds.getRef().child("confirm").setValue("확인");
+                            }
                         }
-                    }else{
+                    } else {
                         Log.d("chatDTO 널", " chatDTO 널");
                     }
-                    adapterChat = new AdapterChat(ChatActivity.this, chatList);
-                    adapterChat.notifyDataSetChanged();
-                    //set adapter to recyclerview
-                    recyclerView.setAdapter(adapterChat);
-                    recyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (adapterChat != null && adapterChat.getItemCount() > 0) {
-                                recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
-                            } else {
-                                recyclerView.scrollToPosition(0);
-                            }
-
-                        }
-                    });
-
                 }
+
+                adapterChat = new AdapterChat(ChatActivity.this, chatList);
+                recyclerView.setAdapter(adapterChat);
+                adapterChat.notifyDataSetChanged();
+
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (adapterChat != null && adapterChat.getItemCount() > 0) {
+                            recyclerView.smoothScrollToPosition(adapterChat.getItemCount() - 1);
+                        } else {
+                            recyclerView.scrollToPosition(0);
+                        }
+                    }
+                });
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // 처리 중단 시 동작
             }
         });
     }
+
+
+
 
     private void sendMessage(String message) {
 
@@ -211,6 +220,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("receiver", hisUid);
         hashMap.put("message", message);
         hashMap.put("timestamp", timestamp);
+        hashMap.put("confirm", "미확인");
         databaseReference.child("Chats").push().setValue(hashMap);
 
         // reset edittext after sending message

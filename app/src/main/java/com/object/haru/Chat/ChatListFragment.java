@@ -183,8 +183,6 @@ public class ChatListFragment extends Fragment {
                 Log.d("라스트 getMessage", lastmessage);
                 Log.d("라스트 getTimestamp", time);
                 adapterChatlist.setLastMessageMap(userId, lastmessage);
-
-                adapterChatlist.notifyDataSetChanged();
                 adapterChatlist.setLastTimeMap(userId, time);
                 adapterChatlist.notifyDataSetChanged();
             }
