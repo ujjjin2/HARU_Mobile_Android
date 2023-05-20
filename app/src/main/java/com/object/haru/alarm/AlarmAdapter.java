@@ -129,13 +129,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
                             Log.d("[알림체크]","성공");
                             Intent intent = null;
                             if(alarmDTO.getTitle().equals("새로운 지원서가 도착했습니다!")){
-
                                 long id = alarmDTO.getAid();
                                 Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token, id);
                                 applyDetail.enqueue(new Callback<ApplyDTO>() {
                                     @Override
                                     public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
-
+                                        alarmDTO.setConfirm(0);
+                                        notifyItemChanged(position);
                                         Intent   intent = new Intent(context, ApplyDetailActivity.class);
                                         intent.putExtra("newApply", "newApply");
                                         intent.putExtra("id", String.valueOf(alarmDTO.getAid()));
@@ -159,10 +159,11 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
 
 
                             }else if(alarmDTO.getTitle().equals("지원하신 알바가 확정되었습니다!")){
-
-
+                                alarmDTO.setConfirm(0);
+                                notifyItemChanged(position);
                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                                     intent = new Intent(context, DetailActivity.class);
+
                                 }
                                 intent.putExtra("comfirmation", "comfirmation");
                                 intent.putExtra("rId", Long.valueOf(alarmDTO.getRid()));
