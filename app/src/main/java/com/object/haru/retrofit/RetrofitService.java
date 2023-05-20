@@ -149,6 +149,9 @@ public interface RetrofitService {
     @GET("/alarm/select/kakaoid")
     Call<List<AlarmDTO>> getAlarmList(@Header("X-Auth-Token")String token, @Query("kakaoid")Long kakaoid);
 
+    @PUT("/alarm/update/{alarmId}")
+    Call<Void> updateCheckAlarm(@Header("X-Auth-Token")String token, @Path("alarmId")Long alarmId);
+
 
 
 

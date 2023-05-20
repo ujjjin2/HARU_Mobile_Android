@@ -3,10 +3,23 @@ package com.object.haru.alarm;
 import java.time.LocalDateTime;
 
 public class AlarmDTO {
-    private long kakaoid;
+    private Long kakaoid;
+    private Long alarmid;
     private String body;
     private String title;
+    private int confirm;
+    private long aid;
+    private long rid;
+    private long rrid;
+    private String alTime;
 
+    public Long getAlarmid() {
+        return alarmid;
+    }
+
+    public void setAlarmid(Long alarmid) {
+        this.alarmid = alarmid;
+    }
     public long getKakaoid() {
         return kakaoid;
     }
@@ -71,11 +84,7 @@ public class AlarmDTO {
         this.alTime = alTime;
     }
 
-    private int confirm;
-    private long aid;
-    private long rid;
-    private long rrid;
-    private String alTime;
+
 
     // Constructors, getters, and setters
 }

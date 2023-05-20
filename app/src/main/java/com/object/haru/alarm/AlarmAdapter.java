@@ -1,6 +1,7 @@
 package com.object.haru.alarm;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +57,17 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         AlarmDTO alarm = alarmList.get(position);
 
+        // 알림 확인 값에 따라 배경색 설정
+        if (alarm.getConfirm() == 0) {
+            holder.itemView.setBackgroundColor(Color.WHITE); // 알림 확인이 0인 경우 하얀색 배경
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.item_border); // 알림 확인이 1인 경우 초록색 배경
+        }
+
         String timeAgo;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             String alTime = alarm.getAlTime();
+
             Log.d("alTime", alTime);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
             LocalDateTime rDateTime = LocalDateTime.parse(alTime, formatter);
@@ -95,6 +104,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
     public class CustomViewHolder extends RecyclerView.ViewHolder{
 
         protected TextView title, body, time;
+        private boolean isSelected;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,56 +117,70 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
                 public void onClick(View v) {
                     int position = getAbsoluteAdapterPosition();
                     Log.d("클릭", String.valueOf(position));
-
                     alarmDTO = alarmList.get(position);
 
-                    Intent intent = null;
-                    if(alarmDTO.getTitle().equals("새로운 지원서가 도착했습니다!")){
+                    Log.d("읽음 상태 체크",String.valueOf(alarmDTO.getConfirm()));
+                    Log.d("변경할 id ",String.valueOf(alarmDTO.getAlarmid()));
+
+                    Call<Void> updateCheck =  RetrofitClientInstance.getApiService().updateCheckAlarm(token, alarmDTO.getAlarmid());
+                    updateCheck.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Log.d("[알림체크]","성공");
+                            Intent intent = null;
+                            if(alarmDTO.getTitle().equals("새로운 지원서가 도착했습니다!")){
+
+                                long id = alarmDTO.getAid();
+                                Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token, id);
+                                applyDetail.enqueue(new Callback<ApplyDTO>() {
+                                    @Override
+                                    public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
+
+                                        Intent   intent = new Intent(context, ApplyDetailActivity.class);
+                                        intent.putExtra("newApply", "newApply");
+                                        intent.putExtra("id", String.valueOf(alarmDTO.getAid()));
+                                        intent.putExtra("token", token);
+                                        intent.putExtra("sex", response.body().getAsex());
+                                        intent.putExtra("self", response.body().getMyself());
+                                        intent.putExtra("name", response.body().getName());
+                                        intent.putExtra("career", response.body().getAcareer());
+                                        intent.putExtra("age", response.body().getAage());
+                                        intent.putExtra("rating", response.body().getAvgRating());
+                                        intent.putExtra("rId", response.body().getRid());
+                                        intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
+                                        intent.putExtra("kakaoid", kakaoid.toString());
+                                        context.startActivity(intent);
+                                    }
+                                    @Override
+                                    public void onFailure(Call<ApplyDTO> call, Throwable t) {
+                                        Log.d("[지원서 확인]","실패"+t.getStackTrace().toString());
+                                    }
+                                });
 
 
-                        long id = alarmDTO.getAid();
-                        Call<ApplyDTO> applyDetail = RetrofitClientInstance.getApiService().getApplyDetail(token, id);
-                        applyDetail.enqueue(new Callback<ApplyDTO>() {
-                            @Override
-                            public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
-                                Intent   intent = new Intent(context, ApplyDetailActivity.class);
-                                intent.putExtra("newApply", "newApply");
-                                intent.putExtra("id", String.valueOf(alarmDTO.getAid()));
+                            }else if(alarmDTO.getTitle().equals("지원하신 알바가 확정되었습니다!")){
+
+
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                    intent = new Intent(context, DetailActivity.class);
+                                }
+                                intent.putExtra("comfirmation", "comfirmation");
+                                intent.putExtra("rId", Long.valueOf(alarmDTO.getRid()));
                                 intent.putExtra("token", token);
-                                intent.putExtra("sex", response.body().getAsex());
-                                intent.putExtra("self", response.body().getMyself());
-                                intent.putExtra("name", response.body().getName());
-                                intent.putExtra("career", response.body().getAcareer());
-                                intent.putExtra("age", response.body().getAage());
-                                intent.putExtra("rating", response.body().getAvgRating());
-                                intent.putExtra("rId", response.body().getRid());
-                                intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
-                                intent.putExtra("kakaoid", kakaoid.toString());
+                                intent.putExtra("kakaoId", kakaoid);
+
                                 context.startActivity(intent);
                             }
-                            @Override
-                            public void onFailure(Call<ApplyDTO> call, Throwable t) {
 
-                            }
-                        });
-
-
-                    }else if(alarmDTO.getTitle().equals("지원하신 알바가 확정되었습니다!")){
-
-
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                              intent = new Intent(context, DetailActivity.class);
                         }
-                        Log.d("넘기기",String.valueOf(alarmDTO.getRid()));
-                        Log.d("넘기기",token);
-                        Log.d("넘기기",kakaoid.toString());
-                        intent.putExtra("comfirmation", "comfirmation");
-                        intent.putExtra("rId", Long.valueOf(alarmDTO.getRid()));
-                        intent.putExtra("token", token);
-                        intent.putExtra("kakaoId", kakaoid);
 
-                        context.startActivity(intent);
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                                Log.d("[알림체크]","실패"+t.getStackTrace().toString());
+                        }
+                    });
+
+
 
                 }
             });
