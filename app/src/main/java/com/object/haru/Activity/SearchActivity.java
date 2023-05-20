@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchAdapter.OnItemClickListener{
 
     private EditText editText_search;
     private ImageView back_btn;
@@ -33,6 +33,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private Long kakaoId;
     private String token;
+
+    private SearchAdapter searchAdapter;
 
     private static final int MAX_SEARCH_WORDS = 10; // 최대 저장 개수
 
@@ -50,7 +52,7 @@ public class SearchActivity extends AppCompatActivity {
 
         list = loadSearchWords(); // 저장된 SearchWord를 불러와서 list에 담음
 
-        SearchAdapter searchAdapter = new SearchAdapter(list);
+        searchAdapter = new SearchAdapter(list,this);
         RecyclerView recyclerView = findViewById(R.id.search_recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -103,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // 액티비티가 다시 활성화될 때 list를 업데이트
         list = loadSearchWords();
-        SearchAdapter searchAdapter = new SearchAdapter(list);
+        SearchAdapter searchAdapter = new SearchAdapter(list,this);
         RecyclerView recyclerView = findViewById(R.id.search_recyclerView);
         recyclerView.setAdapter(searchAdapter);
     }
@@ -137,4 +139,31 @@ public class SearchActivity extends AppCompatActivity {
         Set<String> searchWordsSet = sharedPreferences.getStringSet("searchWords", new HashSet<>());
         return new ArrayList<>(searchWordsSet);
     }
+
+    @Override
+    public void onItemDeleted(String searchWord) {
+        // SharedPreference에서 해당 단어 삭제
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> searchWordsSet = sharedPreferences.getStringSet("searchWords", new HashSet<>());
+        ArrayList<String> searchWords = new ArrayList<>(searchWordsSet);
+
+        // 단어 삭제
+        searchWords.remove(searchWord);
+
+        editor.putStringSet("searchWords", new HashSet<>(searchWords));
+        editor.apply();
+
+        // 업데이트된 리스트 설정
+        list = loadSearchWords();
+
+        // 액티비티에서 리사이클러뷰를 재호출
+        RecyclerView recyclerView = findViewById(R.id.search_recyclerView);
+        recyclerView.setAdapter(new SearchAdapter(list, this));
+    }
+
+
+
+
+
 }
