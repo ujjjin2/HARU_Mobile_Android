@@ -41,6 +41,7 @@
             </TextView>
 
             <ImageView
+                android:id="@+id/cancel_image_view"
                 android:layout_width="11dp"
                 android:layout_height="11dp"
                 android:src="@drawable/cancel"
