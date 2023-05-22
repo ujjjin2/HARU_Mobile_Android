@@ -3,6 +3,7 @@ package com.object.haru.Chat;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.object.haru.DTO.FcmSendDTO;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +55,7 @@ public class ChatActivity extends AppCompatActivity {
     private AdapterChat adapterChat;
     private String hisUid, myUid, kakao, Fridname;
     private String myName, token, uid;
+    private  Intent intent;
   //  private  Query myQuery,userQuery;
 
     private Long Fridkakaoid,kakaoid;
@@ -78,7 +81,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        Intent intent = getIntent();
+        intent = getIntent();
 
         hisUid = intent.getStringExtra("idToken");
         Fridname = intent.getStringExtra("Fridname");
@@ -86,6 +89,8 @@ public class ChatActivity extends AppCompatActivity {
         kakaoid = Long.parseLong(intent.getStringExtra("kakaoid")); //나의 kakaoid
         Fridkakaoid = Long.parseLong(intent.getStringExtra("Fridkakaoid")); //상대방 kakaoid
         token = intent.getStringExtra("token");
+
+
 
         Log.d("채팅시작 kakaoid", kakaoid.toString());  //확인완료 --> chat에서 넘겨주는거랑 맞추기 0511 0239
         Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료 --> chat에서 넘겨주는거 확인하기
@@ -103,21 +108,32 @@ public class ChatActivity extends AppCompatActivity {
                     // text empty
                     Toast.makeText(ChatActivity.this,"메시지를 입력해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat", 1L);
-                    Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token,fcmSendDTO);
-                    fcmSend.enqueue(new Callback<FcmSendDTO>() {
+                    sendMessage(message);
+
+                    DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+                            .child(hisUid).child(myUid);
+                    chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onResponse(Call<FcmSendDTO> call, Response<FcmSendDTO> response) {
-                            Log.d("메세지 전송 알림 성공 : " ,"[성공]");
-                            sendMessage(message);
-                           // recyclerView.scrollToPosition(chatList.size()-1);
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+
+                            } else {
+                                int confirmValue = snapshot.child("confirm").getValue(Integer.class);
+                                if (confirmValue == 0) {
+                                    // confirm 값이 0인 경우 - 화면 보고 있는 상대
+                                } else {
+                                    // confirm 값이 1인 경우 - 화면 보고있지 않은 상대
+                                    new FcmSendTask().execute(message); // 알림 전송
+                                }
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<FcmSendDTO> call, Throwable t) {
-                            Log.d("메세지 전송 알림 실패 : " ,"[실패]");
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle error if needed
                         }
                     });
+
                 }
             }
         });
@@ -266,17 +282,40 @@ public class ChatActivity extends AppCompatActivity {
     // onStart start ============================================================================================
     @Override
     protected void onStart() {
-
         super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        myUid = user.getUid();
+
+        intent = getIntent();
+        hisUid = intent.getStringExtra("idToken");
+
+
+// 채팅화면 접속중인 액티비티 동기화 =================================
+        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+                .child(myUid).child(hisUid);
+        chatRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    chatRef.child("confirm").setValue(1);
+                } else {
+                    chatRef.child("confirm").setValue(0); //현재 화면을 보고있단 뜻
+                    Log.d("채팅 보는중", "성공");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
+        });
+
+// 채팅화면 접속중인 액티비티 동기화 끝 =================================
     }
 
     // onCheck start ============================================================================================
 
     public void onCheck(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        myUid = user.getUid();
-
-        //Firebase 데이터베이스에서 데이터를 읽고 쓸 수 있는 실시간 데이터베이스 인스턴스를 가져옴
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         //"trip" 데이터베이스의 "UserAccount" 노드에 대한 참조를 가져옵니다.
@@ -323,5 +362,70 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void finish() {
+        // 액티비티가 종료될 때 호출됨
+        super.finish();
+        Log.d("뒤로가기 ", "뺵");
+        closeCheck();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 뒤로 가기 버튼이 눌렸을 때 호출됨
+        super.onBackPressed();
+        closeCheck();
+    }
+
+    public void closeCheck(){
+        Log.d("closeCheck ", "closeCheck");
+        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+                .child(myUid).child(hisUid);
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatRef.child("confirm").setValue(1);
+                // 예: Toast 메시지 출력, UI 업데이트 등
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
+        });
+    }
+
+
+    private class FcmSendTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String message = params[0];
+            // 이후 코드에서 message 변수 사용
+            FcmSendDTO fcmSendDTO = new FcmSendDTO(Fridkakaoid, myName, message, "chat", 1L);
+            Call<FcmSendDTO> fcmSend = RetrofitClientInstance.getApiService().fcm_send(token, fcmSendDTO);
+            try {
+                Response<FcmSendDTO> response = fcmSend.execute();
+                return response.isSuccessful();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                Log.d("메세지 전송 알림 성공: ", "[성공]");
+                // recyclerView.scrollToPosition(chatList.size()-1);
+            } else {
+                Log.d("메세지 전송 알림 실패: ", "[실패]");
+            }
+        }
+    }
+
+
+
 
 }
