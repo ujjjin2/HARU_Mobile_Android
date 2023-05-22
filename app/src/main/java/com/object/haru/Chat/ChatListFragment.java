@@ -58,10 +58,6 @@ public class ChatListFragment extends Fragment {
         kakaoid = intent.getLongExtra("kakaoId", 0);
 
 
-
-
-
-
         Log.d("[채팅 리스트에서 카카오ID 확인]", String.valueOf(kakaoid)); //자신의 kid
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -86,9 +82,6 @@ public class ChatListFragment extends Fragment {
                 for (DataSnapshot ds: snapshot.getChildren()) {
                     ModelChatlist chatlist = ds.getValue(ModelChatlist.class);
                     modelChatList.add(chatlist);
-                }
-                for (int i = 1; i < modelChatList.size(); i++) {
-                    Log.d("List에 담긴 uid ["+ i+"]", "Chat ID: " + modelChatList.get(i).getId());
                 }
                 loadChats();
             }
@@ -179,11 +172,6 @@ public class ChatListFragment extends Fragment {
 
                     }
                 }
-                Log.d("라스트 receiver", receiver);
-                Log.d("라스트 sender", sender);
-                Log.d("라스트 getMessage", lastmessage);
-                Log.d("라스트 getTimestamp", time);
-                Log.d("라스트 confirm", confirm);
                 adapterChatlist.setLastMessageMap(userId, lastmessage);
                 adapterChatlist.setLastConfirmMap(userId, confirm);
                 adapterChatlist.setLastsenderMap(userId, sender);

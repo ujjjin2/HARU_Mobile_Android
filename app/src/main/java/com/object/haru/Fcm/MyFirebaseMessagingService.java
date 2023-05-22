@@ -1,5 +1,6 @@
 package com.object.haru.Fcm;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -133,6 +134,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.notify(0, mBuilder.build());
 
         }else if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("chat")) {
+            SharedPreferences auto = getSharedPreferences("checkChat", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor autoLoginEdit = auto.edit();
+            autoLoginEdit.putLong("checkChat", 1);
             // newApply 주제에 대한 처리
             Intent intent = new Intent(this, LoginActivity.class);
               intent.putExtra("chat", "test"); // 알림 데이터 전달

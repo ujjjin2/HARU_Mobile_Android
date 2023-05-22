@@ -75,17 +75,11 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             holder.time_text.setVisibility(View.GONE);
         } else {
             if (confirm != null && confirm.equals("미확인") && sender != null && sender.equals(hisUid)) {
-                Log.d("미확인","색갈바꿈 실행");
-                Log.d("confirm",confirm);
-                Log.d("sender",sender);
-                Log.d("hisUid",hisUid);
+
                 holder.itemView.setBackgroundResource(R.drawable.item_border); // 알림 확인이 1인 경우 초록색 배경
             } else {
                 // 기본 배경색
-                Log.d("미확인","색갈바꿈 미실행");
-                Log.d("confirm",confirm);
 
-                Log.d("hisUid",hisUid);
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
             // if문 안에 넣어줘야 실행 됨...아니면 numberformatException...

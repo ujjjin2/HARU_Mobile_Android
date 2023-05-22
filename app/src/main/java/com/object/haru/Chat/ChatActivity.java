@@ -155,8 +155,11 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
+    // onCreate END ============================================================================================
 
 
+
+    // readMessages start ============================================================================================
     private void readMessages() {
         chatList = new ArrayList<>();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -179,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Log.d("chatDTO 널", " chatDTO 널");
+                        Log.d("chatDTO 널", " 실패 ");
                     }
                 }
 
@@ -208,7 +211,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-
+// send start ============================================================================================
     private void sendMessage(String message) {
 
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -216,7 +219,6 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
-        Log.d("센더에서 hisuid ", hisUid);
         hashMap.put("receiver", hisUid);
         hashMap.put("message", message);
         hashMap.put("timestamp", timestamp);
@@ -234,6 +236,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()) {
                     chatRef.child("id").setValue(hisUid);
+                    chatRef.child("confirm").setValue(1);
 
                 }
             }
@@ -250,6 +253,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()) {
                     chatRef2.child("id").setValue(myUid);
+                    chatRef2.child("confirm").setValue(1);
                 }
             }
             @Override
@@ -258,11 +262,15 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+
+    // onStart start ============================================================================================
     @Override
     protected void onStart() {
 
         super.onStart();
     }
+
+    // onCheck start ============================================================================================
 
     public void onCheck(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
