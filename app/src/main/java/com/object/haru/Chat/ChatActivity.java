@@ -51,13 +51,15 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private DatabaseReference chatRe;
+    private ValueEventListener chatReListener;
     private List<ChatDTO> chatList;
     private AdapterChat adapterChat;
-    private String hisUid, myUid, kakao, Fridname;
+    private String hisUid, myUid, Fridname;
     private String myName, token, uid;
     private  Intent intent;
+    private  boolean checked = false;
   //  private  Query myQuery,userQuery;
-
     private Long Fridkakaoid,kakaoid;
 
     @Override
@@ -94,6 +96,40 @@ public class ChatActivity extends AppCompatActivity {
 
         Log.d("채팅시작 kakaoid", kakaoid.toString());  //확인완료 --> chat에서 넘겨주는거랑 맞추기 0511 0239
         Log.d("채팅시작 Fridkakaoid", Fridkakaoid.toString()); //확인완료 --> chat에서 넘겨주는거 확인하기
+
+
+        // 채팅화면 접속중인 액티비티 동기화 =================================
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        myUid = user.getUid();
+        intent = getIntent();
+        hisUid = intent.getStringExtra("idToken");
+         checked = false;
+
+        chatRe = FirebaseDatabase.getInstance().getReference("ChatList")
+                .child(myUid).child(hisUid);
+        chatReListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    chatRe.child("confirm").setValue(1);
+                } else {
+                    if(checked == false){
+                    chatRe.child("confirm").setValue(0); //현재 화면을 보고있단 뜻
+                    }
+                    Log.d("채팅 보는중", "성공");
+                    checked = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
+        };
+        chatRe.addValueEventListener(chatReListener);
+
+
+// 채팅화면 접속중인 액티비티 동기화 끝 =================================
 
 
 
@@ -143,7 +179,7 @@ public class ChatActivity extends AppCompatActivity {
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+               onBackPressed();
             }
         });
 
@@ -194,7 +230,33 @@ public class ChatActivity extends AppCompatActivity {
                             // 확인 처리
                             if (chatDTO.getConfirm().equals("미확인") && chatDTO.getReceiver().equals(myUid)) {
                                 Log.d("미확인 처리", "성공");
-                                ds.getRef().child("confirm").setValue("확인");
+
+                                DatabaseReference chatRR = FirebaseDatabase.getInstance().getReference("ChatList")
+                                        .child(myUid).child(hisUid);
+
+                                chatRR.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (!snapshot.exists()) {
+
+                                        } else {
+                                            if(snapshot.child("confirm").getValue(Integer.class) == 0){
+
+                                                ds.getRef().child("confirm").setValue("확인");
+                                                Log.d("채팅 보는중", "성공");
+                                            }else{
+                                                Log.d("채팅 안보는중", "안보는중");
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    
+                                    }
+                                });
+
                             }
                         }
                     } else {
@@ -245,37 +307,41 @@ public class ChatActivity extends AppCompatActivity {
 
         message_edit.setText("");
 
+        // 채팅 리스트가 없는 경우 생성 ==================================================
         DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
                 .child(myUid).child(hisUid);
-        chatRef.addValueEventListener(new ValueEventListener() {
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()) {
                     chatRef.child("id").setValue(hisUid);
                     chatRef.child("confirm").setValue(1);
 
+                    DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList")
+                            .child(hisUid).child(myUid);
+
+                    chatRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(!snapshot.exists()) {
+                                chatRef2.child("id").setValue(myUid);
+                                chatRef2.child("confirm").setValue(1);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+        // 채팅 리스트가 없는 경우 생성 END ==================================================
 
-        DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList")
-                .child(hisUid).child(myUid);
 
-        chatRef2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()) {
-                    chatRef2.child("id").setValue(myUid);
-                    chatRef2.child("confirm").setValue(1);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
     }
 
 
@@ -283,34 +349,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        myUid = user.getUid();
 
-        intent = getIntent();
-        hisUid = intent.getStringExtra("idToken");
-
-
-// 채팅화면 접속중인 액티비티 동기화 =================================
-        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
-                .child(myUid).child(hisUid);
-        chatRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    chatRef.child("confirm").setValue(1);
-                } else {
-                    chatRef.child("confirm").setValue(0); //현재 화면을 보고있단 뜻
-                    Log.d("채팅 보는중", "성공");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error if needed
-            }
-        });
-
-// 채팅화면 접속중인 액티비티 동기화 끝 =================================
     }
 
     // onCheck start ============================================================================================
@@ -366,16 +405,19 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void finish() {
         // 액티비티가 종료될 때 호출됨
+        if (!isFinishing()) {
+            onPause();
+        }
+        closeCheck();
         super.finish();
         Log.d("뒤로가기 ", "뺵");
-        closeCheck();
+
     }
 
     @Override
     public void onBackPressed() {
         // 뒤로 가기 버튼이 눌렸을 때 호출됨
         super.onBackPressed();
-        closeCheck();
     }
 
     public void closeCheck(){
@@ -385,8 +427,12 @@ public class ChatActivity extends AppCompatActivity {
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatRef.child("confirm").setValue(1);
-                // 예: Toast 메시지 출력, UI 업데이트 등
+                // 이미 confirm 값이 1로 설정되어 있다면 변경하지 않음
+                if (snapshot.exists() && snapshot.child("confirm").getValue(Integer.class) != 1) {
+                    chatRef.child("confirm").setValue(1);
+                    // 값이 변경되었음을 확인할 수 있는 작업을 수행할 수 있습니다.
+                    // 예: Toast 메시지 출력, UI 업데이트 등
+                }
             }
 
             @Override
@@ -395,6 +441,18 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if (chatRe != null && chatReListener != null) {
+            chatRe.removeEventListener(chatReListener);
+        }
+        super.onDestroy();
+
+    }
+
+
+
 
 
     private class FcmSendTask extends AsyncTask<String, Void, Boolean> {
@@ -424,8 +482,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 
 }
