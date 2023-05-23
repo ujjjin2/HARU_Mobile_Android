@@ -103,22 +103,26 @@ public class ChatActivity extends AppCompatActivity {
         myUid = user.getUid();
         intent = getIntent();
         hisUid = intent.getStringExtra("idToken");
-         checked = false;
+        checked = false;
 
         chatRe = FirebaseDatabase.getInstance().getReference("ChatList")
                 .child(myUid).child(hisUid);
         chatReListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    chatRe.child("confirm").setValue(1);
-                } else {
-                    if(checked == false){
-                    chatRe.child("confirm").setValue(0); //현재 화면을 보고있단 뜻
+                if (chatRe != null) {
+                    if (!snapshot.exists()) {
+                        chatRe.child("confirm").setValue(1);
+                        chatRe.child("id").setValue(hisUid);
+
+                    } else {
+                        if (!checked) {
+                            chatRe.child("confirm").setValue(0);
+                            Log.d("채팅 보는중", "성공");
+                        }
                     }
-                    Log.d("채팅 보는중", "성공");
-                    checked = true;
                 }
+                checked = true;
             }
 
             @Override
@@ -317,21 +321,22 @@ public class ChatActivity extends AppCompatActivity {
                     chatRef.child("id").setValue(hisUid);
                     chatRef.child("confirm").setValue(1);
 
-                    DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList")
-                            .child(hisUid).child(myUid);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
-                    chatRef2.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(!snapshot.exists()) {
-                                chatRef2.child("id").setValue(myUid);
-                                chatRef2.child("confirm").setValue(1);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
+        DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("ChatList")
+                .child(hisUid).child(myUid);
+
+        chatRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()) {
+                    chatRef2.child("id").setValue(myUid);
+                    chatRef2.child("confirm").setValue(1);
 
                 }
             }
@@ -339,6 +344,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
         // 채팅 리스트가 없는 경우 생성 END ==================================================
 
 
@@ -430,8 +436,6 @@ public class ChatActivity extends AppCompatActivity {
                 // 이미 confirm 값이 1로 설정되어 있다면 변경하지 않음
                 if (snapshot.exists() && snapshot.child("confirm").getValue(Integer.class) != 1) {
                     chatRef.child("confirm").setValue(1);
-                    // 값이 변경되었음을 확인할 수 있는 작업을 수행할 수 있습니다.
-                    // 예: Toast 메시지 출력, UI 업데이트 등
                 }
             }
 
