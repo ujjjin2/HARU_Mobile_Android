@@ -1,7 +1,9 @@
 package com.object.haru.Chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -27,6 +29,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
     private Context context;
     private String token;
     private Long kakaoid;
+    private int  chatCount = 0; // chatCount -> 읽지 않은 채팅 갯수
     private List<UserAccountDTO> userList; // 채팅 목록에 표시할 유저 정보를 저장하는 리스트
     private HashMap<String, String> messageMap; //채팅 목록에서 각 유저의 마지막 메시지를 저장하는 맵
     private HashMap<String, String> confirmMap; //채팅 목록에서 각 유저의 마지막 읽음체크를 저장하는 맵
@@ -67,6 +70,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
         String confirm = confirmMap.get(hisUid);
         String sender = senderMap.get(hisUid);
 
+        SharedPreferences auto = context.getSharedPreferences("chatCount", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor chat = auto.edit();
+
 
         holder.name_text.setText(userName);
 
@@ -75,7 +81,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
             holder.time_text.setVisibility(View.GONE);
         } else {
             if (confirm != null && confirm.equals("미확인") && sender != null && sender.equals(hisUid)) {
-
+                chatCount++; //읽지 않은 채팅의 수를 +1 해줌
                 holder.itemView.setBackgroundResource(R.drawable.item_border); // 알림 확인이 1인 경우 초록색 배경
             } else {
                 // 기본 배경색
@@ -101,6 +107,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
                 // start chat activity with that user
                 int adapterPosition = holder.getAbsoluteAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
+                    chatCount--;
+                    chat.putInt("chatCount", chatCount);
+                    chat.commit();
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("idToken", hisUid);
                     intent.putExtra("kakaoid", kakaoid.toString()); //상대방 kakaoid
@@ -111,6 +120,11 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
                 }
             }
         });
+
+
+        chat.putInt("chatCount", chatCount);
+        chat.commit();
+
     }
 
 
@@ -147,8 +161,6 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
         public holder(@NonNull View itemView) {
             super(itemView);
-
-
             this.name_text = itemView.findViewById(R.id.name_text);
             this.message_text = itemView.findViewById(R.id.message_text);
             this.time_text = itemView.findViewById(R.id.time_text);
