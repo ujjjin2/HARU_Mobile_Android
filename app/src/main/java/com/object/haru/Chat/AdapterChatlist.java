@@ -123,6 +123,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
 
 
         chat.putInt("chatCount", chatCount);
+        Log.d("읽지않은 채팅 수 ", String.valueOf(chatCount));
         chat.commit();
 
     }
