@@ -69,8 +69,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
             String alTime = alarm.getAlTime();
 
             Log.d("alTime", alTime);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-            LocalDateTime rDateTime = LocalDateTime.parse(alTime, formatter);
+           // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+            String formattedAlTime = alTime.substring(0, alTime.lastIndexOf('.'));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            LocalDateTime rDateTime = LocalDateTime.parse(formattedAlTime, formatter);
+
+
             Duration duration = Duration.between(rDateTime, LocalDateTime.now());
             long hoursDiff = duration.toHours();
 
