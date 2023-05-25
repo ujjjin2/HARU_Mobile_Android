@@ -163,15 +163,13 @@ public class MainFragment_rc extends Fragment {
         //2023-02-07 허유진 Retrofit 전체보이게 하기
 
         recruitAdapter = new RecruitAdapter(arrayList, getActivity(),token, kakaoId);
-        call = RetrofitClientInstance.getApiService().getAll(token,
-                30,latitude,longitude, page);
+        call = RetrofitClientInstance.getApiService().getAll(token, kakaoId, latitude,longitude, page);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
                 
                 if (response.isSuccessful() && response.body() != null) {
 //                    progressBar.setVisibility(View.GONE);
-
                     List<RecruitDTO> recruit = response.body();
                     arrayList.addAll(recruit);
                     recruitAdapter = new RecruitAdapter(arrayList, getContext(), token, kakaoId);
@@ -193,7 +191,7 @@ public class MainFragment_rc extends Fragment {
     }
 
     private void update(int page) {
-        call = RetrofitClientInstance.getApiService().getAll(token, 30, latitude, longitude, page);
+        call = RetrofitClientInstance.getApiService().getAll(token, kakaoId, latitude, longitude, page);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {
@@ -254,6 +252,7 @@ public class MainFragment_rc extends Fragment {
                     recruitAdapter.notifyDataSetChanged();
                 }
             }
+
         }
 
         @Override

@@ -19,8 +19,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.DTO.zzimRequestDTO;
@@ -39,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class DetailActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, View.OnScrollChangeListener {
+public class DetailActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private NestedScrollView nestedScrollView;
@@ -59,6 +62,11 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
     private RecruitDTO recruit;
 
     private Button applyButton;
+
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private CoordinatorLayout coordinatorLayout;
+    private AppBarLayout appBarLayout;
+
     private double lat, lon;
     private boolean zzimButtonCheck;
 
@@ -66,7 +74,6 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
 
         Intent intent = getIntent();
         rId = intent.getLongExtra("rId", 0);
@@ -79,12 +86,11 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
         backButton = findViewById(R.id.back_btn);
         tabLayout = findViewById(R.id.tablayout);
         nestedScrollView = findViewById(R.id.nested_scrollview);
-        motionLayout = findViewById(R.id.motionlayout);
+//        motionLayout = findViewById(R.id.motionlayout);
         lineView2 = findViewById(R.id.line_view2);
         lineView3 = findViewById(R.id.line_view3);
         emptyView = findViewById(R.id.emptyView);
-        deposit_tv2 = findViewById(R.id.deposit_tv2);
-        deposit_tv3 = findViewById(R.id.deposit_tv3);
+//        deposit_tv2 = findViewById(R.id.deposit_tv2);
         writer = findViewById(R.id.writer_text);
         writeTime_tv = findViewById(R.id.time_text);
         title_tv = findViewById(R.id.title_text);
@@ -105,10 +111,15 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
         starButton = findViewById(R.id.imageView22);
         optionButton = findViewById(R.id.imageButton_option);
         category_tv = findViewById(R.id.category_data);
+        collapsingToolbarLayout = findViewById(R.id.collapsing);
+        coordinatorLayout = findViewById(R.id.coodinatorlayout);
+        appBarLayout = findViewById(R.id.appBarLayout);
+
+        appBarLayout.setExpanded(true);
 
 
-        tabLayout.addOnTabSelectedListener(this);
-        nestedScrollView.setOnScrollChangeListener(this);
+//        tabLayout.addOnTabSelectedListener(this);
+//        nestedScrollView.setOnScrollChangeListener(this);
 
         TabLayout.Tab firstTab = tabLayout.newTab().setText("지원조건");
         TabLayout.Tab secondTab = tabLayout.newTab().setText("근무지역");
@@ -120,6 +131,57 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
 
         moveUserProfile();
         actionBackButton();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                switch (tab.getPosition()) {
+                    case 0:
+                        nestedScrollView.smoothScrollTo(0, emptyView.getTop(), 1000);
+                        appBarLayout.setExpanded(false);
+                        break;
+                    case 1:
+                        nestedScrollView.smoothScrollTo(0, lineView2.getTop(), 1000);
+                        appBarLayout.setExpanded(false);
+                        break;
+                    case 2:
+                        nestedScrollView.smoothScrollTo(0, lineView3.getTop(), 1000);
+                        appBarLayout.setExpanded(false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // 탭 선택 이전에는 AppBarLayout을 확장된 상태로 유지
+                appBarLayout.setExpanded(true);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                onTabSelected(tab);
+            }
+        });
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == 0) {
+                    tabLayout.setScrollPosition(0, 0f, true);
+                } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView2) && (scrollY < computeDistanceToView(nestedScrollView, lineView3))) {
+                    tabLayout.setScrollPosition(1, 0f, true);
+                } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView3) && (scrollY < computeDistanceToView(nestedScrollView, deposit_tv2))) {
+                    tabLayout.setScrollPosition(2, 0f, true);
+                } else {
+                    tabLayout.setScrollPosition(3, 0f, true);
+                }
+            }
+        });
+
     }
 
     private void checkZzim() {
@@ -410,7 +472,7 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
                     }
                 } else {
                     applyButton.setBackgroundResource(R.drawable.register_btn2);
-                    applyButton.setText("지원하기");
+                    applyButton.setText("지원서 작성하기");
                     applyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -468,23 +530,6 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
         });
     }
 
-    @Override
-    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        if (scrollY > 0) {
-            motionLayout.transitionToEnd();
-        }
-
-        if (scrollY == 0) {
-            tabLayout.setScrollPosition(0, 0f, true);
-        } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView2) && (scrollY < computeDistanceToView(nestedScrollView, lineView3))) {
-            tabLayout.setScrollPosition(1, 0f, true);
-        } else if (scrollY >= computeDistanceToView(nestedScrollView, lineView3) && (scrollY < computeDistanceToView(nestedScrollView, deposit_tv2))) {
-            tabLayout.setScrollPosition(2, 0f, true);
-        }
-
-        if(!nestedScrollView.canScrollVertically(1)) tabLayout.setScrollPosition(3, 0f, true);
-    }
-
     public static int computeDistanceToView(NestedScrollView scrollView, View view) {
         int top = calculateRectOnScreen(scrollView).top;
         int scrollY = scrollView.getScrollY();
@@ -501,33 +546,6 @@ public class DetailActivity extends AppCompatActivity implements TabLayout.OnTab
                 location[0] + view.getMeasuredWidth(),
                 location[1] + view.getMeasuredHeight()
         );
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        switch (tab.getPosition()) {
-            case 0:
-                nestedScrollView.smoothScrollTo(0, emptyView.getTop(), 1000);
-                break;
-            case 1:
-                nestedScrollView.smoothScrollTo(0, lineView2.getTop(), 1000);
-                break;
-            case 2:
-                nestedScrollView.smoothScrollTo(0, lineView3.getTop(), 1000);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-        onTabSelected(tab);
     }
 
     @Override

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context=".Activity.ApplyWriteActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,167 +16,202 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/left"
+        android:layout_marginStart="7dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ApplyWrite_toolbar">
+    </ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ApplyWrite_toolbar"
+        android:text="지원서">
+    </TextView>
+
     <TextView
         android:id="@+id/applywrite_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
         android:text="나이"
-        android:textColor="#299460"
-        android:textStyle="bold"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/applywrite_age2"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textColor="@color/black"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ApplyWrite_toolbar" />
 
     <TextView
-        android:id="@+id/applywrite_career"
+        android:id="@+id/applywrite_age2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        tools:text="18세에서 25세까지만 지원가능합니다."
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toRightOf="@id/applywrite_age"
+        app:layout_constraintTop_toTopOf="@+id/applywrite_age">
+    </TextView>
+
+    <TextView
+        android:id="@+id/career"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="28dp"
         android:text="경력"
-        android:textColor="#299460"
-        android:textStyle="bold"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/applywrite_career2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/applywrite_age_et" />
 
     <TextView
         android:id="@+id/applywrite_sex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="35dp"
         android:text="성별"
-        android:textColor="#299460"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/applywrite_sex2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/applywrite_career_et" />
 
     <TextView
         android:id="@+id/applywrite_etc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="28dp"
-        android:textColor="#299460"
-        android:textStyle="bold"
         android:text="기타 또는 자기소개"
-        android:textSize="15dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/applywrite_sex_et" />
 
     <TextView
-        android:id="@+id/applywrite_age2"
-        android:layout_width="298dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="24dp"
-        android:text=": 20살 이상"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ApplyWrite_toolbar" />
-
-    <TextView
         android:id="@+id/applywrite_career2"
-        android:layout_width="298dp"
-        android:layout_height="21dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="20dp"
         android:text=": 맘스터치 조리 우대"
         android:textColor="@color/black"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toRightOf="@+id/career"
         app:layout_constraintTop_toBottomOf="@+id/applywrite_age_et" />
 
     <TextView
         android:id="@+id/applywrite_sex2"
-        android:layout_width="298dp"
-        android:layout_height="21dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="20dp"
         android:text=": 성별 무관"
         android:textColor="@color/black"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toRightOf="@+id/applywrite_sex"
         app:layout_constraintTop_toBottomOf="@+id/applywrite_career_et" />
 
     <EditText
         android:id="@+id/applywrite_age_et"
-        android:layout_width="363dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:ems="10"
         android:hint="지원자의 나이를 적어주세요"
         android:inputType="number"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applywrite_age2" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_age">
+    </EditText>
 
     <EditText
         android:id="@+id/applywrite_career_et"
-        android:layout_width="363dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:ems="10"
         android:hint="경력을 입력해주세요"
+        android:layout_marginTop="5dp"
         android:inputType="textPersonName"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applywrite_career2" />
+        android:textSize="15sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/career" />
 
     <EditText
         android:id="@+id/applywrite_sex_et"
-        android:layout_width="363dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:ems="10"
+        android:layout_marginTop="5dp"
         android:hint="성별을 입력해주세요"
         android:inputType="textPersonName"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applywrite_sex2" />
+        android:textSize="14sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_sex" />
 
     <EditText
         android:id="@+id/applywrite_myself"
-        android:layout_width="363dp"
-        android:layout_height="161dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="자기자신을 소개해주세요"
+        android:gravity="start"
         android:inputType="textPersonName"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applywrite_etc" />
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applywrite_etc"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton" />
 
-    <Button
+    <View
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </View>
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/applywrite_btn"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="8dp"
         android:text="지원하기"
+        android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="20dp"
-        android:background="#299460"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/register_btn2"
+        app:layout_constraintTop_toTopOf="@+id/registerButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+    </androidx.appcompat.widget.AppCompatButton>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

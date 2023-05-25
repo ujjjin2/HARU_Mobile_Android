@@ -8,9 +8,9 @@
         motion:duration="0"
         motion:motionInterpolator="linear">
 
-        <OnSwipe
-            motion:dragDirection="dragUp"
-            motion:touchAnchorId="@id/nested_scrollview" />
+<!--        <OnSwipe-->
+<!--            motion:dragDirection="dragUp"-->
+<!--            motion:touchAnchorId="@id/nested_scrollview" />-->
     </Transition>
 
     <ConstraintSet android:id="@+id/expanded">

@@ -51,14 +51,16 @@
                         android:id="@+id/rTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:text="2시간전"
+                        android:layout_gravity="center"
                         android:textSize="12dp"
-                        android:layout_marginTop="3dp">
+                        android:layout_marginTop="0dp">
                     </TextView>
 
                     <ImageView
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
+                        android:id="@+id/starIcon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/zzim"
                         android:layout_marginLeft="4dp" >
                     </ImageView>
@@ -159,7 +161,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="시급"
-                            android:textColor="#07BC7D"
+                            android:textColor="#009C75"
                             android:textSize="14dp"
                             android:textStyle="bold">
                         </TextView>

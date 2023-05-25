@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RecruitDTO {
@@ -62,6 +64,17 @@ public class RecruitDTO {
     @SerializedName("kakaoid")
     @Expose
     private long kakaoid;
+
+    @SerializedName("zzim")
+    @Expose
+    private boolean zzim;
+
+    public void setZzim(boolean zzim) {
+        this.zzim = zzim;
+    }
+    public void getZzim(boolean zzim) {
+        this.zzim = zzim;
+    }
 
     public String getAddr() {
         return addr;
@@ -163,9 +176,6 @@ public class RecruitDTO {
         return rtime;
     }
 
-
-
-
     public void setRtime(String rtime) {
         this.rtime = rtime;
     }
@@ -210,7 +220,7 @@ public class RecruitDTO {
         this.kakaoid = kakaoid;
     }
 
-    public RecruitDTO(String addr, String endTime, double lat, double lon, Integer pay, String rage, String rcareer, String rsex, String stTime, String subject, String title, long kakaoid) {
+    public RecruitDTO(String addr, String endTime, double lat, double lon, Integer pay, String rage, String rcareer, String rsex, String stTime, String subject, String title, Long kakaoid) {
         this.addr = addr;
         this.endTime = endTime;
         this.lat = lat;
@@ -223,5 +233,9 @@ public class RecruitDTO {
         this.subject = subject;
         this.title = title;
         this.kakaoid = kakaoid;
+    }
+
+    public boolean isZzim() {
+        return zzim;
     }
 }
