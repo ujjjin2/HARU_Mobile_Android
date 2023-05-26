@@ -1,15 +1,21 @@
 package com.object.haru.Fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -34,6 +40,12 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
+        //Context 객체 가져오기
+        Context context = requireContext();
+        // SharedPreferences 가져오기
+        SharedPreferences auto = context.getSharedPreferences("chatCount", Context.MODE_PRIVATE);
+        int chatCount = auto.getInt("chatCount", 0);
+        Log.d("세팅 프레그먼트에서 chatCount", String.valueOf(chatCount));
 
         Intent intent = getActivity().getIntent();
         token = intent.getStringExtra("token");
@@ -137,4 +149,6 @@ public class SettingFragment extends Fragment {
         return view;
 
     }
+
 }
+

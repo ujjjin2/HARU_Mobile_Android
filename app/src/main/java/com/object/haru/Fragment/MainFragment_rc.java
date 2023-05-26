@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -91,6 +92,12 @@ public class MainFragment_rc extends Fragment {
         token = intent.getStringExtra("token");
         kakaoId = intent.getExtras().getLong("kakaoId");
         Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+
+        Context context = requireContext();
+        // SharedPreferences 가져오기
+        SharedPreferences auto = context.getSharedPreferences("chatCount", Context.MODE_PRIVATE);
+        int chatCount = auto.getInt("chatCount", 0);
+        Log.d("메인 프레그먼트에서 chatCount", String.valueOf(chatCount));
 
         swipeRefreshLayout.setDistanceToTriggerSync(400);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private View loginbutton;
     Call<KakaoDTO> call;
     private Long kakaoId, kakaoId2;
+    private int checkChat;
     private Button Testloginbtn;
     private String FcmToken, token2;
     private String email;
@@ -73,8 +74,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("FCM Token", FcmToken);
 
                     SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
-                    token2 = auto.getString("token", null);
                     kakaoId2 = auto.getLong("kakaoId", 0);
+                    token2 = auto.getString("token", null);
+                    SharedPreferences check = getSharedPreferences("checkChat", Activity.MODE_PRIVATE);
+                    checkChat = check.getInt("chatCount", 0);
+
+                    Log.d("[시작 에서 checkChat]", String.valueOf(checkChat));
 
                     // ======================================= 알림 클릭으로 시작한 경우 ========================================
                     Intent intent;
@@ -84,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("token", token2);
                         intent.putExtra("chat", "chat");
                         intent.putExtra("kakaoId", kakaoId2);
+                        intent.putExtra("checkChat", checkChat);
                         startActivity(intent);
                     }else // 새로운 지원서 알림
                         if(getIntent().getStringExtra("newApply")!=null){
@@ -104,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("rId", response.body().getRid());
                                 intent.putExtra("Fridkakaoid", response.body().getKakaoid()); //long 타입
                                 intent.putExtra("kakaoid", kakaoId2.toString());
+                                intent.putExtra("checkChat", checkChat);
                                 startActivity(intent);
                             }
                             @Override
@@ -122,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent2.putExtra("rId", id);
                         intent2.putExtra("token", token2);
                         intent2.putExtra("kakaoId", kakaoId2);
+                        intent2.putExtra("checkChat", checkChat);
 
                         startActivity(intent2);
                     }
@@ -145,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                                         intent.putExtra("token", token2);
                                         intent.putExtra("FcmToken", FcmToken);
                                         intent.putExtra("kakaoId", kakaoId2);
+                                        intent.putExtra("checkChat", checkChat);
                                         startActivity(intent);
                                     }
 
@@ -245,6 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 intent.putExtra("token", Test_token);
                                                 intent.putExtra("kakaoId", 123456789L);
+                                                intent.putExtra("checkChat", checkChat);
                                                 startActivity(intent);
                                             }
 
@@ -307,8 +317,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFirebaseCompleted() {
                 // getFirebase() 메소드가 완료된 후 실행되어야 할 코드들
-                Log.d("[273라인]", kakaoId.toString());
-                System.out.println("토큰" + accessToken);
                 Log.d("fcm 확인", FcmToken);
 
                 call = RetrofitClientInstance.getApiService().kakaoLogin("", accessToken, FcmToken);
@@ -330,6 +338,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("kakaoId", kakaoId);
                                     intent.putExtra("token", kakao.getacccesstoken());
+                                    intent.putExtra("checkChat", checkChat);
                                     SharedPreferences auto = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor autoLoginEdit = auto.edit();
                                     autoLoginEdit.putLong("kakaoId", kakaoId);

@@ -9,12 +9,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,9 +30,7 @@ import com.object.haru.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /* 토큰이 새로 만들어질때나 refresh 될때  */
-    private static final String TAG = "FirebaseMsgService";
-
-    private String msg, title;
+    private static final String TAG = "MyFirebaseMessaging";
 
     @Override
     public void onCreate() {
@@ -120,6 +123,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("comfirmation","구인확정"); // 알림 데이터 전달
             intent.putExtra("id", remoteMessage.getData().get("id")); // 알림 데이터 전달
             Log.d("확정된 글 번호 :",remoteMessage.getData().get("id"));
+
+
+
+
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
@@ -136,7 +143,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }else if (remoteMessage.getData().containsKey("topic") && remoteMessage.getData().get("topic").equals("chat")) {
             SharedPreferences auto = getSharedPreferences("checkChat", Activity.MODE_PRIVATE);
             SharedPreferences.Editor autoLoginEdit = auto.edit();
-            autoLoginEdit.putLong("checkChat", 1);
+            autoLoginEdit.putInt("chatCount", 1);
+            autoLoginEdit.apply();
+
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity mainActivity = MainActivity.INSTANCE;
+                    if (mainActivity != null) {
+                        BottomNavigationView bottomNavigationView = mainActivity.getBottomNavigationView();
+                        Menu menu = bottomNavigationView.getMenu();
+                        MenuItem chatListMenuItem = menu.findItem(R.id.chatList);
+                        Log.d("알림받고 채팅변경 :","하는중");
+                        chatListMenuItem.setIcon(R.drawable.colorheart);
+                    }else{
+                        Log.d("알림받고 mainActivity :","널");
+                    }
+                }
+            });
             // newApply 주제에 대한 처리
             Intent intent = new Intent(this, LoginActivity.class);
               intent.putExtra("chat", "test"); // 알림 데이터 전달

@@ -107,7 +107,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
                 // start chat activity with that user
                 int adapterPosition = holder.getAbsoluteAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    chatCount--;
+                    chatCount=0;
                     chat.putInt("chatCount", chatCount);
                     chat.commit();
                     Intent intent = new Intent(context, ChatActivity.class);
@@ -120,7 +120,6 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.holder
                 }
             }
         });
-
 
         chat.putInt("chatCount", chatCount);
         Log.d("읽지않은 채팅 수 ", String.valueOf(chatCount));

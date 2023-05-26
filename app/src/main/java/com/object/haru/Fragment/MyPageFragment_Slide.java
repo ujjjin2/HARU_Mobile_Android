@@ -1,6 +1,8 @@
 package com.object.haru.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +64,12 @@ public class MyPageFragment_Slide extends Fragment  {
         token = intent.getStringExtra("token");
         kakaoId = intent.getLongExtra("kakaoId", 0);
         Log.d("[카카오ID 확인]", String.valueOf(kakaoId));
+
+        Context context = requireContext();
+        // SharedPreferences 가져오기
+        SharedPreferences auto = context.getSharedPreferences("chatCount", Context.MODE_PRIVATE);
+        int chatCount = auto.getInt("chatCount", 0);
+        Log.d("마이페이지 프레그먼트에서 chatCount", String.valueOf(chatCount));
 
         profile = view.findViewById(R.id.view1);
         zzim = view.findViewById(R.id.view2);
