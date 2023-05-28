@@ -124,9 +124,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("id", remoteMessage.getData().get("id")); // 알림 데이터 전달
             Log.d("확정된 글 번호 :",remoteMessage.getData().get("id"));
 
-
-
-
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default")
@@ -155,8 +152,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         BottomNavigationView bottomNavigationView = mainActivity.getBottomNavigationView();
                         Menu menu = bottomNavigationView.getMenu();
                         MenuItem chatListMenuItem = menu.findItem(R.id.chatList);
-                        Log.d("알림받고 채팅변경 :","하는중");
-                        chatListMenuItem.setIcon(R.drawable.colorheart);
+                        Log.d("알림받고 채팅변경 :","성공");
+                        chatListMenuItem.setIcon(R.drawable.chat3);
                     }else{
                         Log.d("알림받고 mainActivity :","널");
                     }

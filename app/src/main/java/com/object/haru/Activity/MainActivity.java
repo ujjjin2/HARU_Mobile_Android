@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         if (menu != null) {
             MenuItem chatListMenuItem = menu.findItem(R.id.chatList); // chatListMenuItem 변수 선언
             if (chatCount >= 1 || checkChat >=1) {
-                chatListMenuItem.setIcon(R.drawable.colorheart);
+                chatListMenuItem.setIcon(R.drawable.chat3);
                 Log.d("아이콘 변경", "아이콘 변경 실행됨");
                 Log.d("아이콘 변경 chatCount", String.valueOf(chatCount));
                 Log.d("아이콘 변경 checkChat", String.valueOf(checkChat));
