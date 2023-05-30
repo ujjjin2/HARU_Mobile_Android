@@ -84,6 +84,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
         applywrite_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                applywrite_btn.setEnabled(false);
                 String ageWrite = applywrite_age_et.getText().toString();
                 String careerWrite = applywrite_career_et.getText().toString();
                 String sexWrite = applywrite_sex_et.getText().toString();
@@ -107,6 +108,7 @@ public class ApplyWriteActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
+                applywrite_btn.setEnabled(true);
             }
         });
 
