@@ -140,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                send_btn.setEnabled(false);
 
                 // get text from edit text
                 String message = message_edit.getText().toString().trim();
@@ -175,6 +176,7 @@ public class ChatActivity extends AppCompatActivity {
                     });
 
                 }
+                send_btn.setEnabled(true);
             }
         });
 

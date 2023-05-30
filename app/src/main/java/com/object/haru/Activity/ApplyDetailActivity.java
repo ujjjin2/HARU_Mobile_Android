@@ -99,8 +99,10 @@ public class ApplyDetailActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                chatButton.setEnabled(false);
                 System.out.println("상대방 kakaoid : "+ Fridkakaoid);
                 chatStart(Fridkakaoid);
+                chatButton.setEnabled(true);
             }
         });
 
