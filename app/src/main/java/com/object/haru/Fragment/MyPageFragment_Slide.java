@@ -87,7 +87,7 @@ public class MyPageFragment_Slide extends Fragment  {
         myPageFragment_writeText = view.findViewById(R.id.myPageFragment_writeText);
 
         fetchRecentWritedData();
-        fetchRecentRegisterData();
+        fetchRecentApplyData();
         fetchUserInformation();
 
         profile.setOnClickListener(new View.OnClickListener() {
@@ -159,14 +159,14 @@ public class MyPageFragment_Slide extends Fragment  {
         Glide.with(getActivity()).load(photoURL).into(myPageFragment_profile);
     }
 
-    private void fetchRecentRegisterData() {
+    private void fetchRecentApplyData() {
         //내가 지원한 알바
         Call<ApplyDTO> applycall = RetrofitClientInstance.getApiService().MapageSHOW_Apply(token,kakaoId);
         applycall.enqueue(new Callback<ApplyDTO>() {
             @Override
             public void onResponse(Call<ApplyDTO> call, Response<ApplyDTO> response) {
                 applyDTO = response.body();
-                updateRecentRegisterDataStateProgressBar();
+                updateRecentApplyDataStateProgressBar();
             }
 
             @Override
@@ -176,9 +176,9 @@ public class MyPageFragment_Slide extends Fragment  {
         });
     }
 
-    private void updateRecentRegisterDataStateProgressBar() {
-        if (applyDTO == null){
-            profile_title2.setText("작성한 글이 없음");
+    private void updateRecentApplyDataStateProgressBar() {
+        if (applyDTO.getRid() == null){
+            profile_title2.setText("지원한 글이 없음");
             stateProgressBar2.setVisibility(View.INVISIBLE);
             registerCardView.setOnClickListener(new View.OnClickListener() {
                 @Override

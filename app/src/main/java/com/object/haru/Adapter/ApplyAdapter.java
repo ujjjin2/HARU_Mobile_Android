@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,11 +31,13 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
     private Long kakaoid;
 
     private ApplyDTO applyDTO;
+    private Long confirmedPerson;
 
-    public ApplyAdapter(ArrayList<ApplyDTO> arrayList, String token, Long kakaoid) {
+    public ApplyAdapter(ArrayList<ApplyDTO> arrayList, String token, Long kakaoid, Long confirmedPerson) {
         this.arrayList = arrayList;
         this.token = token;
-        this.kakaoid =kakaoid;
+        this.kakaoid = kakaoid;
+        this.confirmedPerson = confirmedPerson;
     }
 
     @NonNull
@@ -59,6 +62,9 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
             holder.applicant_rating.setText(arrayList.get(position).getAvgRating().toString());
         }
 
+        if (String.valueOf(confirmedPerson).equals(String.valueOf(arrayList.get(position).getKakaoid()))) {
+            holder.confirmedSignal.setVisibility(View.VISIBLE);
+        }
         holder.applicant_self_introduce.setText(arrayList.get(position).getMyself());
         holder.applicant_sex.setText(arrayList.get(position).getAsex());
 
@@ -85,6 +91,8 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
         ImageView applicant_userImg;
         TextView applicant_username,applicant_rating, applicant_self_introduce, applicant_sex;
 
+        Button confirmedSignal;
+
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.applicant_userImg = itemView.findViewById(R.id.applicant_userImg);
@@ -92,6 +100,7 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.CustomViewHo
             this.applicant_rating = itemView.findViewById(R.id.applicant_rating);
             this.applicant_sex = itemView.findViewById(R.id.applicant_sex);
             this.applicant_self_introduce = itemView.findViewById(R.id.applicant_self_introduce);
+            this.confirmedSignal = itemView.findViewById(R.id.confirm_button);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {

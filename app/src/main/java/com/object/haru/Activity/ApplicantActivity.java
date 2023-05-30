@@ -34,6 +34,7 @@ public class ApplicantActivity extends AppCompatActivity {
     private long kakaoId;
     private Long rid;
     private ImageView backButton;
+    private Long confirmedPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +55,17 @@ public class ApplicantActivity extends AppCompatActivity {
             }
         });
 
-                recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
+        recyclerView.setHasFixedSize(true);//리사이클뷰 기존성능 강화
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>(); //Information 객체를 담을 ArraryList
 
-        fetch();
+        fetchWithConfirmedPerson();
     }
-
-    private void fetch() {
+    private void fetchWithConfirmedPerson() {
+        getConfirmedPerson();
+    }
+    private void fetch(Long confirmedPerson) {
 
         Call<List<ApplyDTO>> call = RetrofitClientInstance.getApiService().apply_list(token, rid);
         call.enqueue(new Callback<List<ApplyDTO>>() {
@@ -73,7 +76,7 @@ public class ApplicantActivity extends AppCompatActivity {
 
                     List<ApplyDTO> apply = response.body();
                     arrayList.addAll(apply);
-                    applyAdapter = new ApplyAdapter(arrayList, token,kakaoId);
+                    applyAdapter = new ApplyAdapter(arrayList, token, kakaoId, confirmedPerson);
                     recyclerView.setAdapter(applyAdapter);
                     Log.d("[입력 성공]", "=============");
                 }
@@ -82,6 +85,24 @@ public class ApplicantActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<ApplyDTO>> call, Throwable t) {
                 Log.d("[입력 실패]", "=============");
+            }
+        });
+    }
+
+    private void getConfirmedPerson() {
+        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().getDetailRecruit(token, rid);
+        call.enqueue(new Callback<RecruitDTO>() {
+            @Override
+            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                RecruitDTO recruitDTO = response.body();
+                confirmedPerson = recruitDTO.getPerson();
+                Log.d("PersonId", String.valueOf(recruitDTO.getPerson()));
+                fetch(confirmedPerson);
+            }
+
+            @Override
+            public void onFailure(Call<RecruitDTO> call, Throwable t) {
+
             }
         });
     }

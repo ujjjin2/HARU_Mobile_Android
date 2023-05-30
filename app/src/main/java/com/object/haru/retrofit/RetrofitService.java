@@ -108,7 +108,7 @@ public interface RetrofitService {
 
     //마이 리스트 - 내가 지원한 알바
     @GET("/apply/v1/recentApply")
-    Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoId")Long kakaoid);
+    Call<ApplyDTO> MapageSHOW_Apply(@Header("X-Auth-Token")String token,@Query("kakaoid")Long kakaoid);
 
     // Test 로그인
     @GET("/test/login")
