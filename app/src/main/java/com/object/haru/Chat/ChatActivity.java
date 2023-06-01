@@ -443,7 +443,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error if needed
+                Log.d("읽음처리 로직 실패","======");
             }
         });
     }
