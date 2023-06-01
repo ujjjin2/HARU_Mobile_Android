@@ -456,7 +456,19 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 액티비티가 백그라운드로 이동할 때 리얼타임 데이터베이스의 값을 변경하는 로직 추가
+        closeCheck();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 액티비티가 완전히 보이지 않게 되는 경우 리얼타임 데이터베이스의 값을 변경하는 로직 추가
+        closeCheck();
+    }
 
 
 
