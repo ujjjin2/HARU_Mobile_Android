@@ -59,7 +59,6 @@ public class ChatActivity extends AppCompatActivity {
     private String myName, token, uid;
     private  Intent intent;
     private  boolean checked = false;
-  //  private  Query myQuery,userQuery;
     private Long Fridkakaoid,kakaoid;
 
     @Override
