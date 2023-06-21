@@ -85,12 +85,13 @@ public class ApplyWriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 applywrite_btn.setEnabled(false);
+
                 String ageWrite = applywrite_age_et.getText().toString();
                 String careerWrite = applywrite_career_et.getText().toString();
                 String sexWrite = applywrite_sex_et.getText().toString();
                 String myselfWrite = applywrite_myself.getText().toString();
 
-                ApplyDTO applyDTO = new ApplyDTO(ageWrite,careerWrite,sexWrite,myselfWrite, new Long(rId), kakaoId);
+                ApplyDTO applyDTO = new ApplyDTO(ageWrite, careerWrite, sexWrite, myselfWrite, new Long(rId), kakaoId);
 
                 Call<ApplyDTO> call = RetrofitClientInstance.getApiService().applyWrite(token, applyDTO);
                 call.enqueue(new Callback<ApplyDTO>() {
@@ -100,15 +101,19 @@ public class ApplyWriteActivity extends AppCompatActivity {
                         Log.w("[지원하기-값 넣기 성공]","===========================");
                         finish();
 
+                        // API 호출 완료 후에 버튼 활성화
+                        applywrite_btn.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(Call<ApplyDTO> call, Throwable t) {
                         Log.w("[지원하기-값 넣기 실패]","===========================");
                         t.printStackTrace();
+
+                        // API 호출 실패 시에도 버튼 활성화
+                        applywrite_btn.setEnabled(true);
                     }
                 });
-                applywrite_btn.setEnabled(true);
             }
         });
 

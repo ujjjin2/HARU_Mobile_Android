@@ -284,9 +284,11 @@ public class RegisterActivity extends AppCompatActivity {
         registerAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registerAddr.setEnabled(false);
                 Intent intent = new Intent(getApplicationContext(), Search_register.class);
                 overridePendingTransition(0, 0);
                 getSearchResult.launch(intent);
+                registerAddr.setEnabled(true);
             }
         });
     }
@@ -464,6 +466,7 @@ public class RegisterActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                submit.setEnabled(false);
                 List<Address> list = null;
 
                 try {
@@ -498,11 +501,14 @@ public class RegisterActivity extends AppCompatActivity {
                                 RecruitDTO recruitDTO = response.body();
                                 Log.d("[성공]", "----------------------");
                                 finish();
+
+                                submit.setEnabled(true);
                             }
 
                             @Override
                             public void onFailure(Call<RecruitDTO> call, Throwable t) {
                                 Log.d("[실페]","================");
+                                submit.setEnabled(true);
                             }
                         });
                     }

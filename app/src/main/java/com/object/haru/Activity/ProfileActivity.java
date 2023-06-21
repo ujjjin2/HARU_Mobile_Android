@@ -58,10 +58,12 @@ public class ProfileActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
+                  editButton.setEnabled(false);
                   Intent intent = new Intent(ProfileActivity.this, ProfileEditActivity.class);
                   intent.putExtra("token", token);
                   intent.putExtra("kakaoId", kakaoId);
                   startActivity(intent);
+                  editButton.setEnabled(true);
               }
         });
 
@@ -70,16 +72,20 @@ public class ProfileActivity extends AppCompatActivity {
         receiveReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                receiveReview.setEnabled(false);
                 Intent intent = new Intent(ProfileActivity.this, ReceiveReviewActivity.class);
                 startActivity(intent);
+                receiveReview.setEnabled(true);
             }
         });
 
         writeReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                writeReview.setEnabled(false);
                 Intent intent = new Intent(ProfileActivity.this, WriteReviewActivity.class);
                 startActivity(intent);
+                writeReview.setEnabled(true);
             }
         });
 

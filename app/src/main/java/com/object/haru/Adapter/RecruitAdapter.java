@@ -94,6 +94,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
         zzimButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                zzimButton.setEnabled(false);
                 handleZzimButtonClick(zzimButton, recruitDTO);
             }
         });
@@ -110,11 +111,14 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
                     zzimRequestDTO zzimRequestDTO = response.body();
                     setZzimState(zzimButton, false);
                     recruitDTO.setZzim(false);
+
+                    zzimButton.setEnabled(true);
                 }
 
                 @Override
                 public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
                     t.printStackTrace();
+                    zzimButton.setEnabled(true);
                 }
             });
         } else {
@@ -125,11 +129,15 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
                     zzimRequestDTO zzimRequestDTO = response.body();
                     setZzimState(zzimButton, true);
                     recruitDTO.setZzim(true);
+
+                    zzimButton.setEnabled(true);
                 }
 
                 @Override
                 public void onFailure(Call<zzimRequestDTO> call, Throwable t) {
                     t.printStackTrace();
+
+                    zzimButton.setEnabled(true);
                 }
             });
         }
@@ -184,6 +192,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    itemView.setEnabled(false);
                     int position = getAbsoluteAdapterPosition();
 
                     recruitDTO = arrayList.get(position);
@@ -197,6 +206,7 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.CustomVi
                     intent.putExtra("kakaoId", kakaoId);
 
                     context.startActivity(intent);
+                    itemView.setEnabled(true);
                 }
             });
 

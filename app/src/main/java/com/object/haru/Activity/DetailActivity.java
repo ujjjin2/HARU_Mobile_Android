@@ -352,6 +352,7 @@ public class DetailActivity extends AppCompatActivity {
         optionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                optionButton.setEnabled(false);
                 final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
                 getMenuInflater().inflate(R.menu.menu,popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -375,12 +376,16 @@ public class DetailActivity extends AppCompatActivity {
                                             RecruitDTO recruit = response.body();
                                             finish();
                                             Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
+
+                                            optionButton.setEnabled(true);
                                         }
 
                                         @Override
                                         public void onFailure(Call<RecruitDTO> call, Throwable t) {
                                             Toast.makeText(DetailActivity.this, "삭제 실패", Toast.LENGTH_SHORT).show();
                                             t.printStackTrace();
+
+                                            optionButton.setEnabled(true);
                                         }
                                     });
                                 }
@@ -404,6 +409,7 @@ public class DetailActivity extends AppCompatActivity {
         starButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                starButton.setEnabled(false);
                 if (zzimButtonCheck == true) {
                     starButton.setImageResource(R.drawable.starcolor);
                     zzimRequestDTO zzim = new zzimRequestDTO(rId, kakaoId);
@@ -415,6 +421,8 @@ public class DetailActivity extends AppCompatActivity {
                             zzimRequestDTO zzimRequestDTO = response.body();
                             Toast.makeText(DetailActivity.this, "좋아요 저장", Toast.LENGTH_SHORT).show();
                             zzimButtonCheck = false;
+
+                            starButton.setEnabled(true);
                         }
 
                         @Override
@@ -422,6 +430,8 @@ public class DetailActivity extends AppCompatActivity {
                             Toast.makeText(DetailActivity.this, "좋아요 저장 실패", Toast.LENGTH_SHORT).show();
                             zzimButtonCheck = false;
                             t.printStackTrace();
+
+                            starButton.setEnabled(true);
                         }
                     });
                 } else {
@@ -433,6 +443,8 @@ public class DetailActivity extends AppCompatActivity {
                             zzimRequestDTO zzimRequestDTO = response.body();
                             Toast.makeText(DetailActivity.this, "좋아요 삭제", Toast.LENGTH_SHORT).show();
                             zzimButtonCheck = true;
+
+                            starButton.setEnabled(true);
                         }
 
                         @Override
@@ -440,6 +452,8 @@ public class DetailActivity extends AppCompatActivity {
                             Toast.makeText(DetailActivity.this, "좋아요 삭제 실패", Toast.LENGTH_SHORT).show();
                             t.printStackTrace();
                             zzimButtonCheck = true;
+
+                            starButton.setEnabled(true);
                         }
                     });
                 }
@@ -460,6 +474,7 @@ public class DetailActivity extends AppCompatActivity {
                         applyButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                applyButton.setEnabled(false);
                                 deleteCheckDialog();
                             }
                         });
@@ -476,11 +491,14 @@ public class DetailActivity extends AppCompatActivity {
                     applyButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            applyButton.setEnabled(false);
                             Intent intent = new Intent(DetailActivity.this, ApplyWriteActivity.class);
                             intent.putExtra("rId", rId);
                             intent.putExtra("token", token);
                             intent.putExtra("kakaoId", kakaoId);
                             startActivity(intent);
+                            applyButton.setEnabled(true);
                         }
                     });
                 }
@@ -513,6 +531,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         builder.show();
+        applyButton.setEnabled(true);
     }
 
     private void deleteApply() {

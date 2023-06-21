@@ -43,6 +43,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editButton.setEnabled(false);
               updateUserInfo();
           }
         });
@@ -84,6 +85,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+        editButton.setEnabled(true);
     }
 
     private void getUserInfo() {

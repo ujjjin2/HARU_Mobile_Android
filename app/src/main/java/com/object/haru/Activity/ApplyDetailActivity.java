@@ -92,6 +92,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                confirm.setEnabled(false);
                 confirmUser();
             }
         });
@@ -102,7 +103,6 @@ public class ApplyDetailActivity extends AppCompatActivity {
                 chatButton.setEnabled(false);
                 System.out.println("상대방 kakaoid : "+ Fridkakaoid);
                 chatStart(Fridkakaoid);
-                chatButton.setEnabled(true);
             }
         });
 
@@ -122,6 +122,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
 
             }
         });
+        confirm.setEnabled(true);
     }
 
     private void chatStart(Long Fridkakaoid) {
@@ -152,6 +153,7 @@ public class ApplyDetailActivity extends AppCompatActivity {
                 Log.e("TAG", "Database Error", error.toException());
             }
         });
+        chatButton.setEnabled(true);
     }
 
 
