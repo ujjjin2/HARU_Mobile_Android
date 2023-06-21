@@ -235,9 +235,10 @@ public class MainFragment_rc extends Fragment {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         }
 
-        if (latitude != null && longitude != null) {
-            update(0);
-        }
+        // 무한 로딩 해서 주석해뒀음 0621 한승완
+//        if (latitude != null && longitude != null) {
+//            update(0);
+//        }
 
         if (recruitAdapter != null) {
             recruitAdapter.notifyDataSetChanged();
@@ -254,7 +255,8 @@ public class MainFragment_rc extends Fragment {
             altitude = location.getAltitude();
             if (latitude != null && longitude != null) {
                 // 위치 정보가 업데이트되면 데이터를 로드합니다.
-                update(0);
+                // 무한 로딩 해서 주석해뒀음 0621 한승완
+                //update(0);
                 if (recruitAdapter != null) {
                     recruitAdapter.notifyDataSetChanged();
                 }
