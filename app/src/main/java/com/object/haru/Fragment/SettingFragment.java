@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.object.haru.Activity.LoginActivity;
 import com.object.haru.Activity.NoticeActivity;
 import com.object.haru.R;
 import com.object.haru.retrofit.RetrofitClientInstance;
@@ -82,9 +83,12 @@ public class SettingFragment extends Fragment {
                 builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // 자동로그인 추가시 테스트 후 추가
-                        // autoLoginEdit.clear(); // SharedPreferences에 저장된 모든 데이터 제거
-                        // autoLoginEdit.apply(); // 변경 사항 저장
+                        SharedPreferences sharedPreferences = context.getSharedPreferences("autoLogin", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply(); // 변경 사항 저장
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
                         getActivity().finish(); //시작 액티비티로 이동
                         showToast("로그아웃 완료");
                     }

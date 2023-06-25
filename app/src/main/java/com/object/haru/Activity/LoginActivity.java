@@ -2,6 +2,7 @@ package com.object.haru.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
@@ -91,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("kakaoId", kakaoId2);
                         intent.putExtra("checkChat", checkChat);
                         startActivity(intent);
+                        finish();
                     }else // 새로운 지원서 알림
                         if(getIntent().getStringExtra("newApply")!=null){
                         String idString = getIntent().getStringExtra("id");
@@ -112,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("kakaoid", kakaoId2.toString());
                                 intent.putExtra("checkChat", checkChat);
                                 startActivity(intent);
+                                finish();
                             }
                             @Override
                             public void onFailure(Call<ApplyDTO> call, Throwable t) {
@@ -132,12 +136,13 @@ public class LoginActivity extends AppCompatActivity {
                         intent2.putExtra("checkChat", checkChat);
 
                         startActivity(intent2);
+                        finish();
                     }
 
                     // ======================================= 알림 클릭 끝========================================
 
                     // 자동 로그인 부분 2개의 ==를 !=로 똑같이 맞춰주면 자동 로그인 구현
-                    if (kakaoId2 != 0 && token2 == null) {
+                    if (kakaoId2 != 0 && token2 != null) {
                         kakaoId = kakaoId2;
                         getFirebase(new FirebaseCallback() {
                             @Override
@@ -155,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                                         intent.putExtra("kakaoId", kakaoId2);
                                         intent.putExtra("checkChat", checkChat);
                                         startActivity(intent);
+                                        finish();
                                     }
 
                                     @Override
@@ -168,17 +174,21 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
        // ===============================   자동 로그인이 아닌 경우 ============================== //
                         loginbutton = findViewById(R.id.login);
+                        loginbutton.setVisibility(View.VISIBLE);
                         loginbutton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // 로그인 메소드
                                 performLogin();
+                                loginbutton.setVisibility(View.INVISIBLE);
+                                Testloginbtn.setVisibility(View.INVISIBLE);
                             }
 
                         });
 
 // ================================== 테스트 로그인 ==============================
                         Testloginbtn = findViewById(R.id.loginbtn);
+                        Testloginbtn.setVisibility(View.VISIBLE);
                         Testloginbtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -256,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 intent.putExtra("kakaoId", 123456789L);
                                                 intent.putExtra("checkChat", checkChat);
                                                 startActivity(intent);
+                                                finish();
                                             }
 
                                             @Override
@@ -287,6 +298,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
 // ==========================  메소드 부분 ========================== //
+
+    public void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 
     public void performLogin() {  // 메인 메소드
         if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
@@ -346,6 +364,7 @@ public class LoginActivity extends AppCompatActivity {
                                     autoLoginEdit.commit();
 
                                     startActivity(intent);
+                                    finish();
                                 }
 
                                 @Override
@@ -392,7 +411,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // 카카오 로그인 데이터 처리, 리얼타임 로직 처리
-    private void getFirebase(FirebaseCallback callback) {
+    public void getFirebase(FirebaseCallback callback) {
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", meError);
