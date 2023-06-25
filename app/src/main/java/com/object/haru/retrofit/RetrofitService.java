@@ -40,8 +40,8 @@ public interface RetrofitService {
     Call<KakaoDTO> kakaoLogin(@Header("X-Auth-Token") String token, @Query("acccesstoken")String acccesstoken, @Query("fcmtoken")String fcmtoken);
 
     // 검색
-    @GET("/api/recruit/select/location/search3")
-    Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token,@Query("search")String search, @Query("kakaoid")Long kakaoid);
+    @GET("/api/recruit/select/location/search3/{search}/{kakaoid}")
+    Call<List<RecruitDTO>> getSearchRecruit(@Header("X-Auth-Token")String token,@Path("search")String search, @Path("kakaoid")Long kakaoid);
 
     //상세 페이지-삭제
     @PUT("/api/recruit/remove/{rid}")
