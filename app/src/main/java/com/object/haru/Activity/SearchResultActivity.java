@@ -97,7 +97,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void fetch() {
-        call = RetrofitClientInstance.getApiService().getSearchRecruit(token, searchWord);
+        call = RetrofitClientInstance.getApiService().getSearchRecruit(token, searchWord, kakaoId);
         call.enqueue(new Callback<List<RecruitDTO>>() {
             @Override
             public void onResponse(Call<List<RecruitDTO>> call, Response<List<RecruitDTO>> response) {

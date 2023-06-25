@@ -2,7 +2,6 @@ package com.object.haru.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.splashscreen.SplashScreen;
 
 import android.app.Activity;
 import android.content.Intent;
