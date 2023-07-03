@@ -15,6 +15,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,6 +52,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// GIF add library +
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+// GIF add library -
+
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View loginbutton;
@@ -66,6 +73,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ImageView loading = (ImageView) findViewById(R.id.login_ing);
+        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(loading);
+        Glide.with(this).load(R.drawable.load_img).into(gifImage);
+        // GIF add code
         
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
@@ -172,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     } else {
        // ===============================   자동 로그인이 아닌 경우 ============================== //
+                        loading.setVisibility(View.INVISIBLE);
                         loginbutton = findViewById(R.id.login);
                         loginbutton.setVisibility(View.VISIBLE);
                         loginbutton.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                                 performLogin();
                                 loginbutton.setVisibility(View.INVISIBLE);
                                 Testloginbtn.setVisibility(View.INVISIBLE);
+                                loading.setVisibility(View.VISIBLE);
                             }
 
                         });
