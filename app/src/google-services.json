@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:119828509374:android:6e8dca874915ec8e55e4ef",
         "android_client_info": {
-          "package_name": "com.object.haru"
+          "package_name": "haru.myapplication"
         }
       },
       "oauth_client": [
