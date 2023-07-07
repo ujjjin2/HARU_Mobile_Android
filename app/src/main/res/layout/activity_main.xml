@@ -124,7 +124,7 @@
         android:id="@+id/HomeFragment_notice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
+        android:layout_gravity="right|right"
         android:src="@drawable/notification"
         android:backgroundTint="#009C75"
         android:layout_margin="16dp" />
