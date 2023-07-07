@@ -60,7 +60,7 @@ public class HomeFragment_Slide extends Fragment {
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private HomeFragment_Slide homeFragment;
-    private FloatingActionButton floatingActionButton, noticeBtn;
+    private FloatingActionButton floatingActionButton;
     private FrameLayout frameLayout;
     private androidx.appcompat.widget.Toolbar toolbar;
     private MenuItem menuItem;
@@ -162,7 +162,6 @@ public class HomeFragment_Slide extends Fragment {
         mInputMethodManager.hideSoftInputFromWindow(editText_search.getWindowToken(), 0);
 
         floatingActionButton = view.findViewById(R.id.HomeFragment_FAB);
-            noticeBtn = view.findViewById(R.id.HomeFragment_notice);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,22 +173,32 @@ public class HomeFragment_Slide extends Fragment {
             }
         });
 
-            noticeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AlarmActivity.class);
-                    intent.putExtra("token", token);
-                    intent.putExtra("kakaoId", kakaoId);
-                    startActivity(intent);
-                }
-            });
+//            noticeBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getActivity(), AlarmActivity.class);
+//                    intent.putExtra("token", token);
+//                    intent.putExtra("kakaoId", kakaoId);
+//                    startActivity(intent);
+//                }
+//            });
 
         frameLayout = (FrameLayout) LayoutInflater.from(getActivity()).inflate(R.layout.notification_badge, null);
         toolbar = (Toolbar) view.findViewById(R.id.HomeFragment_Toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).setTitle("");
+        frameLayout.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent = new Intent(getActivity(), AlarmActivity.class);
+               intent.putExtra("token", token);
+               intent.putExtra("kakaoId", kakaoId);
+               startActivity(intent);
+           }
+       });
 
-        setHasOptionsMenu(true);
+
+                setHasOptionsMenu(true);
 
         editText_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,10 +224,7 @@ public class HomeFragment_Slide extends Fragment {
 
         menuItem.setActionView(frameLayout);
         View view = menuItem.getActionView();
-        textView = view.findViewById(R.id.badge_counter);
-
-        textView.setText("3");
-
+//        textView = view.findViewById(R.id.badge_counter);
         setHasOptionsMenu(true);
     }
 
