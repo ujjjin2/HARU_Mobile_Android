@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     Call<KakaoDTO> call;
     private Long kakaoId, kakaoId2;
     private int checkChat;
-    private Button Testloginbtn;
+//    private Button Testloginbtn;
     private String FcmToken, token2;
     private String email;
     private String name;
@@ -193,111 +193,111 @@ public class LoginActivity extends AppCompatActivity {
                                 // 로그인 메소드
                                 performLogin();
                                 loginbutton.setVisibility(View.INVISIBLE);
-                                Testloginbtn.setVisibility(View.INVISIBLE);
+//                                Testloginbtn.setVisibility(View.INVISIBLE);
                                 loading.setVisibility(View.VISIBLE);
                             }
 
                         });
 
-// ================================== 테스트 로그인 ==============================
-                        Testloginbtn = findViewById(R.id.loginbtn);
-                        Testloginbtn.setVisibility(View.VISIBLE);
-                        Testloginbtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.d("테스트onClick FCM Token", FcmToken);
-                                Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
-                                testDTOCall.enqueue(new Callback<TestDTO>() {
-                                    @Override
-                                    public void onResponse(Call<TestDTO> call, Response<TestDTO> response) {
-                                        TestDTO testDTO = response.body();
-                                        String Test_token = testDTO.getAcccesstoken();
-
-                                        Log.d("테스트에서 FCM Token", FcmToken);
-                                        Log.d("테스트 AccessToken", Test_token);
-
-                                        Long testid = 123456789L;
-                                        String email = "TestID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
-
-
-                                        // 파이어베이스 인증 및 로그인
-                                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                                        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
-                                            if (task.isSuccessful()) {
-                                                List<String> signInMethods = task.getResult().getSignInMethods();
-                                                if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
-                                                    // 이미 회원가입한 사용자인 경우 로그인
-                                                    mAuth.signInWithEmailAndPassword(email, testid.toString())
-                                                            .addOnCompleteListener(LoginActivity.this, signInTask -> {
-                                                                if (signInTask.isSuccessful()) {
-                                                                    // 로그인 성공
-                                                                    FirebaseUser user = mAuth.getCurrentUser();
-                                                                } else {
-                                                                    // 로그인 실패
-                                                                    Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
-                                                                }
-                                                            });
-                                                } else {
-                                                    // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
-                                                    mAuth.createUserWithEmailAndPassword(email, testid.toString())
-                                                            .addOnCompleteListener(LoginActivity.this, createTask -> {
-                                                                if (createTask.isSuccessful()) {
-                                                                    // 회원가입 및 로그인 성공
-                                                                    FirebaseUser user = mAuth.getCurrentUser();
-                                                                    if (user != null) {
-                                                                        Log.w("테스트 user 추가", "진행");
-                                                                        String uid = user.getUid();
-                                                                        // UserAccountDTO 객체 생성 및 초기화
-                                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "TestID",123456789L);
-                                                                        // 데이터베이스에 저장
-                                                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
-                                                                        databaseReference.child(testid.toString()).setValue(userAccountDTO);
-                                                                    } else {
-                                                                        Log.w("테스트 user이 null임", "널");
-                                                                    }
-
-                                                                } else {
-                                                                    // 회원가입 실패
-                                                                    Log.w(TAG, "Firebase createUser:failure", createTask.getException());
-                                                                }
-                                                            });
-                                                }
-                                            } else {
-                                                // 이메일 주소 확인 실패
-                                                Log.w(TAG, "Firebase Email:failure", task.getException());
-                                            }
-                                        });
-
-                                        FCMDTO fcmdto = new FCMDTO(FcmToken, 123456789L);
-                                        Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token, fcmdto);
-                                        fcmdtoCall.enqueue(new Callback<FCMDTO>() {
-                                            @Override
-                                            public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
-                                                Log.d("[FCM-설정]", "======성공=======");
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                intent.putExtra("token", Test_token);
-                                                intent.putExtra("kakaoId", 123456789L);
-                                                intent.putExtra("checkChat", checkChat);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<FCMDTO> call, Throwable t) {
-                                                Log.d("FCM 실패", "====================");
-                                                t.printStackTrace();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<TestDTO> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
-                            }
-                        });
- // ================================== 테스트 로그인 끝 =============================
+//// ================================== 테스트 로그인 ==============================
+//                        Testloginbtn = findViewById(R.id.loginbtn);
+//                        Testloginbtn.setVisibility(View.VISIBLE);
+//                        Testloginbtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Log.d("테스트onClick FCM Token", FcmToken);
+//                                Call<TestDTO> testDTOCall = RetrofitClientInstance.getApiService().Test_Login();
+//                                testDTOCall.enqueue(new Callback<TestDTO>() {
+//                                    @Override
+//                                    public void onResponse(Call<TestDTO> call, Response<TestDTO> response) {
+//                                        TestDTO testDTO = response.body();
+//                                        String Test_token = testDTO.getAcccesstoken();
+//
+//                                        Log.d("테스트에서 FCM Token", FcmToken);
+//                                        Log.d("테스트 AccessToken", Test_token);
+//
+//                                        Long testid = 123456789L;
+//                                        String email = "TestID@test.com";     //임시용 이메일 나중에 이메일 받아와야됌
+//
+//
+//                                        // 파이어베이스 인증 및 로그인
+//                                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//                                        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+//                                            if (task.isSuccessful()) {
+//                                                List<String> signInMethods = task.getResult().getSignInMethods();
+//                                                if (signInMethods != null && signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+//                                                    // 이미 회원가입한 사용자인 경우 로그인
+//                                                    mAuth.signInWithEmailAndPassword(email, testid.toString())
+//                                                            .addOnCompleteListener(LoginActivity.this, signInTask -> {
+//                                                                if (signInTask.isSuccessful()) {
+//                                                                    // 로그인 성공
+//                                                                    FirebaseUser user = mAuth.getCurrentUser();
+//                                                                } else {
+//                                                                    // 로그인 실패
+//                                                                    Log.w(TAG, "signInWithEmail:failure", signInTask.getException());
+//                                                                }
+//                                                            });
+//                                                } else {
+//                                                    // 이메일 주소가 존재하지 않는 경우 회원가입 후 로그인
+//                                                    mAuth.createUserWithEmailAndPassword(email, testid.toString())
+//                                                            .addOnCompleteListener(LoginActivity.this, createTask -> {
+//                                                                if (createTask.isSuccessful()) {
+//                                                                    // 회원가입 및 로그인 성공
+//                                                                    FirebaseUser user = mAuth.getCurrentUser();
+//                                                                    if (user != null) {
+//                                                                        Log.w("테스트 user 추가", "진행");
+//                                                                        String uid = user.getUid();
+//                                                                        // UserAccountDTO 객체 생성 및 초기화
+//                                                                        UserAccountDTO userAccountDTO = new UserAccountDTO(uid, email, "TestID",123456789L);
+//                                                                        // 데이터베이스에 저장
+//                                                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userAccount");
+//                                                                        databaseReference.child(testid.toString()).setValue(userAccountDTO);
+//                                                                    } else {
+//                                                                        Log.w("테스트 user이 null임", "널");
+//                                                                    }
+//
+//                                                                } else {
+//                                                                    // 회원가입 실패
+//                                                                    Log.w(TAG, "Firebase createUser:failure", createTask.getException());
+//                                                                }
+//                                                            });
+//                                                }
+//                                            } else {
+//                                                // 이메일 주소 확인 실패
+//                                                Log.w(TAG, "Firebase Email:failure", task.getException());
+//                                            }
+//                                        });
+//
+//                                        FCMDTO fcmdto = new FCMDTO(FcmToken, 123456789L);
+//                                        Call<FCMDTO> fcmdtoCall = RetrofitClientInstance.getApiService().fcm_save(Test_token, fcmdto);
+//                                        fcmdtoCall.enqueue(new Callback<FCMDTO>() {
+//                                            @Override
+//                                            public void onResponse(Call<FCMDTO> call, Response<FCMDTO> response) {
+//                                                Log.d("[FCM-설정]", "======성공=======");
+//                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                                intent.putExtra("token", Test_token);
+//                                                intent.putExtra("kakaoId", 123456789L);
+//                                                intent.putExtra("checkChat", checkChat);
+//                                                startActivity(intent);
+//                                                finish();
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Call<FCMDTO> call, Throwable t) {
+//                                                Log.d("FCM 실패", "====================");
+//                                                t.printStackTrace();
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Call<TestDTO> call, Throwable t) {
+//                                        t.printStackTrace();
+//                                    }
+//                                });
+//                            }
+//                        });
+// // ================================== 테스트 로그인 끝 =============================
 
                     }
                 } else {
