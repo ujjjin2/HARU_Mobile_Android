@@ -37,6 +37,7 @@ import androidx.core.content.ContextCompat;
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
+import com.object.haru.ClickUtils;
 import com.object.haru.DTO.RecruitDTO;
 import com.object.haru.R;
 import com.object.haru.Search_register;
@@ -206,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                age = "";
             }
         });
 
@@ -218,7 +219,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                age = "";
             }
         });
     }
@@ -272,6 +273,7 @@ public class RegisterActivity extends AppCompatActivity {
                     radioButtonFemale.setTextColor(Color.parseColor("#07BC7D"));
                     radioButtonFemale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_selector));
                     radioButtonMale.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.radio_button_selector));
+                    gender = "";
                 }
             }
         });
@@ -459,6 +461,19 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private static int extractNumber(String str) {
+        String numberStr = str.replaceAll("[^0-9]", "");
+        return Integer.parseInt(numberStr);
+    }
+
+    private static int[] extractAges(String str) {
+        int[] ages = new int[2];
+        String[] ageStr = str.split("~");
+        ages[0] = extractNumber(ageStr[0].trim());
+        ages[1] = extractNumber(ageStr[1].trim());
+        return ages;
+    }
+
     private void actionSubmitButton() {
         submit = findViewById(R.id.submitButton);
 
@@ -466,53 +481,84 @@ public class RegisterActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit.setEnabled(false);
-                List<Address> list = null;
+                ClickUtils.handleClick(v, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("클릭중", "11111111111111111");
+                        if (spinnerStartTime.getSelectedItem().equals("시작시간")
+                                || spinnerEndTime.getSelectedItem().equals("종료시간")
+                                || lastDate == null || firstDate == null
+                                || data == null || registerDetailAddr == null
+                                || registerMoney.getText().toString().isEmpty()
+                                || registerCareer.getText().toString().isEmpty()
+                                || registerCategory.toString().isEmpty()
+                                || registerTitle.toString().isEmpty()
+                                || gender.isEmpty()
+                                || age.equals("최소연령 ~ 최대연령")) {
+                            Toast.makeText(RegisterActivity.this, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            Log.e("제목이 없음", "ㅇㅇㅇ");
+                            return;
+                        }
 
-                try {
-                    list = geocoder.getFromLocationName(data+registerDetailAddr.getText().toString(), 10);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                if (list != null) {
-                    if (list.size() == 0) {
-                        Toast.makeText(RegisterActivity.this, "해당 주수정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Address address = list.get(0);
-                        double lat = address.getLatitude();
-                        double lon = address.getLongitude();
 
-                        RecruitDTO recruitDTO = new RecruitDTO(data+registerDetailAddr.getText().toString(),
-                                lastDate+" "+spinnerEndTime.getSelectedItem()+":00",
-                                lat,
-                                lon,
-                                Integer.parseInt(registerMoney.getText().toString().replace(",", "")),
-                                age,
-                                registerCareer.getText().toString(),
-                                gender,
-                                firstDate+" "+spinnerStartTime.getSelectedItem()+":00",
-                                registerCategory.getText().toString(),
-                                registerTitle.getText().toString(),
-                                kakaoId);
-                        Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
-                        call.enqueue(new Callback<RecruitDTO>() {
-                            @Override
-                            public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
-                                RecruitDTO recruitDTO = response.body();
-                                Log.d("[성공]", "----------------------");
-                                finish();
+                        // 나이 큰숫자가 앞에 올경우 대비
 
-                                submit.setEnabled(true);
+                        if (!age.equals("연령무관")) {
+                            int[] ages = extractAges(age);
+                            if (ages[1] - ages[0] < 0) {
+                                Toast.makeText(RegisterActivity.this, "나이를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                return;
                             }
+                        }
+                        // 버튼 두번 클릭 대비
 
-                            @Override
-                            public void onFailure(Call<RecruitDTO> call, Throwable t) {
-                                Log.d("[실페]","================");
-                                submit.setEnabled(true);
+                        List<Address> list = null;
+                        try {
+                            list = geocoder.getFromLocationName(data+registerDetailAddr.getText().toString(), 10);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (list != null) {
+                            if (list.size() == 0) {
+                                Toast.makeText(RegisterActivity.this, "해당 주수정보의 위도 경도가 주어지지 않았습니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Address address = list.get(0);
+                                double lat = address.getLatitude();
+                                double lon = address.getLongitude();
+
+                                RecruitDTO recruitDTO = new RecruitDTO(data+registerDetailAddr.getText().toString(),
+                                        lastDate+" "+spinnerEndTime.getSelectedItem()+":00",
+                                        lat,
+                                        lon,
+                                        Integer.parseInt(registerMoney.getText().toString().replace(",", "")),
+                                        age,
+                                        registerCareer.getText().toString(),
+                                        gender,
+                                        firstDate+" "+spinnerStartTime.getSelectedItem()+":00",
+                                        registerCategory.getText().toString(),
+                                        registerTitle.getText().toString(),
+                                        kakaoId);
+                                Call<RecruitDTO> call = RetrofitClientInstance.getApiService().register(token, recruitDTO);
+                                call.enqueue(new Callback<RecruitDTO>() {
+                                    @Override
+                                    public void onResponse(Call<RecruitDTO> call, Response<RecruitDTO> response) {
+                                        RecruitDTO recruitDTO = response.body();
+                                        Log.d("[성공]", "----------------------");
+                                        finish();
+
+                                        submit.setEnabled(true);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<RecruitDTO> call, Throwable t) {
+                                        Log.d("[실페]","================");
+                                        submit.setEnabled(true);
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
-                }
+                });
             }
         });
     }
