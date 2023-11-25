@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+RetrofitClientInstance.java
+google-services.json
